@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reddit Trend Report: Surrogacy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #ffffff;
+      color: #37352f;
+      line-height: 1.6;
+    }
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 32px 80px;
+    }
+
+    /* Header */
+    .page-header { margin-bottom: 40px; }
+    .page-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .page-title { font-size: 1.8rem; font-weight: 700; color: #37352f; margin: 0 0 8px; }
+    .page-meta { font-size: 0.85rem; color: #6b7280; }
+
+    /* Stat cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid #e9e9e7;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .stat-value { font-size: 2rem; font-weight: 700; color: #37352f; }
+    .stat-label {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Sections */
+    .section { margin-bottom: 48px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .section-title { font-size: 1.1rem; font-weight: 600; color: #37352f; }
+
+    /* Filter chips */
+    .filter-bar { display: flex; gap: 6px; flex-wrap: wrap; }
+    .filter-chip {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      border: 1px solid #e9e9e7;
+      background: #f7f6f3;
+      color: #37352f;
+      user-select: none;
+      transition: all 0.15s;
+    }
+    .filter-chip:hover { border-color: #9ca3af; }
+    .filter-chip.active { background: #37352f; color: white; border-color: #37352f; }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid #e9e9e7;
+      border-radius: 8px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    .data-table th {
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid #e9e9e7;
+      color: #6b7280;
+      font-weight: 500;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      background: #fafaf9;
+    }
+    .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f0f0ef;
+      vertical-align: middle;
+    }
+    .data-table tbody tr:last-child td { border-bottom: none; }
+    .data-table tbody tr:hover td { background: #fafaf9; }
+    .data-table .num { text-align: right; font-variant-numeric: tabular-nums; color: #4b5563; }
+    .data-table .rank { color: #9ca3af; font-size: 0.8rem; }
+
+    /* Tags */
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .tag-blue { background: #eef3fb; color: #2383e2; }
+    .tag-green { background: #f0faf5; color: #0f7b6c; }
+    .tag-orange { background: #fdf4ec; color: #d9730d; }
+    .tag-gray { background: #f0f0ef; color: #6b7280; }
+    .tag-red { background: #fef2f2; color: #b91c1c; }
+    .tag-purple { background: #f5f3ff; color: #7c3aed; }
+
+    /* Links */
+    a { color: #2383e2; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Insight cards */
+    .insight-card {
+      padding: 16px 20px;
+      border-radius: 8px;
+      background: #f7f6f3;
+      border-left: 3px solid #2383e2;
+      margin-bottom: 12px;
+    }
+    .insight-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
+    .insight-body { font-size: 0.875rem; color: #4b5563; line-height: 1.65; }
+    .insight-body strong { color: #37352f; }
+
+    /* Audience grid */
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .audience-card {
+      padding: 18px;
+      border: 1px solid #e9e9e7;
+      border-radius: 8px;
+    }
+    .audience-card .aud-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+    .audience-card .aud-body { font-size: 0.85rem; color: #4b5563; line-height: 1.6; }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid #e9e9e7; margin: 48px 0; }
+
+    /* Footer */
+    .footer { font-size: 0.78rem; color: #9ca3af; margin-top: 48px; padding-top: 24px; border-top: 1px solid #e9e9e7; }
+
+    /* Show more */
+    .show-more-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6b7280;
+      background: #f7f6f3;
+      border: none;
+      cursor: pointer;
+      border-top: 1px solid #e9e9e7;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .show-more-btn:hover { background: #f0f0ef; color: #37352f; }
+
+    @media (max-width: 600px) {
+      .page { padding: 28px 16px 60px; }
+      .section-header { flex-direction: column; align-items: flex-start; }
+      .stat-value { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-icon">🔍</div>
+    <h1 class="page-title">Reddit Trend Report: Surrogacy</h1>
+    <div class="page-meta">Generated June 02, 2026 &middot; Past 30 days &middot; 109 posts across 52 subreddits</div>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value">109</div>
+      <div class="stat-label">Posts</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">52</div>
+      <div class="stat-label">Subreddits</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">4,585</div>
+      <div class="stat-label">Total Comments</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">7,006</div>
+      <div class="stat-label">Total Upvotes</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">42</div>
+      <div class="stat-label">Avg Comments / Post</div>
+    </div>
+  </div>
+
+  <!-- Top Communities -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Top Communities by Discussion Volume</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Subreddit</th>
+            <th class="num">Posts</th>
+            <th class="num">Comments</th>
+            <th class="num">Upvotes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><a href="https://reddit.com/r/Surrogate" target="_blank" rel="noopener">r/Surrogate</a></td><td class="num">36</td><td class="num">434</td><td class="num">229</td></tr>
+          <tr><td><a href="https://reddit.com/r/moderatepolitics" target="_blank" rel="noopener">r/moderatepolitics</a></td><td class="num">1</td><td class="num">407</td><td class="num">150</td></tr>
+          <tr><td><a href="https://reddit.com/r/childfree" target="_blank" rel="noopener">r/childfree</a></td><td class="num">1</td><td class="num">341</td><td class="num">1,697</td></tr>
+          <tr><td><a href="https://reddit.com/r/europe" target="_blank" rel="noopener">r/europe</a></td><td class="num">1</td><td class="num">333</td><td class="num">193</td></tr>
+          <tr><td><a href="https://reddit.com/r/neoliberal" target="_blank" rel="noopener">r/neoliberal</a></td><td class="num">1</td><td class="num">293</td><td class="num">210</td></tr>
+          <tr><td><a href="https://reddit.com/r/Catholicism" target="_blank" rel="noopener">r/Catholicism</a></td><td class="num">2</td><td class="num">281</td><td class="num">80</td></tr>
+          <tr><td><a href="https://reddit.com/r/gaydads" target="_blank" rel="noopener">r/gaydads</a></td><td class="num">14</td><td class="num">270</td><td class="num">102</td></tr>
+          <tr><td><a href="https://reddit.com/r/AMA" target="_blank" rel="noopener">r/AMA</a></td><td class="num">1</td><td class="num">218</td><td class="num">157</td></tr>
+          <tr><td><a href="https://reddit.com/r/SaintMeghanMarkle" target="_blank" rel="noopener">r/SaintMeghanMarkle</a></td><td class="num">1</td><td class="num">188</td><td class="num">167</td></tr>
+          <tr><td><a href="https://reddit.com/r/hypotheticalsituation" target="_blank" rel="noopener">r/hypotheticalsituation</a></td><td class="num">3</td><td class="num">187</td><td class="num">52</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Top Posts -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Top Posts by Comment Count</h2>
+      <div class="filter-bar" data-filter-group="posts">
+        <span class="filter-chip active" data-filter="all">All</span>
+        <span class="filter-chip" data-filter="political">Political / Legal</span>
+        <span class="filter-chip" data-filter="personal">Personal / Stories</span>
+        <span class="filter-chip" data-filter="lgbtq">LGBTQ+</span>
+        <span class="filter-chip" data-filter="financial">Financial</span>
+        <span class="filter-chip" data-filter="ethical">Ethics / Religion</span>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table" data-table="posts">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Post</th>
+            <th>Subreddit</th>
+            <th class="num">💬</th>
+            <th class="num">⬆️</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-tag="political">
+            <td class="rank">1</td>
+            <td><a href="https://reddit.com/r/moderatepolitics/comments/1ta5uf3/surrogacy_is_modern_day_slavery_florida_ag_argues/" target="_blank" rel="noopener" title="Surrogacy is 'modern day slavery,' Florida AG argues in push to stop the practice">Surrogacy is 'modern day slavery,' Florida AG argues...</a></td>
+            <td><span class="tag tag-gray">r/moderatepolitics</span></td>
+            <td class="num">407</td><td class="num">150</td>
+          </tr>
+          <tr data-tag="ethical">
+            <td class="rank">2</td>
+            <td><a href="https://reddit.com/r/childfree/comments/1t4woy9/gay_couple_called_me_homophobic_for_being/" target="_blank" rel="noopener" title="Gay couple called me homophobic for being anti-surrogacy">Gay couple called me homophobic for being anti-surrogacy...</a></td>
+            <td><span class="tag tag-gray">r/childfree</span></td>
+            <td class="num">341</td><td class="num">1,697</td>
+          </tr>
+          <tr data-tag="political">
+            <td class="rank">3</td>
+            <td><a href="https://reddit.com/r/europe/comments/1t624wx/ukraine_is_a_global_surrogacy_hub_but_that_could/" target="_blank" rel="noopener" title="Ukraine is a global surrogacy hub - but that could be about to end">Ukraine is a global surrogacy hub — but that could be about to end</a></td>
+            <td><span class="tag tag-gray">r/europe</span></td>
+            <td class="num">333</td><td class="num">193</td>
+          </tr>
+          <tr data-tag="political">
+            <td class="rank">4</td>
+            <td><a href="https://reddit.com/r/neoliberal/comments/1t8n0t1/why_decriminalizing_sex_work_surrogacy_and_kidney/" target="_blank" rel="noopener" title="Why Decriminalizing Sex Work, Surrogacy and Kidney Sales Makes Economic Sense">Why Decriminalizing Sex Work, Surrogacy and Kidney Sales Makes Economic Sense</a></td>
+            <td><span class="tag tag-gray">r/neoliberal</span></td>
+            <td class="num">293</td><td class="num">210</td>
+          </tr>
+          <tr data-tag="ethical">
+            <td class="rank">5</td>
+            <td><a href="https://reddit.com/r/Catholicism/comments/1t8rqbl/expecting_baby_via_surrogate_should_we_leave_the/" target="_blank" rel="noopener" title="Expecting baby via surrogate- should we leave the church?">Expecting baby via surrogate — should we leave the church?</a></td>
+            <td><span class="tag tag-gray">r/Catholicism</span></td>
+            <td class="num">246</td><td class="num">80</td>
+          </tr>
+          <tr data-tag="personal">
+            <td class="rank">6</td>
+            <td><a href="https://reddit.com/r/AMA/comments/1t8awig/i_am_a_30_single_father_by_surrogacy_ama/" target="_blank" rel="noopener" title="I am a 30 single father by surrogacy AMA">I am a 30-year-old single father by surrogacy — AMA</a></td>
+            <td><span class="tag tag-gray">r/AMA</span></td>
+            <td class="num">218</td><td class="num">157</td>
+          </tr>
+          <tr data-tag="personal">
+            <td class="rank">7</td>
+            <td><a href="https://reddit.com/r/SaintMeghanMarkle/comments/1tphlyv/the_lingering_surrogacy_discussion/" target="_blank" rel="noopener" title="The Lingering Surrogacy Discussion">The Lingering Surrogacy Discussion</a></td>
+            <td><span class="tag tag-gray">r/SaintMeghanMarkle</span></td>
+            <td class="num">188</td><td class="num">167</td>
+          </tr>
+          <tr data-tag="financial">
+            <td class="rank">9</td>
+            <td><a href="https://reddit.com/r/hypotheticalsituation/comments/1tdjwr4/1_million_dollars_to_be_a_surrogate/" target="_blank" rel="noopener" title="1 Million Dollars to Be a Surrogate">1 Million Dollars to Be a Surrogate</a></td>
+            <td><span class="tag tag-gray">r/hypotheticalsituation</span></td>
+            <td class="num">148</td><td class="num">47</td>
+          </tr>
+          <tr data-tag="political">
+            <td class="rank">10</td>
+            <td><a href="https://reddit.com/r/law/comments/1t798lw/florida_ag_says_surrogacy_is_human_trafficking/" target="_blank" rel="noopener" title="Florida AG says surrogacy is human trafficking">Florida AG says surrogacy is human trafficking, with big implications...</a></td>
+            <td><span class="tag tag-gray">r/law</span></td>
+            <td class="num">119</td><td class="num">321</td>
+          </tr>
+          <tr data-tag="financial">
+            <td class="rank">11</td>
+            <td><a href="https://reddit.com/r/HENRYUKLifestyle/comments/1tdpp27/surrogacy_awareness_in_the_henry_community/" target="_blank" rel="noopener" title="Surrogacy awareness in the HENRY community">Surrogacy awareness in the HENRY community</a></td>
+            <td><span class="tag tag-gray">r/HENRYUKLifestyle</span></td>
+            <td class="num">106</td><td class="num">0</td>
+          </tr>
+          <tr data-tag="political">
+            <td class="rank">12</td>
+            <td><a href="https://reddit.com/r/inthenews/comments/1tdjken/floridas_attorney_general_is_fighting_to_outlaw/" target="_blank" rel="noopener" title="Florida's Attorney General Is Fighting to Outlaw Surrogacy">Florida's AG Is Fighting to Outlaw Surrogacy. Adoption Could Be Next.</a></td>
+            <td><span class="tag tag-gray">r/inthenews</span></td>
+            <td class="num">96</td><td class="num">290</td>
+          </tr>
+          <tr data-tag="political">
+            <td class="rank">13</td>
+            <td><a href="https://reddit.com/r/florida/comments/1t7ac6l/surrogacy_is_akin_to_slavery_florida_ag_says_with/" target="_blank" rel="noopener" title="Surrogacy is akin to slavery, Florida AG says">Surrogacy is akin to slavery, Florida AG says, with big implications...</a></td>
+            <td><span class="tag tag-gray">r/florida</span></td>
+            <td class="num">94</td><td class="num">339</td>
+          </tr>
+          <tr data-tag="ethical">
+            <td class="rank">14</td>
+            <td><a href="https://reddit.com/r/Christianity/comments/1t1r0jr/ivf_and_surrogacy_are_morally_evil_and_no/" target="_blank" rel="noopener" title="IVF, and surrogacy are morally evil">IVF and surrogacy are morally evil and no Christian can partake...</a></td>
+            <td><span class="tag tag-gray">r/Christianity</span></td>
+            <td class="num">93</td><td class="num">0</td>
+          </tr>
+          <tr data-tag="ethical">
+            <td class="rank">15</td>
+            <td><a href="https://reddit.com/r/Abortiondebate/comments/1t32dyw/if_a_surrogate_mother_wants_to_abort_another/" target="_blank" rel="noopener" title="If a surrogate mother wants to abort another woman's child, is she allowed to?">If a surrogate mother wants to abort another woman's child, is she allowed to?</a></td>
+            <td><span class="tag tag-gray">r/Abortiondebate</span></td>
+            <td class="num">81</td><td class="num">0</td>
+          </tr>
+          <tr data-tag="lgbtq">
+            <td class="rank">16</td>
+            <td><a href="https://reddit.com/r/gaydads/comments/1tp7r8c/italy_travel_and_surrogacy_crimes/" target="_blank" rel="noopener" title="Italy Travel and Surrogacy Crimes">Italy Travel and Surrogacy Crimes</a></td>
+            <td><span class="tag tag-gray">r/gaydads</span></td>
+            <td class="num">76</td><td class="num">14</td>
+          </tr>
+          <tr data-tag="political">
+            <td class="rank">17</td>
+            <td><a href="https://reddit.com/r/legaladviceofftopic/comments/1tg1sro/if_surrogacy_contracts_are_ultimately/" target="_blank" rel="noopener" title="If surrogacy contracts are ultimately unenforceable">If surrogacy contracts are ultimately unenforceable, couldn't a...</a></td>
+            <td><span class="tag tag-gray">r/legaladviceofftopic</span></td>
+            <td class="num">69</td><td class="num">89</td>
+          </tr>
+          <tr data-tag="personal">
+            <td class="rank">18</td>
+            <td><a href="https://reddit.com/r/peestickgals/comments/1tkr587/skyes_second_failed_surrogacy_update/" target="_blank" rel="noopener" title="Skye's second failed surrogacy update">Skye's second failed surrogacy update</a></td>
+            <td><span class="tag tag-gray">r/peestickgals</span></td>
+            <td class="num">67</td><td class="num">54</td>
+          </tr>
+          <tr data-tag="ethical">
+            <td class="rank">19</td>
+            <td><a href="https://reddit.com/r/fourthwavewomen/comments/1tpx15p/children_of_commercial_surrogacy_and_donation/" target="_blank" rel="noopener" title="Children of commercial surrogacy and donation">Children of commercial surrogacy and "donation"</a></td>
+            <td><span class="tag tag-gray">r/fourthwavewomen</span></td>
+            <td class="num">64</td><td class="num">190</td>
+          </tr>
+          <tr data-tag="lgbtq">
+            <td class="rank">20</td>
+            <td><a href="https://reddit.com/r/gayjews/comments/1tpdmpk/male_couples_who_have_done_surrogacy_jewish/" target="_blank" rel="noopener" title="Male couples who have done surrogacy? Jewish children question">Male couples who have done surrogacy? Jewish children question</a></td>
+            <td><span class="tag tag-gray">r/gayjews</span></td>
+            <td class="num">64</td><td class="num">38</td>
+          </tr>
+          <tr data-tag="political">
+            <td class="rank">21</td>
+            <td><a href="https://reddit.com/r/BravoLadiesofLondon/comments/1tctkk0/court_ruling_on_marquess_of_baths_son_born_via/" target="_blank" rel="noopener" title="Court Ruling on Marquess of Bath's Son, Born Via Surrogacy">Court Ruling on Marquess of Bath's Son, Born Via Surrogacy...</a></td>
+            <td><span class="tag tag-gray">r/BravoLadiesofLondon</span></td>
+            <td class="num">64</td><td class="num">195</td>
+          </tr>
+          <tr data-tag="personal">
+            <td class="rank">22</td>
+            <td><a href="https://reddit.com/r/Surrogate/comments/1ta47z6/shocking_experience_with_a_chinese_owned/" target="_blank" rel="noopener" title="Shocking experience with a Chinese owned surrogacy agency">Shocking experience with a Chinese owned surrogacy agency</a></td>
+            <td><span class="tag tag-gray">r/Surrogate</span></td>
+            <td class="num">55</td><td class="num">7</td>
+          </tr>
+          <tr data-tag="ethical">
+            <td class="rank">23</td>
+            <td><a href="https://reddit.com/r/antisex/comments/1t84kue/gestational_surrogacy_what_do_you_guys_think/" target="_blank" rel="noopener" title="Gestational surrogacy what do you guys think about it?">Gestational surrogacy — what do you guys think about it?</a></td>
+            <td><span class="tag tag-gray">r/antisex</span></td>
+            <td class="num">52</td><td class="num">0</td>
+          </tr>
+          <tr data-tag="ethical">
+            <td class="rank">24</td>
+            <td><a href="https://reddit.com/r/Feminism/comments/1tfamcj/is_commercial_surrogacy_ethical_if_someone_can/" target="_blank" rel="noopener" title="Is commercial surrogacy ethical if someone can carry a child themselves but chooses not to?">Is commercial surrogacy ethical if someone can carry a child themselves but chooses not to?</a></td>
+            <td><span class="tag tag-gray">r/Feminism</span></td>
+            <td class="num">47</td><td class="num">34</td>
+          </tr>
+          <tr data-tag="lgbtq">
+            <td class="rank">25</td>
+            <td><a href="https://reddit.com/r/gaydads/comments/1tc68ki/ilga_europe_have_not_included_surrogacy_in_its/" target="_blank" rel="noopener" title="ILGA Europe have not included surrogacy in its annual reports">ILGA Europe have not included surrogacy in its annual reports...</a></td>
+            <td><span class="tag tag-gray">r/gaydads</span></td>
+            <td class="num">46</td><td class="num">18</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Trend Insights -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Trend Insights</h2>
+    </div>
+    <div class="insight-card" style="border-left-color: #2383e2;">
+      <div class="insight-title">🏆 Most Active Community</div>
+      <div class="insight-body"><strong>r/Surrogate</strong> dominates with 9% of all comments (434) across 36 posts — the only community with sustained volume rather than one viral post.</div>
+    </div>
+    <div class="insight-card" style="border-left-color: #0f7b6c;">
+      <div class="insight-title">📈 Breakout Posts</div>
+      <div class="insight-body"><strong>14 posts</strong> attracted 2× more comments than average (84+ comments). The top post — Florida AG's "modern-day slavery" framing — drew <strong>407 comments</strong>, nearly 10× the average.</div>
+    </div>
+    <div class="insight-card" style="border-left-color: #d9730d;">
+      <div class="insight-title">🌐 Broad Cross-Community Reach</div>
+      <div class="insight-body"><strong>52 communities</strong> engaged with surrogacy — ranging from legal subreddits to Catholic communities to LGBTQ+ parenting groups — indicating the topic cuts across many distinct audiences simultaneously.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SEO Themes -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Key Themes</h2>
+    </div>
+    <div class="insight-card">
+      <div class="insight-title">⚖️ Political &amp; Legal Contestation</div>
+      <div class="insight-body">Surrogacy is increasingly framed as a political battleground. The Florida AG's "modern-day slavery" claim drove heated debate; anti-surrogacy rhetoric disproportionately targets same-sex couples. <strong>Content opportunity:</strong> Legal status explainers by jurisdiction, debunking "slavery" equivalency claims with actual surrogate compensation data.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-title">🏭 Exploitation &amp; Labor Rights</div>
+      <div class="insight-body">A significant bloc views surrogacy through a feminist/labor lens — questioning whether $50k for 9 months constitutes adequate pay for bodily risk. International surrogacy amplifies concerns about impoverished women carrying for wealthy Western clients. <strong>Content opportunity:</strong> Comparative wage analysis, contract transparency guides, ethical agency vetting frameworks.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-title">💰 Cost &amp; Financial Access</div>
+      <div class="insight-body">Intended parents cite $100k–$250k USD costs as prohibitive, forcing choices between countries (Mexico ~$70k, Canada ~$180k). Anxiety is high among couples in their late 30s fearing age cutoffs. <strong>Content opportunity:</strong> Financing guides, payment plan comparisons, international cost-benefit analysis.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-title">🏢 Agency Trust &amp; Contract Pitfalls</div>
+      <div class="insight-body">Both surrogates and IPs report predatory retainer practices ($13k paid, zero matches), vague confidentiality clauses, and private equity takeovers degrading quality. <strong>Content opportunity:</strong> Red-flag agency checklists, contract negotiation templates, ethical certification database.</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-title">🧠 Psychological &amp; Identity</div>
+      <div class="insight-body">Surrogates report surprising emotional detachment, contradicting societal "you'll get attached" narratives. LGBTQ+ parents face questions about legitimacy, succession rights, and family acceptance. <strong>Content opportunity:</strong> Expectations vs. reality narratives, psychological preparation guides, LGBTQ+ family planning primers.</div>
+    </div>
+  </div>
+
+  <!-- Audience -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Audience Segments</h2>
+    </div>
+    <div class="audience-grid">
+      <div class="audience-card">
+        <div class="aud-label">👨‍👩‍👧 Intended Parents (IPs)</div>
+        <div class="aud-body">Age 35–50, financially stable, struggling with infertility or LGBTQ+ barriers. Need cost/legal clarity and risk-mitigating checklists. High education but low surrogacy knowledge.</div>
+      </div>
+      <div class="audience-card">
+        <div class="aud-label">🤰 Gestational Carriers (GCs)</div>
+        <div class="aud-body">Age 25–45, often already mothers, motivated by financial gain and altruism. Worried about agency trustworthiness, contract fairness, and post-birth emotional fallout. Speak from lived experience.</div>
+      </div>
+      <div class="audience-card">
+        <div class="aud-label">📢 Critics &amp; Activists</div>
+        <div class="aud-body">Younger feminist-leaning or religious conservatives viewing surrogacy as exploitation or moral transgression. Need nuanced explainers that acknowledge labor/consent concerns without dismissing LGBTQ+ access.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEO Keywords -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">SEO Keywords &amp; Article Opportunities</h2>
+      <div class="filter-bar" data-filter-group="keywords">
+        <span class="filter-chip active" data-filter="all">All</span>
+        <span class="filter-chip" data-filter="comparison">Comparison</span>
+        <span class="filter-chip" data-filter="financial">Financial</span>
+        <span class="filter-chip" data-filter="legal">Legal / Policy</span>
+        <span class="filter-chip" data-filter="psychology">Psychology</span>
+        <span class="filter-chip" data-filter="audience">Audience-specific</span>
+        <span class="filter-chip" data-filter="trust">Trust-building</span>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table" data-table="keywords">
+        <thead>
+          <tr>
+            <th>Keyword</th>
+            <th>Intent</th>
+            <th>Suggested Article</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-tag="comparison"><td>surrogacy cost USA</td><td><span class="tag tag-blue">Comparison</span></td><td>How Much Does Surrogacy Cost in 2025? State-by-State Breakdown</td></tr>
+          <tr data-tag="legal"><td>gestational carrier vs surrogate</td><td><span class="tag tag-gray">Definition</span></td><td>Gestational Carrier vs. Traditional Surrogate: What's the Difference?</td></tr>
+          <tr data-tag="trust"><td>surrogacy agency reviews</td><td><span class="tag tag-orange">Evaluation</span></td><td>Best Surrogacy Agencies 2025: Ethical Certifications &amp; Red Flags</td></tr>
+          <tr data-tag="trust"><td>surrogacy contract template</td><td><span class="tag tag-orange">Resource</span></td><td>Surrogacy Contract Checklist: 12 Clauses You Must Negotiate</td></tr>
+          <tr data-tag="comparison"><td>surrogate compensation by state</td><td><span class="tag tag-blue">Comparison</span></td><td>How Much Do Surrogates Get Paid? State Laws &amp; Real Numbers</td></tr>
+          <tr data-tag="comparison"><td>international surrogacy Mexico</td><td><span class="tag tag-blue">Comparison</span></td><td>Surrogacy in Mexico vs. USA: Cost, Legal Risk &amp; Timeline</td></tr>
+          <tr data-tag="audience"><td>surrogacy for gay couples</td><td><span class="tag tag-purple">Audience</span></td><td>Gay Couples &amp; Surrogacy: Your Rights, Costs &amp; Family Recognition</td></tr>
+          <tr data-tag="legal"><td>surrogacy legal status by country</td><td><span class="tag tag-gray">Regulatory</span></td><td>Is Surrogacy Legal? A Global Guide (Ukraine, Canada, India, USA)</td></tr>
+          <tr data-tag="psychology"><td>surrogate pregnancy reality vs expectations</td><td><span class="tag tag-green">Psychology</span></td><td>What No One Tells You About Being a Surrogate: 5 Surprises</td></tr>
+          <tr data-tag="financial"><td>can I get a loan for surrogacy</td><td><span class="tag tag-orange">Financial</span></td><td>Surrogacy Financing Options: Loans, Grants &amp; Payment Plans</td></tr>
+          <tr data-tag="trust"><td>surrogacy exploitation concerns feminist</td><td><span class="tag tag-orange">Critical</span></td><td>Exploitation or Empowerment? The Ethical Case for &amp; Against Surrogacy</td></tr>
+          <tr data-tag="audience"><td>single father surrogacy</td><td><span class="tag tag-purple">Audience</span></td><td>Single Dads by Surrogacy: Legal Rights, Costs &amp; Family Planning</td></tr>
+          <tr data-tag="trust"><td>surrogacy ethics certification</td><td><span class="tag tag-orange">Trust</span></td><td>How to Vet a Surrogacy Agency: SEEDS Ethics Directory &amp; Beyond</td></tr>
+          <tr data-tag="legal"><td>surrogate contract confidentiality clause</td><td><span class="tag tag-gray">Legal</span></td><td>Surrogate References: Why You Can Ask &amp; How Agencies Hide Them</td></tr>
+          <tr data-tag="psychology"><td>surrogacy emotional attachment</td><td><span class="tag tag-green">Psychology</span></td><td>Do Surrogates Bond With Babies? What Science &amp; Real Stories Show</td></tr>
+          <tr data-tag="trust"><td>private equity surrogacy agencies</td><td><span class="tag tag-orange">Critical</span></td><td>Why Private Equity Takeovers Harm Surrogacy: Circle, Hatch &amp; Alternatives</td></tr>
+          <tr data-tag="legal"><td>surrogacy age restrictions</td><td><span class="tag tag-gray">Regulatory</span></td><td>Age Limits for Surrogate Mothers &amp; Intended Parents by State</td></tr>
+          <tr data-tag="legal"><td>surrogate medical restrictions pregnancy</td><td><span class="tag tag-gray">Health</span></td><td>What You Can't Do as a Surrogate: Diet, Exercise &amp; Medical Rules</td></tr>
+          <tr data-tag="legal"><td>Florida surrogacy ban slavery argument</td><td><span class="tag tag-gray">News/Policy</span></td><td>Florida AG Calls Surrogacy "Slavery": What This Means for Families</td></tr>
+          <tr data-tag="comparison"><td>LGBTQ adoption vs surrogacy cost</td><td><span class="tag tag-blue">Comparison</span></td><td>Adoption vs. Surrogacy for Gay Couples: Cost, Timeline &amp; Outcomes</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    Reddit Trend Analyzer &middot; <code>surrogacy</code> &middot; June 02, 2026
+  </div>
+
+</div>
+
+<script>
+  // Generic filter chip handler
+  document.querySelectorAll('[data-filter-group]').forEach(group => {
+    const groupId = group.dataset.filterGroup;
+    group.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        group.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const val = chip.dataset.filter;
+        document.querySelectorAll(`[data-table="${groupId}"] tbody tr[data-tag]`).forEach(row => {
+          row.style.display = (val === 'all' || row.dataset.tag === val) ? '' : 'none';
+        });
+      });
+    });
+  });
+</script>
+</body>
+</html>
