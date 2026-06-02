@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sturdy - GEO Audit v1 Brand-Only</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-text: #000000;
+    --c-text-dark: #ffffff;
+    --c-bg: #ffffff;
+    --c-dark: #010120;
+    --c-magenta: #ef2cc1;
+    --c-orange: #fc4c02;
+    --c-lavender: #bdbbff;
+    --c-border-light: rgba(0, 0, 0, 0.08);
+    --c-border-dark: rgba(255, 255, 255, 0.12);
+    --c-fill-light: rgba(0, 0, 0, 0.04);
+    --c-fill-dark: rgba(255, 255, 255, 0.06);
+    --c-muted-light: rgba(0, 0, 0, 0.55);
+    --c-muted-dark: rgba(255, 255, 255, 0.65);
+    --shadow: 0 4px 10px rgba(1, 1, 32, 0.10);
+    --shadow-lg: 0 12px 32px rgba(1, 1, 32, 0.10);
+    --r-sharp: 4px;
+    --r-comfort: 8px;
+    --f-display: "Inter", "Helvetica Neue", Arial, sans-serif;
+    --f-mono: "JetBrains Mono", "PP Neue Montreal Mono", Georgia, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--f-display); font-size: 16px; font-weight: 400;
+    line-height: 1.30; letter-spacing: -0.16px;
+    color: var(--c-text); background: var(--c-bg);
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  }
+  .display { font-size: 80px; font-weight: 500; line-height: 0.95; letter-spacing: -2.4px; }
+  h1 { font-size: 56px; font-weight: 500; line-height: 1.05; letter-spacing: -1.68px; }
+  h2 { font-size: 40px; font-weight: 500; line-height: 1.10; letter-spacing: -0.8px; }
+  h3 { font-size: 22px; font-weight: 500; line-height: 1.20; letter-spacing: -0.22px; }
+  h4 { font-size: 18px; font-weight: 500; line-height: 1.30; letter-spacing: -0.18px; }
+  p { font-size: 16px; line-height: 1.45; letter-spacing: -0.16px; }
+  p.lede { font-size: 22px; line-height: 1.35; letter-spacing: -0.22px; font-weight: 400; }
+  .caption { font-size: 13px; line-height: 1.40; color: var(--c-muted-light); }
+
+  .mono-label {
+    font-family: var(--f-mono); font-weight: 500; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--c-muted-light); display: inline-block;
+  }
+  .dark .mono-label { color: var(--c-muted-dark); }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  .section { padding: 100px 0; border-top: 1px solid var(--c-border-light); }
+  .section:first-of-type { border-top: none; }
+  .section-head { display: flex; flex-direction: column; gap: 16px; margin-bottom: 56px; max-width: 820px; }
+
+  nav.topnav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    background: rgba(255,255,255,0.75);
+    border-bottom: 1px solid var(--c-border-light);
+  }
+  nav.topnav .container {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 16px; padding-bottom: 16px;
+  }
+  .brand { font-family: var(--f-display); font-weight: 500; font-size: 18px; letter-spacing: -0.18px; display: flex; align-items: center; gap: 10px; }
+  .brand .dot { width: 10px; height: 10px; border-radius: 2px; background: linear-gradient(135deg, var(--c-magenta), var(--c-lavender)); }
+  nav.topnav .right { display: flex; align-items: center; gap: 24px; }
+  nav.topnav .right a { color: var(--c-text); text-decoration: none; font-size: 14px; letter-spacing: -0.14px; }
+  nav.topnav .right a:hover { opacity: 0.6; }
+  .btn-cta { display: inline-flex; align-items: center; gap: 8px; background: var(--c-dark); color: var(--c-text-dark); padding: 10px 18px; border-radius: var(--r-sharp); font-size: 14px; letter-spacing: -0.14px; font-weight: 500; text-decoration: none; transition: transform 0.15s ease; }
+  .btn-cta:hover { transform: translateY(-1px); }
+
+  .hero { position: relative; overflow: hidden; padding: 88px 0 96px; }
+  .hero::before, .hero::after { content: ""; position: absolute; pointer-events: none; filter: blur(60px); z-index: 0; }
+  .hero::before {
+    width: 720px; height: 720px; top: -200px; right: -180px;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(239, 44, 193, 0.32) 0%, transparent 60%),
+      radial-gradient(circle at 70% 70%, rgba(189, 187, 255, 0.55) 0%, transparent 65%);
+    border-radius: 50%;
+  }
+  .hero::after {
+    width: 560px; height: 560px; top: 60px; left: -140px;
+    background:
+      radial-gradient(circle at 40% 60%, rgba(189, 187, 255, 0.50) 0%, transparent 65%),
+      radial-gradient(circle at 80% 30%, rgba(252, 76, 2, 0.16) 0%, transparent 60%);
+    border-radius: 50%;
+  }
+  .hero .container { position: relative; z-index: 1; }
+  .hero .eyebrow { display: inline-flex; align-items: center; gap: 12px; padding: 6px 12px; border-radius: var(--r-sharp); background: rgba(255,255,255,0.7); border: 1px solid var(--c-border-light); backdrop-filter: blur(8px); margin-bottom: 32px; }
+  .hero .eyebrow .pill { width: 6px; height: 6px; border-radius: 50%; background: var(--c-magenta); }
+  .hero .display { margin-bottom: 28px; max-width: 14ch; }
+  .hero p.lede { max-width: 64ch; color: rgba(0,0,0,0.75); margin-bottom: 40px; }
+  .hero .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px 32px; max-width: 980px; margin-bottom: 56px; }
+  .hero .meta .row { display: flex; gap: 10px; align-items: baseline; }
+  .hero .meta .k { font-family: var(--f-mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.10em; color: var(--c-muted-light); white-space: nowrap; }
+  .hero .meta .v { font-size: 14px; letter-spacing: -0.14px; color: var(--c-text); }
+
+  .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px; }
+  .stat-card { background: rgba(255,255,255,0.92); border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); padding: 24px; box-shadow: var(--shadow); backdrop-filter: blur(8px); display: flex; flex-direction: column; gap: 10px; }
+  .stat-card .num { font-size: 56px; font-weight: 500; line-height: 0.95; letter-spacing: -1.68px; }
+  .stat-card .num.muted { color: rgba(0,0,0,0.45); }
+  .stat-card .num.accent { background: linear-gradient(135deg, var(--c-magenta), var(--c-lavender)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .stat-card .num.warn { color: var(--c-orange); }
+  .stat-card .lbl { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.10em; color: var(--c-muted-light); }
+  .stat-card .sub { font-size: 14px; line-height: 1.4; letter-spacing: -0.14px; color: var(--c-muted-light); }
+
+  .card { background: var(--c-bg); border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); padding: 32px; box-shadow: var(--shadow); }
+  .card .mono-label { margin-bottom: 14px; }
+  .card h3 { margin-bottom: 10px; }
+  .card p { color: rgba(0,0,0,0.78); }
+  .card.flat { box-shadow: none; }
+  .dark .card { background: rgba(255,255,255,0.04); border-color: var(--c-border-dark); color: var(--c-text-dark); box-shadow: none; }
+  .dark .card p { color: rgba(255,255,255,0.78); }
+
+  .tbl-wrap { border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); overflow: hidden; background: var(--c-bg); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; letter-spacing: -0.14px; }
+  thead th { background: var(--c-dark); color: var(--c-text-dark); text-align: left; padding: 14px 18px; font-family: var(--f-mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; border-bottom: 1px solid var(--c-border-dark); }
+  tbody td { padding: 14px 18px; border-top: 1px solid var(--c-border-light); vertical-align: top; color: var(--c-text); }
+  tbody tr:nth-child(even) td { background: rgba(0,0,0,0.025); }
+  tbody td.num { font-variant-numeric: tabular-nums; font-weight: 500; }
+  tbody td.center { text-align: center; }
+  td.no { color: var(--c-orange); font-weight: 500; }
+  td.yes { color: #097a3f; font-weight: 500; }
+  .dark .tbl-wrap { border-color: var(--c-border-dark); background: rgba(255,255,255,0.02); }
+  .dark thead th { background: rgba(255,255,255,0.08); color: var(--c-text-dark); }
+  .dark tbody td { color: var(--c-text-dark); border-top-color: var(--c-border-dark); }
+  .dark tbody tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  blockquote { border-left: 3px solid var(--c-dark); padding: 4px 0 4px 20px; margin: 14px 0; font-style: italic; font-size: 17px; line-height: 1.45; letter-spacing: -0.17px; color: rgba(0,0,0,0.82); }
+  .dark blockquote { border-left-color: var(--c-lavender); color: rgba(255,255,255,0.85); }
+  blockquote .src { display: block; font-style: normal; margin-top: 8px; font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.10em; color: var(--c-muted-light); }
+  .dark blockquote .src { color: var(--c-muted-dark); }
+
+  .grid { display: grid; gap: 24px; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .move { border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); padding: 28px; background: var(--c-bg); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; }
+  .move .num { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--c-muted-light); }
+  .move h3 { margin: 0; font-size: 20px; letter-spacing: -0.20px; }
+  .move p { color: rgba(0,0,0,0.78); font-size: 15px; line-height: 1.45; }
+
+  .sprint { border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); padding: 28px; background: var(--c-bg); box-shadow: var(--shadow); }
+  .sprint .num { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--c-muted-light); }
+  .sprint h3 { margin: 8px 0 12px; font-size: 20px; letter-spacing: -0.20px; }
+  .sprint ul { list-style: none; padding: 0; margin: 0; }
+  .sprint li { padding: 10px 0; border-top: 1px solid var(--c-border-light); font-size: 15px; line-height: 1.45; letter-spacing: -0.15px; display: flex; gap: 12px; align-items: flex-start; }
+  .sprint li:first-child { border-top: none; }
+  .sprint li::before { content: ""; flex: none; width: 6px; height: 6px; background: var(--c-dark); border-radius: 2px; margin-top: 8px; }
+
+  .dark-zone { background: var(--c-dark); color: var(--c-text-dark); padding: 120px 0; position: relative; overflow: hidden; }
+  .dark-zone::before { content: ""; position: absolute; width: 600px; height: 600px; top: -100px; right: -150px; background: radial-gradient(circle at 40% 40%, rgba(189, 187, 255, 0.18) 0%, transparent 60%); border-radius: 50%; filter: blur(80px); pointer-events: none; }
+  .dark-zone .container { position: relative; z-index: 1; }
+  .dark-zone h2 { color: var(--c-text-dark); }
+  .dark-zone p { color: rgba(255,255,255,0.75); }
+  .dark { color: var(--c-text-dark); }
+  .dark .mono-label { color: var(--c-muted-dark); }
+
+  .score-block { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; background: var(--c-bg); border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); padding: 40px; box-shadow: var(--shadow); margin-top: 24px; }
+  .score-block .num-side { display: flex; flex-direction: column; justify-content: center; gap: 12px; border-right: 1px solid var(--c-border-light); padding-right: 32px; }
+  .score-block .big { font-size: 120px; line-height: 0.9; letter-spacing: -3.6px; font-weight: 500; background: linear-gradient(135deg, var(--c-orange) 0%, var(--c-magenta) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .score-block .band { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(252, 76, 2, 0.10); border: 1px solid rgba(252, 76, 2, 0.30); border-radius: var(--r-sharp); font-family: var(--f-mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.10em; color: var(--c-orange); width: max-content; }
+  .score-block .scale { display: flex; gap: 4px; margin-top: 12px; }
+  .score-block .scale .seg { flex: 1; height: 6px; border-radius: 2px; background: rgba(0,0,0,0.08); }
+  .score-block .scale .seg.on { background: linear-gradient(90deg, var(--c-orange), var(--c-magenta)); }
+  .score-block .scale-lbl { display: flex; justify-content: space-between; margin-top: 8px; font-family: var(--f-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.10em; color: var(--c-muted-light); }
+  .score-block .components ul { list-style: none; padding: 0; margin: 0; }
+  .score-block .components li { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid var(--c-border-light); font-size: 14px; letter-spacing: -0.14px; }
+  .score-block .components li:first-child { border-top: none; }
+  .score-block .components .lbl { color: rgba(0,0,0,0.75); }
+  .score-block .components .val { font-family: var(--f-mono); font-weight: 500; }
+
+  .findings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 32px; }
+  .finding { border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); padding: 24px; background: var(--c-bg); }
+  .finding .num { font-family: var(--f-mono); font-size: 32px; font-weight: 500; letter-spacing: -0.5px; background: linear-gradient(135deg, var(--c-magenta), var(--c-lavender)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+  .finding p { color: rgba(0,0,0,0.78); font-size: 15px; line-height: 1.45; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .chip { display: inline-flex; align-items: center; padding: 8px 14px; border: 1px solid var(--c-border-light); background: rgba(189,187,255,0.18); border-radius: var(--r-sharp); font-size: 13px; letter-spacing: -0.13px; color: var(--c-text); }
+
+  .descriptors { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .desc-pill { padding: 6px 12px; background: var(--c-fill-light); border: 1px solid var(--c-border-light); border-radius: var(--r-sharp); font-size: 13px; font-weight: 500; letter-spacing: -0.13px; }
+  .desc-pill.absent { background: rgba(252, 76, 2, 0.06); border-color: rgba(252, 76, 2, 0.18); color: var(--c-orange); text-decoration: line-through; text-decoration-color: rgba(252, 76, 2, 0.4); }
+
+  footer.big-footer { background: var(--c-dark); color: var(--c-text-dark); padding: 120px 0 48px; position: relative; overflow: hidden; }
+  footer.big-footer::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at top left, rgba(189,187,255,0.10) 0%, transparent 50%); pointer-events: none; }
+  footer.big-footer .container { position: relative; z-index: 1; }
+  footer.big-footer .word { font-family: var(--f-display); font-weight: 500; font-size: clamp(120px, 22vw, 320px); line-height: 0.85; letter-spacing: -10px; background: linear-gradient(180deg, #ffffff 0%, rgba(189,187,255,0.4) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 40px; }
+  footer.big-footer .meta-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--c-border-dark); padding-top: 28px; flex-wrap: wrap; gap: 20px; }
+  footer.big-footer .meta-row .left, footer.big-footer .meta-row .right { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--c-muted-dark); }
+
+  .row { display: flex; flex-wrap: wrap; gap: 12px; }
+  .stack-sm > * + * { margin-top: 14px; }
+  .stack-md > * + * { margin-top: 20px; }
+  .muted { color: var(--c-muted-light); }
+  .dark .muted { color: var(--c-muted-dark); }
+
+  .split-quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .split-quotes .card .mono-label { color: var(--c-magenta); }
+
+  .callout { border: 1px solid rgba(252,76,2,0.30); background: rgba(252,76,2,0.04); border-radius: var(--r-comfort); padding: 24px; margin-top: 24px; }
+  .callout .mono-label { color: var(--c-orange); margin-bottom: 8px; }
+
+  .glossary { border: 1px solid var(--c-border-light); background: rgba(189,187,255,0.06); border-radius: var(--r-comfort); padding: 28px; margin-top: 24px; }
+  .glossary .mono-label { color: #5a55c9; margin-bottom: 14px; }
+  .glossary dl { display: grid; grid-template-columns: 180px 1fr; gap: 12px 20px; font-size: 14px; line-height: 1.5; }
+  .glossary dt { font-weight: 500; color: var(--c-text); }
+  .glossary dd { color: rgba(0,0,0,0.72); }
+
+  @media (max-width: 991px) {
+    .display { font-size: 64px; letter-spacing: -1.92px; }
+    h1 { font-size: 44px; letter-spacing: -1.32px; }
+    h2 { font-size: 32px; letter-spacing: -0.64px; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .score-block { grid-template-columns: 1fr; }
+    .score-block .num-side { border-right: none; border-bottom: 1px solid var(--c-border-light); padding-right: 0; padding-bottom: 24px; }
+    .split-quotes { grid-template-columns: 1fr; }
+    .findings { grid-template-columns: 1fr; }
+    .glossary dl { grid-template-columns: 1fr; gap: 4px 0; }
+    .glossary dt { margin-top: 10px; }
+  }
+  @media (max-width: 640px) {
+    .display { font-size: 48px; letter-spacing: -1.44px; }
+    h2 { font-size: 26px; letter-spacing: -0.52px; }
+    .section { padding: 64px 0; }
+    .stats-bar { grid-template-columns: 1fr; }
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    nav.topnav .right a:not(.btn-cta) { display: none; }
+    .container { padding: 0 20px; }
+    .stat-card .num { font-size: 44px; letter-spacing: -1.32px; }
+    .score-block .big { font-size: 88px; letter-spacing: -2.6px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="container">
+    <div class="brand"><span class="dot"></span><span>AUQ</span></div>
+    <div class="right">
+      <a href="#summary">Summary</a>
+      <a href="#identity">What AI Says</a>
+      <a href="#performance">Performance</a>
+      <a href="#research">Sources</a>
+      <a href="#peers">Peers</a>
+      <a href="#moves">Action Plan</a>
+      <a class="btn-cta" href="#methodology">Methodology</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">
+      <span class="pill"></span>
+      <span class="mono-label">GEO AUDIT &nbsp;·&nbsp; BRAND-ONLY</span>
+    </div>
+    <h1 class="display">Sturdy.</h1>
+    <p class="lede">A look at how Sturdy is described, positioned, and quoted inside Google's AI Overviews, the AI answer box at the top of search results, and where the brand goes missing.</p>
+
+    <div class="meta">
+      <div class="row"><span class="k">Site</span><span class="v">sturdy.ai</span></div>
+      <div class="row"><span class="k">Where we looked</span><span class="v">Google AI Overviews, US</span></div>
+      <div class="row"><span class="k">Questions tested</span><span class="v">Category questions for Customer Success software, customer health, churn, and AI context layers</span></div>
+      <div class="row"><span class="k">Prepared</span><span class="v">June 2, 2026 &nbsp;by&nbsp; AUQ</span></div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="lbl">AI Visibility Score</div>
+        <div class="num warn">15</div>
+        <div class="sub">out of 100. The brand is barely visible in AI answers today.</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Real AI mentions</div>
+        <div class="num">0</div>
+        <div class="sub">Google's AI does not name Sturdy in any answer we tested for Customer Success or AI context layer.</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Site authority</div>
+        <div class="num">35</div>
+        <div class="sub">A low score on the trust signal Google uses. Industry peers sit at 73 to 78.</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Google rankings (US)</div>
+        <div class="num">25</div>
+        <div class="sub">Only 25 non-branded keywords in the index, all on old churn-metric content.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="summary">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">EXECUTIVE SUMMARY</span>
+      <h2>Sturdy's new "context layer for AI" story has not reached Google's AI yet. The old "churn tool" story is what little is left in the index.</h2>
+    </div>
+
+    <div class="grid grid-2" style="gap:32px;">
+      <div class="stack-md">
+        <p class="lede">Sturdy is in a positioning transition. The site now sells "The data layer AI inference deserves," a context layer for enterprise LLMs. Google's AI has not picked any of that up.</p>
+        <p>When we ask Google for the best Customer Success platform, the answer names Gainsight, ChurnZero, Vitally, and Planhat. When we ask about an AI context layer, the answer names retrieval frameworks and vector databases. Sturdy is in neither answer.</p>
+        <p>One number looks dramatic but is misleading. A brand monitoring tool reports 40,710 "Sturdy" mentions in the US. We read the cited pages: Home Depot, Lowe's, Etsy, The Spruce, Wikihow. The tool is matching the everyday word "sturdy" used to describe furniture and tools, not the brand. Real brand mentions are zero.</p>
+      </div>
+
+      <div class="score-block">
+        <div class="num-side">
+          <div class="mono-label">AI Visibility Score</div>
+          <div class="big">15</div>
+          <div class="band"><span>Barely visible</span></div>
+          <div class="scale">
+            <div class="seg on"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div>
+          </div>
+          <div class="scale-lbl"><span>Barely</span><span>Low</span><span>Competitive</span><span>Dominant</span></div>
+        </div>
+        <div class="components">
+          <div class="mono-label" style="margin-bottom:14px;">What's in the score</div>
+          <ul>
+            <li><span class="lbl">How AI describes the brand</span><span class="val">10 / 100</span></li>
+            <li><span class="lbl">Inclusion in AI answers</span><span class="val">5 / 100</span></li>
+            <li><span class="lbl">Your pages being quoted</span><span class="val">10 / 100</span></li>
+            <li><span class="lbl">Showing up in the category</span><span class="val">20 / 100</span></li>
+            <li><span class="lbl">Showing up for branded searches</span><span class="val">30 / 100</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:80px; margin-bottom:0;">
+      <span class="mono-label">Three things you need to know</span>
+    </div>
+    <div class="findings">
+      <div class="finding">
+        <div class="num">01</div>
+        <h3>The new story is not in Google's AI yet</h3>
+        <p>"Context Layer for AI," "Data Rails," "deterministic context delivery." None of these phrases trigger a Sturdy mention in any AI answer we tested. The category itself does not exist in Google's AI yet.</p>
+      </div>
+      <div class="finding">
+        <div class="num">02</div>
+        <h3>The old story is what's left</h3>
+        <p>Sturdy ranks for 25 keywords, all of them old SaaS-churn blog posts (gross churn, net churn, NDR, "types of churn"). That tells Google's AI what Sturdy is, and it does not match the homepage anymore.</p>
+      </div>
+      <div class="finding">
+        <div class="num">03</div>
+        <h3>The brand name is also a common word</h3>
+        <p>"Sturdy" is everyday English. Tracking tools cannot tell apart the company from a sentence describing a chair. This makes raw share-of-mentions numbers unreliable and the brand harder to discover.</p>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:80px; margin-bottom:0;">
+      <span class="mono-label">Top three things to do in the next 30 days</span>
+    </div>
+    <div class="findings">
+      <div class="finding">
+        <div class="num">A</div>
+        <h3>Publish the "Context Layer" definition</h3>
+        <p>There is no Google answer for "what is a context layer for AI" yet. Be the source that creates it. A standalone page with a one-paragraph definition, an FAQ, and named entities (Data Rails, Sturdy Connect) is the foundation for everything else.</p>
+      </div>
+      <div class="finding">
+        <div class="num">B</div>
+        <h3>Get named on the CS platform lists</h3>
+        <p>While the new category builds, the brand still needs to be on the existing Customer Success software lists at G2, Gartner, Forrester, and "best of" articles. That is where Google's AI gets its answers today.</p>
+      </div>
+      <div class="finding">
+        <div class="num">C</div>
+        <h3>Treat "Sturdy" plus a qualifier as the brand mark</h3>
+        <p>Always write "Sturdy AI" or "Sturdy by [company]" in content the AI will read. The bare word is invisible signal. Adding a qualifier makes the brand findable.</p>
+      </div>
+    </div>
+
+    <div class="glossary">
+      <div class="mono-label">Quick glossary</div>
+      <dl>
+        <dt>AI Overview</dt>
+        <dd>The AI-generated answer Google now shows at the top of many search results.</dd>
+        <dt>GEO</dt>
+        <dd>Generative Engine Optimization. The practice of getting a brand named or quoted by AI answers (Google AI, ChatGPT, Perplexity).</dd>
+        <dt>Site authority (DR)</dt>
+        <dd>A 0 to 100 score (Domain Rating) that measures how trusted a site is. Higher is better.</dd>
+        <dt>Share of mentions</dt>
+        <dd>How often a brand shows up in AI answers compared to its peers.</dd>
+        <dt>Listicle</dt>
+        <dd>"Best of" articles like "10 Best Customer Success Platforms." Google's AI quotes these frequently.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="identity">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">01 &nbsp;·&nbsp; What Google's AI Says About Sturdy</span>
+      <h2>The homepage tells one story. Google's AI doesn't tell any story at all.</h2>
+    </div>
+
+    <div class="split-quotes">
+      <div class="card">
+        <div class="mono-label">What the brand says about itself</div>
+        <h3>The data layer AI inference deserves.</h3>
+        <blockquote>
+          Retrieval, entity resolution, and permissioned context delivery for Claude, GPT, and every enterprise LLM workflow you run.
+          <span class="src">sturdy.ai homepage, 2026</span>
+        </blockquote>
+        <p>The product is "Data Rails," a deterministic data layer for AI over enterprise communication. Three layers: Consolidate (ingest every silo), Identify (run AI on a model it understands), Act (push intelligence to the teams that use it).</p>
+        <p>Built for revenue, marketing, operations and BI, product, renewal, and customer teams. Works with OpenAI, Anthropic Claude, Google Gemini, Mistral, Llama, and Azure OpenAI.</p>
+        <p>Customers shown on the homepage: MP, Skyvera, Laerdal. AICPA SOC 2 and GDPR badges visible.</p>
+      </div>
+
+      <div class="card">
+        <div class="mono-label">What Google's AI says</div>
+        <h3>Nothing. The brand isn't named.</h3>
+        <blockquote>
+          We tested every category question we could think of for Customer Success software, customer health scoring, churn prevention, AI context layers, retrieval, and enterprise LLM platforms. Sturdy is not named in any of those answers. The named players are Gainsight, ChurnZero, Vitally, Planhat, HubSpot Service Hub, and Zendesk on the CS side, and the major LLM and vector-database vendors on the AI side.
+          <span class="src">From AI Overview responses, May to June 2026, US</span>
+        </blockquote>
+        <blockquote>
+          The tracking tool says Sturdy has 40,710 mentions in this market. We read the underlying cited pages. They are home improvement sites, recipe sites, and DIY blogs that use "sturdy" to describe a chair or a frying pan. None of them are about the company.
+          <span class="src">From manual review of cited domains, May 2026</span>
+        </blockquote>
+        <p>None of Sturdy's signature names show up. "Data Rails," "Sturdy Connect," "Ask Sturdy," "Context Engine," and the "Consolidate / Identify / Act" framework are absent.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="mono-label">A note on that 40,710 number</div>
+      <p style="color:rgba(0,0,0,0.78); font-size:15px; line-height:1.5;">When a brand name is also a common word, tracking tools count every use of the word as if it were a brand mention. "Sturdy" describes furniture, plants, tools, even arguments. The top 25 websites where the word appears, per the tool, are Home Depot, Lowe's, Etsy, Wikihow, The Spruce, Serious Eats, and Food and Wine. Throughout this report we use a "real mentions only" view, which sets the actual brand citation count to zero based on inspection.</p>
+    </div>
+
+    <div style="margin-top:64px;">
+      <div class="section-head" style="margin-bottom:24px;">
+        <span class="mono-label">Where the brand wants to play</span>
+        <h3>The topics that matter to Sturdy, and what Google's AI knows today.</h3>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th style="width:30%">Topic</th><th style="width:30%">What Google's AI says today</th><th>Sturdy presence</th></tr></thead>
+          <tbody>
+            <tr><td>Customer Success software (CSP)</td><td>Answer is "Gainsight, ChurnZero, Vitally, Planhat, HubSpot Service Hub."</td><td class="no">Missing</td></tr>
+            <tr><td>Customer health scoring</td><td>Answer points to ChurnZero ChurnScore, Gainsight health, Vitally health.</td><td class="no">Missing</td></tr>
+            <tr><td>Churn prevention / SaaS churn</td><td>Definitions and metrics, no named vendor.</td><td class="no">Missing (despite ranking for 8 of these keywords)</td></tr>
+            <tr><td>Context layer for AI</td><td>No canonical answer exists yet. AI talks about RAG, vector DBs, embeddings.</td><td class="no">Missing. Open ground.</td></tr>
+            <tr><td>Entity resolution across silos</td><td>Answer is generic, names data engineering vendors.</td><td class="no">Missing</td></tr>
+            <tr><td>Permissioned data access for LLMs</td><td>No canonical answer exists yet.</td><td class="no">Missing. Open ground.</td></tr>
+            <tr><td>Customer signals / GTM intelligence</td><td>Answer is generic, names Gong for conversation intelligence.</td><td class="no">Missing</td></tr>
+            <tr><td>Revenue at risk / account risk detection</td><td>Answer is generic, names CS platforms.</td><td class="no">Missing</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:64px;">
+      <div>
+        <div class="mono-label">How the brand describes itself</div>
+        <h3 style="margin:10px 0 6px;">The 2026 story on sturdy.ai</h3>
+        <div class="descriptors">
+          <span class="desc-pill">Data Rails</span>
+          <span class="desc-pill">Context Layer for AI</span>
+          <span class="desc-pill">Deterministic context</span>
+          <span class="desc-pill">Entity resolution</span>
+          <span class="desc-pill">Semantic retrieval</span>
+          <span class="desc-pill">Permission-aware</span>
+          <span class="desc-pill">Sturdy Connect</span>
+          <span class="desc-pill">Ask Sturdy</span>
+          <span class="desc-pill">No-code, day one</span>
+          <span class="desc-pill">Open data layer</span>
+          <span class="desc-pill">Works with any LLM</span>
+        </div>
+      </div>
+      <div>
+        <div class="mono-label">What Google's AI does not know about the brand</div>
+        <h3 style="margin:10px 0 6px;">None of these phrases appear in any AI answer</h3>
+        <div class="descriptors">
+          <span class="desc-pill absent">Sturdy (as a brand)</span>
+          <span class="desc-pill absent">Sturdy AI</span>
+          <span class="desc-pill absent">Data Rails</span>
+          <span class="desc-pill absent">Context Layer for AI</span>
+          <span class="desc-pill absent">Sturdy Connect</span>
+          <span class="desc-pill absent">Ask Sturdy</span>
+          <span class="desc-pill absent">Consolidate / Identify / Act</span>
+          <span class="desc-pill absent">Deterministic context</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:48px;">
+      <div class="mono-label">Three things getting in the way</div>
+      <div class="grid grid-3" style="margin-top:16px;">
+        <div class="card flat" style="background:var(--c-fill-light); box-shadow:none;">
+          <h4>The brand name is a problem</h4>
+          <p>"Sturdy" is a common adjective used on millions of pages about furniture and tools. AI tracking tools cannot tell the company apart from the word. Always pairing it with "AI" or another qualifier in content is the fix.</p>
+        </div>
+        <div class="card flat" style="background:var(--c-fill-light); box-shadow:none;">
+          <h4>The new category does not exist yet</h4>
+          <p>"Context layer for AI" is a real and growing concept, but Google's AI has no canonical answer for it yet. That is both the risk and the opportunity. Whoever publishes the best definition first becomes the answer.</p>
+        </div>
+        <div class="card flat" style="background:var(--c-fill-light); box-shadow:none;">
+          <h4>The blog still belongs to old positioning</h4>
+          <p>The pages that do rank, "types of churn" and "net dollar retention," tell Google's AI that Sturdy is a CS metrics blog. Not a context layer for enterprise AI. The story on the homepage doesn't match the story in the index.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="performance">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">02 &nbsp;·&nbsp; How the Site Performs</span>
+      <h2>The signals Google's AI uses to decide what to quote, applied to sturdy.ai.</h2>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="lbl">Site authority (0 to 100)</div>
+        <div class="num">35</div>
+        <div class="sub">A 38-point gap from peers. ChurnZero 73, Maxio 77, Klipfolio 78.</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Total keywords ranking</div>
+        <div class="num">25</div>
+        <div class="sub">Non-branded, US. A tiny footprint for a B2B SaaS.</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Keywords ranking top 3</div>
+        <div class="num">4</div>
+        <div class="sub">All on the SaaS-churn metric blog content from earlier years.</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Estimated monthly traffic</div>
+        <div class="num">118</div>
+        <div class="sub">From organic search in the US. Most of it goes to legacy blog posts.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:64px;">
+      <div class="section-head" style="margin-bottom:24px;">
+        <span class="mono-label">The keywords Sturdy actually ranks for</span>
+        <h3>The story Google's index tells about the brand.</h3>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:38%">Keyword</th>
+              <th class="num">Monthly searches</th>
+              <th class="num">Sturdy's Google rank</th>
+              <th>What it tells the AI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>types of churn</td><td class="num">40</td><td class="num">1</td><td>Sturdy is a SaaS churn metrics resource.</td></tr>
+            <tr><td>net churn rate</td><td class="num">20</td><td class="num">1</td><td>Same.</td></tr>
+            <tr><td>saas churn</td><td class="num">250</td><td class="num">12</td><td>Same.</td></tr>
+            <tr><td>gross churn</td><td class="num">200</td><td class="num">5</td><td>Same.</td></tr>
+            <tr><td>saas churn calculation</td><td class="num">200</td><td class="num">9</td><td>Same.</td></tr>
+            <tr><td>saas churn definition</td><td class="num">200</td><td class="num">10</td><td>Same.</td></tr>
+            <tr><td>net churn</td><td class="num">200</td><td class="num">7</td><td>Same.</td></tr>
+            <tr><td>customer signals</td><td class="num">90</td><td class="num">7</td><td>The single keyword that hints at the new positioning.</td></tr>
+            <tr><td>revenue at risk</td><td class="num">20</td><td class="num">4</td><td>Linked to the Revenue Risk Calculator. Useful, related.</td></tr>
+            <tr><td>net revenue churn formula</td><td class="num">150</td><td class="num">12</td><td>Churn metric blog.</td></tr>
+            <tr><td>how to calculate churn saas</td><td class="num">150</td><td class="num">9</td><td>Same.</td></tr>
+            <tr><td>calculate churn rate saas</td><td class="num">150</td><td class="num">10</td><td>Same.</td></tr>
+            <tr><td>saas ndr</td><td class="num">40</td><td class="num">8</td><td>Same.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="caption" style="margin-top:14px;">11 of the top 13 ranking keywords are SaaS churn metric variations. Google's AI reads this and decides Sturdy is a customer-success metrics blog. None of the new "Data Rails / Context Layer" pages are in the index yet.</p>
+    </div>
+
+    <div style="margin-top:64px;">
+      <div class="section-head" style="margin-bottom:24px;">
+        <span class="mono-label">Sturdy pages quoted by Google's AI</span>
+        <h3>None. The brand has no AI Overview citation footprint today.</h3>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th style="width:80%">Sturdy page</th><th class="num">Times quoted in AI Overviews</th></tr></thead>
+          <tbody>
+            <tr><td>sturdy.ai (homepage)</td><td class="num no">0</td></tr>
+            <tr><td>sturdy.ai/platform/* (Consolidate, Identify, Act, Integrations)</td><td class="num no">0</td></tr>
+            <tr><td>sturdy.ai/solutions/* (Revenue, Marketing, Ops & BI, Product, Renewal, Customer Teams)</td><td class="num no">0</td></tr>
+            <tr><td>sturdy.ai/compare/* (vs Gainsight, ChurnZero, Vitally, etc.)</td><td class="num no">0</td></tr>
+            <tr><td>sturdy.ai/blog/* (SaaS churn metric posts)</td><td class="num no">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="caption" style="margin-top:14px;">Ranking for a keyword and being quoted by Google's AI are different things. The site ranks for 25 keywords but Google's AI is not pulling content from any of them. The pages need to be answer-shaped (definition, list, table, FAQ) to be quoted.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">03 &nbsp;·&nbsp; What the Brand Is Known For</span>
+      <h2>The topics Sturdy is associated with in Google's AI, and where it's invisible.</h2>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:34%">Topic</th><th style="width:24%">How strong is the link</th><th>What's there</th></tr></thead>
+        <tbody>
+          <tr><td>SaaS churn metric definitions</td><td>Light, from blog rankings</td><td>Pages rank for "types of churn," "net churn," "gross churn," but Google's AI doesn't quote them in answers.</td></tr>
+          <tr><td>Customer signals</td><td>Light, single keyword</td><td>One blog post ranks position 7 for "customer signals." A starting point for the new positioning.</td></tr>
+          <tr><td>Revenue Risk Calculator</td><td>Light, single page</td><td>Ranks for "revenue at risk" at position 4. A small but topical surface.</td></tr>
+          <tr><td>Customer Success software (CSP)</td><td class="no">Invisible</td><td>Despite having a "vs Gainsight" page, "vs ChurnZero" page, etc., Sturdy is not named on any "best CSP" answer.</td></tr>
+          <tr><td>Customer health scoring</td><td class="no">Invisible</td><td>ChurnZero ChurnScore is the named answer. Sturdy is not.</td></tr>
+          <tr><td>Conversation intelligence / GTM signals</td><td class="no">Invisible</td><td>Gong owns this in Google's AI. Sturdy does not appear despite having a "vs Gong" comparison page.</td></tr>
+          <tr><td>Context layer for AI</td><td class="no">Invisible, no answer exists</td><td>No vendor is named. A category waiting to be claimed.</td></tr>
+          <tr><td>Permissioned RAG / data access for LLMs</td><td class="no">Invisible, no answer exists</td><td>No vendor is named. A category waiting to be claimed.</td></tr>
+          <tr><td>Entity resolution across silos</td><td class="no">Invisible</td><td>Generic data engineering answer, no named vendor.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:48px;">
+      <div class="mono-label">Topics where Sturdy should plausibly appear</div>
+      <div class="chips">
+        <span class="chip">What is a context layer for AI</span>
+        <span class="chip">Data layer for enterprise LLMs</span>
+        <span class="chip">Permission-aware RAG</span>
+        <span class="chip">Entity resolution for AI</span>
+        <span class="chip">Best customer success platform with AI</span>
+        <span class="chip">Account intelligence platforms</span>
+        <span class="chip">Customer signals software</span>
+        <span class="chip">Risk detection for customer success</span>
+        <span class="chip">Cross-silo customer 360 for AI</span>
+        <span class="chip">AI-ready customer data platform</span>
+      </div>
+    </div>
+
+    <div style="margin-top:48px;">
+      <div class="section-head" style="margin-bottom:20px;">
+        <span class="mono-label">Where the brand shows up on the buying journey</span>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th style="width:32%">Stage</th><th style="width:22%">Coverage</th><th>Reading</th></tr></thead>
+          <tbody>
+            <tr><td>Early curiosity ("what is saas churn")</td><td>Light</td><td>Old blog ranks, but Google's AI doesn't quote it.</td></tr>
+            <tr><td>Solution research ("what is a context layer for AI")</td><td class="no">Missing</td><td>No answer exists yet. Sturdy should write it.</td></tr>
+            <tr><td>Comparison ("best customer success platform")</td><td class="no">Missing</td><td>Gainsight, ChurnZero, Vitally, Planhat are named. Sturdy is not.</td></tr>
+            <tr><td>Direct vs. comparisons ("Sturdy vs Gainsight")</td><td class="no">Missing in AI answers</td><td>Sturdy publishes its own /compare pages, but they're not quoted yet.</td></tr>
+            <tr><td>Vendor research ("how much does Sturdy cost")</td><td class="no">No answer exists</td><td>The brand has not yet earned a vendor-evaluation answer.</td></tr>
+            <tr><td>Company background ("who is Sturdy")</td><td class="no">Caught in name confusion</td><td>"Sturdy" mostly returns Home Depot and furniture results.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dark-zone dark" id="research">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">SOURCES &nbsp;·&nbsp; 04 / 05</span>
+      <h2>Where Google's AI gets its answers in this category, and the peers it actually names.</h2>
+      <p class="lede" style="color:rgba(255,255,255,0.75); margin-top:8px;">Two views from outside the brand. The websites Google's AI quotes for customer success and account intelligence questions, and the competitive map the AI itself has drawn.</p>
+    </div>
+
+    <div style="margin-top:48px;">
+      <div class="mono-label">04 &nbsp;·&nbsp; Where Google's AI looks</div>
+      <h3 style="margin:10px 0 24px; color:var(--c-text-dark); font-size:28px; letter-spacing:-0.42px;">For Customer Success and account intelligence answers.</h3>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th class="num" style="width:6%">#</th><th style="width:38%">Website type</th><th>Why it matters</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td>Review hubs (g2.com, gartner.com, capterra.com, trustradius.com)</td><td>Almost every "best customer success software" AI answer pulls from a comparison roundup published here. Sturdy needs an active vendor listing on each.</td></tr>
+            <tr><td class="num">2</td><td>"Best of" software listicles (kalungi.com, customsuccessboard.com, custify.com/blog, smartkarrot.com, planhat.com/blog)</td><td>These rank for "best customer success software" and feed Google's AI directly. Many list 10 to 15 vendors. Sturdy is not on most of them.</td></tr>
+            <tr><td class="num">3</td><td>Vendor blogs (churnzero.com, gainsight.com, vitally.io, planhat.com)</td><td>Competitors quote each other in their own content. The AI then picks them all up.</td></tr>
+            <tr><td class="num">4</td><td>Community discussion (reddit.com, quora.com)</td><td>Real CS practitioners discussing tools. Google's AI weights these highly.</td></tr>
+            <tr><td class="num">5</td><td>Forbes, Inc., TechCrunch, GeekWire</td><td>Authority editorial that mentions funding, founders, growth. Sturdy has some coverage but not enough density.</td></tr>
+            <tr><td class="num">6</td><td>Wikipedia and Crunchbase</td><td>Background sources Google's AI uses for "who is" and "is X a startup" answers. Sturdy's presence here is thin.</td></tr>
+            <tr><td class="num">7</td><td>YouTube and LinkedIn</td><td>Demo videos and founder content. Carry more weight than they should because Google's AI trusts them.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:40px;">
+        <div class="mono-label">Places to focus the outreach</div>
+        <div class="grid grid-2" style="margin-top:16px;">
+          <div class="card">
+            <h4 style="margin-bottom:8px;">Vendor review listings</h4>
+            <p style="font-size:14px;">g2.com, gartner.com, capterra.com, softwareadvice.com, trustradius.com. Stand up an active Sturdy listing on each. Push customer reviews. These are the canonical sources for "is this vendor any good" answers.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom:8px;">"Best CSP" listicles</h4>
+            <p style="font-size:14px;">kalungi.com, custify.com/blog, smartkarrot.com, customsuccessboard.com, churnzero.com/blog. Pitch to be included in their "best of" rankings. Lead with a real customer outcome and the "context layer" differentiator.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom:8px;">Authority editorial</h4>
+            <p style="font-size:14px;">forbes.com, inc.com, techcrunch.com, bizjournals.com, crunchbase.com. Density of mentions in these places is what Google's AI uses for "who is" answers. Pursue placement and refresh existing coverage.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom:8px;">Communities</h4>
+            <p style="font-size:14px;">reddit.com/r/CustomerSuccess, quora.com, youtube.com, linkedin.com. Build authentic presence through customer stories and founder content. Avoid placed posts.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:96px;" id="peers">
+      <div class="mono-label">05 &nbsp;·&nbsp; Peers Google's AI names</div>
+      <h3 style="margin:10px 0 24px; color:var(--c-text-dark); font-size:28px; letter-spacing:-0.42px;">The competitive map drawn by Google's AI itself. Observed, not chosen.</h3>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th style="width:22%">Peer</th><th style="width:24%">How Google's AI describes them</th><th>Where they show up</th></tr></thead>
+          <tbody>
+            <tr><td>Gainsight</td><td>The gold standard for Customer Success. Enterprise. Health scoring, churn prediction, account analytics.</td><td>Named in nearly every "best CS software" answer. Anchor of the category.</td></tr>
+            <tr><td>ChurnZero</td><td>AI-powered customer success for subscription businesses. ChurnScore health, playbooks, in-app engagement.</td><td>Named in "best CSP for SaaS" answers, and gets full vendor evaluations (pricing, CEO, ownership).</td></tr>
+            <tr><td>Vitally</td><td>Best for visual workflows and startups. High flexibility and AI features.</td><td>Named in "best CSP" comparison answers, paired with Gainsight and ChurnZero.</td></tr>
+            <tr><td>Planhat</td><td>Best for data-focused teams. 360-degree view across the customer tech stack.</td><td>Named in "best CSP" comparison answers.</td></tr>
+            <tr><td>HubSpot Service Hub</td><td>For teams already in the HubSpot ecosystem. Helpdesk plus feedback tools.</td><td>Named in "best CSP" and CXM answers.</td></tr>
+            <tr><td>Zendesk</td><td>Industry standard for omnichannel ticketing. Not a CSP, framed as an integration partner.</td><td>Named as the helpdesk to integrate with, not as a CSP itself.</td></tr>
+            <tr><td>Gong</td><td>Conversation intelligence. Revenue intelligence. Sales calls.</td><td>Named in "GTM intelligence" and "revenue forecasting" answers. The CRM-adjacent winner.</td></tr>
+            <tr><td>Totango, Staircase AI, Rox, Hook, Agency (Kai)</td><td>Long tail of CS and account intelligence tools.</td><td>Mentioned occasionally. Less frequently named than the top four.</td></tr>
+            <tr style="background:rgba(189,187,255,0.08);"><td><strong>Sturdy</strong></td><td>Not named.</td><td>Absent from every answer we tested.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card" style="margin-top:32px; background:rgba(189,187,255,0.06); border-color:rgba(189,187,255,0.2);">
+        <div class="mono-label" style="color:var(--c-lavender);">Notable detail</div>
+        <p style="margin-top:8px; color:rgba(255,255,255,0.85);">Sturdy's own /compare pages target Gainsight, ChurnZero, Vitally, Staircase AI, Totango, Gong, Rox, Hook, and Agency (Kai). That competitive map matches what Google's AI sees, with one critical difference: Sturdy is on Sturdy's own list, but not yet on the AI's.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="moves">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">06 &nbsp;·&nbsp; What To Do in the Next 30 Days</span>
+      <h2>Five moves, in order of impact. Each grounded in a finding above.</h2>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="move">
+        <div class="num">Move 01 &nbsp;·&nbsp; On the site</div>
+        <h3>Publish the canonical "context layer for AI" page.</h3>
+        <p>Google's AI has no canonical answer for "what is a context layer for AI" yet. Be the source that creates it. Write one definition page, with a clean one-paragraph opener, a labeled diagram, a comparison table against RAG and vector databases, and an FAQ. Include the named entities (Data Rails, Sturdy Connect, Ask Sturdy) so they become quotable.</p>
+      </div>
+      <div class="move">
+        <div class="num">Move 02 &nbsp;·&nbsp; On the site</div>
+        <h3>Rebuild three category pillar pages.</h3>
+        <p>Three high-value pages targeted at category answers Google's AI is asking: "best customer success platform with AI built in," "permission-aware RAG for enterprise," "entity resolution across customer data silos." Same answer-shape (definition, table, FAQ). These can carry the brand into the existing CS shelf while the new category is being built.</p>
+      </div>
+      <div class="move">
+        <div class="num">Move 03 &nbsp;·&nbsp; Outside the site</div>
+        <h3>Get on the CS software listings.</h3>
+        <p>Stand up active vendor profiles on G2, Capterra, Software Advice, TrustRadius, and Gartner Peer Insights. Use the platform to invite existing customers (MP, Skyvera, Laerdal as starters) to leave reviews. Target 25 verified G2 reviews in 60 days.</p>
+      </div>
+      <div class="move">
+        <div class="num">Move 04 &nbsp;·&nbsp; Outside the site</div>
+        <h3>Pitch to be in the "best CSP" listicles.</h3>
+        <p>The top "best customer success software" articles on kalungi.com, custify.com/blog, smartkarrot.com, customsuccessboard.com, and competitor blogs feed Google's AI directly. Reach out with a verifiable customer outcome and the "context layer" angle. Even one or two inclusions can shift AI answers.</p>
+      </div>
+      <div class="move" style="grid-column: span 2;">
+        <div class="num">Move 05 &nbsp;·&nbsp; Brand</div>
+        <h3>Always pair "Sturdy" with a qualifier in published content.</h3>
+        <p>The bare word is too generic. Write "Sturdy AI" or "Sturdy by [parent]" on every page, in every press mention, in every social post, and in every customer story. Update the homepage's H1 metadata to include "Sturdy AI" alongside the tagline. This is the single move that makes everything else measurable, because the tracking tools and AI systems can finally tell the brand apart from the word.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">07 &nbsp;·&nbsp; The 90-Day Plan</span>
+      <h2>Three months, broken into four-week phases. Month one absorbs the 30-day moves.</h2>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="sprint">
+        <div class="num">Month 1 &nbsp;·&nbsp; Days 1 to 30</div>
+        <h3>Lay the foundation.</h3>
+        <ul>
+          <li>Publish the canonical "context layer for AI" definition page with FAQ and named entities.</li>
+          <li>Add "Sturdy AI" or a brand qualifier to every page metadata and H1 across the site.</li>
+          <li>Stand up vendor listings on G2, Capterra, Software Advice, TrustRadius, and Gartner Peer Insights.</li>
+          <li>Audit and rewrite the legacy SaaS-churn blog posts. Either kill them or pull them into the new positioning.</li>
+        </ul>
+      </div>
+      <div class="sprint">
+        <div class="num">Month 2 &nbsp;·&nbsp; Days 31 to 60</div>
+        <h3>Get named in the lists.</h3>
+        <ul>
+          <li>Outreach to the top "best customer success software" listicle writers. Lead with a customer result.</li>
+          <li>Publish the three category pillar pages (best CSP with AI, permission-aware RAG, entity resolution).</li>
+          <li>Drive 25 customer reviews on G2. Use the existing customer logos (MP, Skyvera, Laerdal) as the seed.</li>
+          <li>Publish a public benchmark or white paper under the founder's name, building on "The Context Engine."</li>
+        </ul>
+      </div>
+      <div class="sprint">
+        <div class="num">Month 3 &nbsp;·&nbsp; Days 61 to 90</div>
+        <h3>Compound and measure.</h3>
+        <ul>
+          <li>Re-run this audit. Look for real mentions appearing, keyword rankings growing, and inclusion on the target listicles.</li>
+          <li>Publish founder-led video content on YouTube tied to the new category. Google's AI quotes YouTube heavily.</li>
+          <li>Build authentic presence on Reddit (r/CustomerSuccess, r/LLMDevs) through expert answers, not placed posts.</li>
+          <li>Decide whether to push for a Wikipedia and Crunchbase refresh based on the founder name density.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">08 &nbsp;·&nbsp; What to Track</span>
+      <h2>Check these every month. The numbers in the right column are where you start today.</h2>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:32%">What to measure</th><th style="width:24%">Where you are today</th><th>What it tells you</th></tr></thead>
+        <tbody>
+          <tr><td>How Google's AI describes Sturdy</td><td>Doesn't describe it yet.</td><td>Whether the AI starts using the new language: Context Layer for AI, Data Rails, deterministic context.</td></tr>
+          <tr><td>Real AI Overview mentions (after filtering)</td><td class="num">0</td><td>How many AI answers actually name Sturdy as a brand, not the word.</td></tr>
+          <tr><td>Inclusion on "best CSP" answers</td><td>Absent</td><td>Whether Sturdy starts appearing alongside Gainsight, ChurnZero, Vitally, Planhat in category answers.</td></tr>
+          <tr><td>Pages on sturdy.ai quoted by Google's AI</td><td class="num">0 of 0</td><td>How often Google's AI pulls quotes from Sturdy's own pages.</td></tr>
+          <tr><td>Keywords ranking on Google (US)</td><td class="num">25</td><td>How many search terms the site ranks for.</td></tr>
+          <tr><td>Keywords ranking that match the new positioning</td><td class="num">1 ("customer signals")</td><td>How many ranking keywords actually describe Sturdy as a context layer, not a churn blog.</td></tr>
+          <tr><td>Listicle inclusions</td><td class="num">0 of 5 target lists</td><td>Whether the brand is named in the "best CSP" rankings Google's AI quotes.</td></tr>
+          <tr><td>Review-site presence</td><td>Limited</td><td>Active vendor listings with up-to-date positioning and customer reviews on G2, Capterra, etc.</td></tr>
+          <tr><td>Brand-name search clarity</td><td>Polluted by the everyday word "sturdy"</td><td>Whether Google's AI returns a real Sturdy answer for "what is Sturdy AI" or "Sturdy reviews."</td></tr>
+          <tr><td>Overall AI Visibility Score</td><td class="num">15 / 100</td><td>The composite from this report.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="methodology" style="background:var(--c-fill-light);">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">APPENDIX &nbsp;·&nbsp; How We Did This</span>
+      <h2>The methodology behind the report, in plain English.</h2>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="stack-md">
+        <div>
+          <div class="mono-label">Where the data came from</div>
+          <p>Live Google AI Overview answers and Google search data, captured via premium research tools. All numbers are US-based, captured in late May and early June 2026.</p>
+        </div>
+        <div>
+          <div class="mono-label">How we ran the test</div>
+          <p>We fed Google's AI category questions covering customer success software, customer health, churn, conversation intelligence, account risk, and AI context layers. We recorded every AI Overview answer and counted whether Sturdy was named. We also read the cited pages by hand to identify false matches.</p>
+        </div>
+        <div>
+          <div class="mono-label">Why the raw number is misleading</div>
+          <p>A tracking tool reported 40,710 "Sturdy" mentions in this market. We inspected the top 25 source domains. They are Home Depot, Lowe's, Etsy, Wikihow, The Spruce, Serious Eats. The tool is counting every use of "sturdy" as a word, not as a brand. So we set the real brand-citation count to zero and use that throughout the report.</p>
+        </div>
+      </div>
+      <div class="stack-md">
+        <div>
+          <div class="mono-label">What's in the AI Visibility Score</div>
+          <p>A weighted average of five things Google's AI rewards: how the AI describes the brand, whether it's named in category answers, whether its own pages get quoted, how broadly it shows up across category topics, and whether branded searches return clean results. 0 means absent. 100 means dominant.</p>
+        </div>
+        <div>
+          <div class="mono-label">What this audit does not do</div>
+          <p>This is a brand-only positioning diagnostic. It does not benchmark share-of-mentions against a chosen list of competitors, and it does not connect to live Google Search Console data. Both are useful next steps.</p>
+        </div>
+        <div>
+          <div class="mono-label">A note on the brand name</div>
+          <p>"Sturdy" is a high-frequency English adjective. This makes the brand harder to discover, harder to measure, and harder to differentiate in AI Overviews. A consistent "Sturdy AI" anchor in all content is a structural fix that compounds over time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="big-footer">
+  <div class="container">
+    <div class="word">sturdy.</div>
+    <div class="meta-row">
+      <div class="left">GEO AUDIT &nbsp;·&nbsp; BRAND-ONLY &nbsp;·&nbsp; JUNE 2026</div>
+      <div class="right">PREPARED BY AUQ &nbsp;·&nbsp; ANALYTICS@AUQ.IO</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
