@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Willow — GEO Audit v2 With Competitors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-text: #000000; --c-text-dark: #ffffff;
+    --c-bg: #ffffff; --c-dark: #010120;
+    --c-magenta: #ef2cc1; --c-orange: #fc4c02; --c-lavender: #bdbbff;
+    --c-border-light: rgba(0, 0, 0, 0.08); --c-border-dark: rgba(255, 255, 255, 0.12);
+    --c-fill-light: rgba(0, 0, 0, 0.04); --c-fill-dark: rgba(255, 255, 255, 0.06);
+    --c-muted-light: rgba(0, 0, 0, 0.55); --c-muted-dark: rgba(255, 255, 255, 0.65);
+    --shadow: 0 4px 10px rgba(1, 1, 32, 0.10); --shadow-lg: 0 12px 32px rgba(1, 1, 32, 0.10);
+    --r-sharp: 4px; --r-comfort: 8px;
+    --f-display: "Inter", "Helvetica Neue", Arial, sans-serif;
+    --f-mono: "JetBrains Mono", "PP Neue Montreal Mono", Georgia, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--f-display); font-size: 16px; font-weight: 400; line-height: 1.30; letter-spacing: -0.16px; color: var(--c-text); background: var(--c-bg); -webkit-font-smoothing: antialiased; }
+  .display { font-size: 80px; font-weight: 500; line-height: 0.95; letter-spacing: -2.4px; }
+  h1 { font-size: 56px; font-weight: 500; line-height: 1.05; letter-spacing: -1.68px; }
+  h2 { font-size: 40px; font-weight: 500; line-height: 1.10; letter-spacing: -0.8px; }
+  h3 { font-size: 22px; font-weight: 500; line-height: 1.20; letter-spacing: -0.22px; }
+  h4 { font-size: 18px; font-weight: 500; line-height: 1.30; letter-spacing: -0.18px; }
+  p { font-size: 16px; line-height: 1.45; letter-spacing: -0.16px; }
+  p.lede { font-size: 22px; line-height: 1.35; letter-spacing: -0.22px; font-weight: 400; }
+  .caption { font-size: 13px; line-height: 1.40; color: var(--c-muted-light); }
+  .mono-label { font-family: var(--f-mono); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--c-muted-light); display: inline-block; }
+  .dark .mono-label { color: var(--c-muted-dark); }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  .section { padding: 100px 0; border-top: 1px solid var(--c-border-light); }
+  .section-head { display: flex; flex-direction: column; gap: 16px; margin-bottom: 56px; max-width: 820px; }
+
+  nav.topnav { position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); background: rgba(255,255,255,0.75); border-bottom: 1px solid var(--c-border-light); }
+  nav.topnav .container { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; padding-bottom: 16px; }
+  .brand { font-family: var(--f-display); font-weight: 500; font-size: 18px; letter-spacing: -0.18px; display: flex; align-items: center; gap: 10px; }
+  .brand .dot { width: 10px; height: 10px; border-radius: 2px; background: linear-gradient(135deg, var(--c-magenta), var(--c-lavender)); }
+  nav.topnav .right { display: flex; align-items: center; gap: 24px; }
+  nav.topnav .right a { color: var(--c-text); text-decoration: none; font-size: 14px; letter-spacing: -0.14px; }
+  nav.topnav .right a:hover { opacity: 0.6; }
+  .btn-cta { display: inline-flex; align-items: center; gap: 8px; background: var(--c-dark); color: var(--c-text-dark); padding: 10px 18px; border-radius: var(--r-sharp); font-size: 14px; letter-spacing: -0.14px; font-weight: 500; text-decoration: none; transition: transform 0.15s ease; }
+  .btn-cta:hover { transform: translateY(-1px); }
+
+  .hero { position: relative; overflow: hidden; padding: 88px 0 96px; }
+  .hero::before, .hero::after { content: ""; position: absolute; pointer-events: none; filter: blur(60px); z-index: 0; }
+  .hero::before { width: 720px; height: 720px; top: -200px; right: -180px; background: radial-gradient(circle at 30% 30%, rgba(189, 187, 255, 0.55) 0%, transparent 60%), radial-gradient(circle at 70% 70%, rgba(239, 44, 193, 0.22) 0%, transparent 65%); border-radius: 50%; }
+  .hero::after { width: 560px; height: 560px; top: 60px; left: -140px; background: radial-gradient(circle at 40% 60%, rgba(189, 187, 255, 0.45) 0%, transparent 65%), radial-gradient(circle at 80% 30%, rgba(252, 76, 2, 0.10) 0%, transparent 60%); border-radius: 50%; }
+  .hero .container { position: relative; z-index: 1; }
+  .hero .eyebrow { display: inline-flex; align-items: center; gap: 12px; padding: 6px 12px; border-radius: var(--r-sharp); background: rgba(255,255,255,0.7); border: 1px solid var(--c-border-light); backdrop-filter: blur(8px); margin-bottom: 32px; }
+  .hero .eyebrow .pill { width: 6px; height: 6px; border-radius: 50%; background: var(--c-lavender); }
+  .hero .display { margin-bottom: 28px; max-width: 14ch; }
+  .hero p.lede { max-width: 64ch; color: rgba(0,0,0,0.75); margin-bottom: 40px; }
+  .hero .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px 32px; max-width: 980px; margin-bottom: 56px; }
+  .hero .meta .row { display: flex; gap: 10px; align-items: baseline; }
+  .hero .meta .k { font-family: var(--f-mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.10em; color: var(--c-muted-light); white-space: nowrap; }
+  .hero .meta .v { font-size: 14px; letter-spacing: -0.14px; color: var(--c-text); }
+
+  .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px; }
+  .stat-card { background: rgba(255,255,255,0.92); border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); padding: 24px; box-shadow: var(--shadow); backdrop-filter: blur(8px); display: flex; flex-direction: column; gap: 10px; }
+  .stat-card .num { font-size: 56px; font-weight: 500; line-height: 0.95; letter-spacing: -1.68px; }
+  .stat-card .num.muted { color: rgba(0,0,0,0.45); }
+  .stat-card .num.accent { background: linear-gradient(135deg, var(--c-lavender), var(--c-magenta)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .stat-card .num.warn { color: var(--c-orange); }
+  .stat-card .lbl { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.10em; color: var(--c-muted-light); }
+  .stat-card .sub { font-size: 14px; line-height: 1.4; letter-spacing: -0.14px; color: var(--c-muted-light); }
+
+  .card { background: var(--c-bg); border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); padding: 32px; box-shadow: var(--shadow); }
+  .card .mono-label { margin-bottom: 14px; }
+  .card h3 { margin-bottom: 10px; }
+  .card p { color: rgba(0,0,0,0.78); }
+  .card.flat { box-shadow: none; }
+  .dark .card { background: rgba(255,255,255,0.04); border-color: var(--c-border-dark); color: var(--c-text-dark); box-shadow: none; }
+  .dark .card p { color: rgba(255,255,255,0.78); }
+
+  .tbl-wrap { border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); overflow: hidden; background: var(--c-bg); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; letter-spacing: -0.14px; }
+  thead th { background: var(--c-dark); color: var(--c-text-dark); text-align: left; padding: 14px 18px; font-family: var(--f-mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; border-bottom: 1px solid var(--c-border-dark); }
+  tbody td { padding: 14px 18px; border-top: 1px solid var(--c-border-light); vertical-align: top; color: var(--c-text); }
+  tbody tr:nth-child(even) td { background: rgba(0,0,0,0.025); }
+  tbody td.num { font-variant-numeric: tabular-nums; font-weight: 500; }
+  td.no { color: var(--c-orange); font-weight: 500; }
+  td.yes { color: #097a3f; font-weight: 500; }
+  td.gf { color: #5a55c9; font-weight: 500; }
+  .dark .tbl-wrap { border-color: var(--c-border-dark); background: rgba(255,255,255,0.02); }
+  .dark thead th { background: rgba(255,255,255,0.08); color: var(--c-text-dark); }
+  .dark tbody td { color: var(--c-text-dark); border-top-color: var(--c-border-dark); }
+  .dark tbody tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  blockquote { border-left: 3px solid var(--c-dark); padding: 4px 0 4px 20px; margin: 14px 0; font-style: italic; font-size: 17px; line-height: 1.45; letter-spacing: -0.17px; color: rgba(0,0,0,0.82); }
+  .dark blockquote { border-left-color: var(--c-lavender); color: rgba(255,255,255,0.85); }
+  blockquote .src { display: block; font-style: normal; margin-top: 8px; font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.10em; color: var(--c-muted-light); }
+
+  .grid { display: grid; gap: 24px; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .move { border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); padding: 28px; background: var(--c-bg); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; }
+  .move .num { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--c-muted-light); }
+  .move h3 { margin: 0; font-size: 20px; letter-spacing: -0.20px; }
+  .move p { color: rgba(0,0,0,0.78); font-size: 15px; line-height: 1.45; }
+
+  .sprint { border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); padding: 28px; background: var(--c-bg); box-shadow: var(--shadow); }
+  .sprint .num { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--c-muted-light); }
+  .sprint h3 { margin: 8px 0 12px; font-size: 20px; letter-spacing: -0.20px; }
+  .sprint ul { list-style: none; padding: 0; margin: 0; }
+  .sprint li { padding: 10px 0; border-top: 1px solid var(--c-border-light); font-size: 15px; line-height: 1.45; letter-spacing: -0.15px; display: flex; gap: 12px; align-items: flex-start; }
+  .sprint li:first-child { border-top: none; }
+  .sprint li::before { content: ""; flex: none; width: 6px; height: 6px; background: var(--c-dark); border-radius: 2px; margin-top: 8px; }
+
+  .dark-zone { background: var(--c-dark); color: var(--c-text-dark); padding: 120px 0; position: relative; overflow: hidden; }
+  .dark-zone::before { content: ""; position: absolute; width: 600px; height: 600px; top: -100px; right: -150px; background: radial-gradient(circle at 40% 40%, rgba(189, 187, 255, 0.20) 0%, transparent 60%); border-radius: 50%; filter: blur(80px); pointer-events: none; }
+  .dark-zone .container { position: relative; z-index: 1; }
+  .dark-zone h2 { color: var(--c-text-dark); }
+  .dark-zone p { color: rgba(255,255,255,0.75); }
+  .dark { color: var(--c-text-dark); }
+
+  .score-block { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; background: var(--c-bg); border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); padding: 40px; box-shadow: var(--shadow); margin-top: 24px; }
+  .score-block .num-side { display: flex; flex-direction: column; justify-content: center; gap: 12px; border-right: 1px solid var(--c-border-light); padding-right: 32px; }
+  .score-block .big { font-size: 120px; line-height: 0.9; letter-spacing: -3.6px; font-weight: 500; background: linear-gradient(135deg, var(--c-lavender) 0%, var(--c-magenta) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .score-block .band { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: rgba(189, 187, 255, 0.16); border: 1px solid rgba(189, 187, 255, 0.40); border-radius: var(--r-sharp); font-family: var(--f-mono); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.10em; color: #5a55c9; width: max-content; }
+  .score-block .scale { display: flex; gap: 4px; margin-top: 12px; }
+  .score-block .scale .seg { flex: 1; height: 6px; border-radius: 2px; background: rgba(0,0,0,0.08); }
+  .score-block .components ul { list-style: none; padding: 0; margin: 0; }
+  .score-block .components li { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid var(--c-border-light); font-size: 14px; letter-spacing: -0.14px; }
+  .score-block .components li:first-child { border-top: none; }
+  .score-block .components .lbl { color: rgba(0,0,0,0.75); }
+  .score-block .components .val { font-family: var(--f-mono); font-weight: 500; }
+  .score-block .scale-lbl { display: flex; justify-content: space-between; margin-top: 8px; font-family: var(--f-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.10em; color: var(--c-muted-light); }
+
+  .findings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 32px; }
+  .finding { border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); padding: 24px; background: var(--c-bg); }
+  .finding .num { font-family: var(--f-mono); font-size: 32px; font-weight: 500; letter-spacing: -0.5px; background: linear-gradient(135deg, var(--c-lavender), var(--c-magenta)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+  .finding p { color: rgba(0,0,0,0.78); font-size: 15px; line-height: 1.45; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .chip { display: inline-flex; align-items: center; padding: 8px 14px; border: 1px solid var(--c-border-light); background: rgba(189,187,255,0.18); border-radius: var(--r-sharp); font-size: 13px; letter-spacing: -0.13px; color: var(--c-text); }
+  .chip.hot { background: rgba(9,122,63,0.10); border-color: rgba(9,122,63,0.25); color: #097a3f; }
+
+  .empty-state { border: 1px dashed rgba(189,187,255,0.50); background: rgba(189,187,255,0.06); border-radius: var(--r-comfort); padding: 32px; text-align: center; }
+  .empty-state .icon { font-family: var(--f-mono); font-size: 48px; color: #5a55c9; margin-bottom: 12px; font-weight: 500; }
+  .empty-state h3 { color: #5a55c9; margin-bottom: 8px; }
+  .empty-state p { color: rgba(0,0,0,0.7); max-width: 60ch; margin: 0 auto; }
+
+  .greenfield-banner { background: linear-gradient(135deg, rgba(189,187,255,0.15) 0%, rgba(239,44,193,0.06) 100%); border: 1px solid rgba(189,187,255,0.40); border-radius: var(--r-comfort); padding: 32px; margin-top: 24px; display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; }
+  .greenfield-banner .marker { font-family: var(--f-mono); font-size: 14px; text-transform: uppercase; letter-spacing: 0.10em; color: #5a55c9; border-right: 1px solid rgba(189,187,255,0.5); padding-right: 24px; line-height: 1.2; }
+  .greenfield-banner p { color: rgba(0,0,0,0.82); font-size: 15px; line-height: 1.5; }
+
+  .callout { border: 1px solid rgba(252,76,2,0.30); background: rgba(252,76,2,0.04); border-radius: var(--r-comfort); padding: 24px; margin-top: 24px; }
+  .callout .mono-label { color: var(--c-orange); margin-bottom: 8px; }
+
+  .info-box { border: 1px solid rgba(37,99,235,0.25); background: rgba(37,99,235,0.04); border-radius: var(--r-comfort); padding: 24px; margin-top: 24px; }
+  .info-box .mono-label { color: #1d4ed8; margin-bottom: 8px; }
+  .info-box p { color: rgba(0,0,0,0.78); font-size: 15px; line-height: 1.5; }
+
+  .glossary { border: 1px solid var(--c-border-light); background: rgba(189,187,255,0.06); border-radius: var(--r-comfort); padding: 28px; margin-top: 32px; }
+  .glossary .mono-label { color: #5a55c9; margin-bottom: 14px; }
+  .glossary dl { display: grid; grid-template-columns: 200px 1fr; gap: 12px 20px; font-size: 14px; line-height: 1.5; }
+  .glossary dt { font-weight: 500; color: var(--c-text); }
+  .glossary dd { color: rgba(0,0,0,0.72); }
+
+  /* SoV bars */
+  .sov-grid { display: grid; gap: 20px; margin-top: 32px; }
+  .sov-row { display: grid; grid-template-columns: 180px 1fr 80px; gap: 16px; align-items: center; }
+  .sov-row .name { font-weight: 500; font-size: 15px; letter-spacing: -0.15px; }
+  .sov-row .name .domain { display: block; font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; color: var(--c-muted-light); margin-top: 2px; letter-spacing: 0.08em; }
+  .sov-row .bar-track { height: 28px; border-radius: var(--r-sharp); background: rgba(0,0,0,0.04); border: 1px solid var(--c-border-light); overflow: hidden; position: relative; }
+  .sov-row .bar { height: 100%; }
+  .sov-row .bar.brand { background: linear-gradient(90deg, var(--c-magenta), var(--c-lavender)); }
+  .sov-row .bar.comp { background: var(--c-dark); }
+  .sov-row .bar.zero { background: repeating-linear-gradient(45deg, rgba(189,187,255,0.35), rgba(189,187,255,0.35) 6px, rgba(189,187,255,0.12) 6px, rgba(189,187,255,0.12) 12px); width: 100%; }
+  .sov-row .pct { font-family: var(--f-mono); font-size: 14px; font-weight: 500; text-align: right; }
+  .sov-row .pct.zero-val { color: var(--c-muted-light); }
+
+  /* Competitor cards */
+  .compare-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 32px; }
+  .compare-card { border: 1px solid var(--c-border-light); border-radius: var(--r-comfort); padding: 28px; background: var(--c-bg); box-shadow: var(--shadow); }
+  .compare-card.brand { border-color: rgba(239,44,193,0.30); background: linear-gradient(180deg, rgba(189,187,255,0.08), transparent 60%); }
+  .compare-card .name { font-size: 20px; font-weight: 500; letter-spacing: -0.20px; margin-bottom: 4px; }
+  .compare-card .role { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.10em; color: var(--c-muted-light); margin-bottom: 16px; }
+  .compare-card .stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-top: 1px solid var(--c-border-light); font-size: 14px; letter-spacing: -0.14px; }
+  .compare-card .stat-row:first-of-type { border-top: none; margin-top: 8px; }
+  .compare-card .stat-row .lbl { color: rgba(0,0,0,0.65); }
+  .compare-card .stat-row .val { font-family: var(--f-mono); font-weight: 500; }
+  .compare-card .stat-row .val.zero { color: var(--c-orange); }
+  .compare-card .stat-row .val.lead { color: #097a3f; }
+
+  .split-quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+  footer.big-footer { background: var(--c-dark); color: var(--c-text-dark); padding: 120px 0 48px; position: relative; overflow: hidden; }
+  footer.big-footer::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at top left, rgba(189,187,255,0.16) 0%, transparent 50%); pointer-events: none; }
+  footer.big-footer .container { position: relative; z-index: 1; }
+  footer.big-footer .word { font-family: var(--f-display); font-weight: 500; font-size: clamp(80px, 14vw, 200px); line-height: 0.85; letter-spacing: -6px; background: linear-gradient(180deg, #ffffff 0%, rgba(189,187,255,0.4) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 40px; }
+  footer.big-footer .meta-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--c-border-dark); padding-top: 28px; flex-wrap: wrap; gap: 20px; }
+  footer.big-footer .meta-row .left, footer.big-footer .meta-row .right { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--c-muted-dark); }
+
+  .row { display: flex; flex-wrap: wrap; gap: 12px; }
+  .stack-md > * + * { margin-top: 20px; }
+  .muted { color: var(--c-muted-light); }
+
+  @media (max-width: 991px) {
+    .display { font-size: 64px; letter-spacing: -1.92px; }
+    h1 { font-size: 44px; letter-spacing: -1.32px; }
+    h2 { font-size: 32px; letter-spacing: -0.64px; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .score-block { grid-template-columns: 1fr; }
+    .score-block .num-side { border-right: none; border-bottom: 1px solid var(--c-border-light); padding-right: 0; padding-bottom: 24px; }
+    .findings { grid-template-columns: 1fr; }
+    .compare-grid { grid-template-columns: 1fr 1fr; }
+    .split-quotes { grid-template-columns: 1fr; }
+    .greenfield-banner { grid-template-columns: 1fr; }
+    .greenfield-banner .marker { border-right: none; border-bottom: 1px solid rgba(189,187,255,0.5); padding-right: 0; padding-bottom: 12px; }
+    .sov-row { grid-template-columns: 1fr; gap: 8px; }
+    .sov-row .pct { text-align: left; }
+    .glossary dl { grid-template-columns: 1fr; gap: 4px 0; }
+    .glossary dt { margin-top: 10px; }
+  }
+  @media (max-width: 640px) {
+    .display { font-size: 48px; letter-spacing: -1.44px; }
+    h2 { font-size: 26px; letter-spacing: -0.52px; }
+    .section { padding: 64px 0; }
+    .stats-bar, .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .compare-grid { grid-template-columns: 1fr; }
+    nav.topnav .right a:not(.btn-cta) { display: none; }
+    .container { padding: 0 20px; }
+    .stat-card .num { font-size: 44px; }
+    .score-block .big { font-size: 88px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="container">
+    <div class="brand"><span class="dot"></span><span>AUQ</span></div>
+    <div class="right">
+      <a href="#summary">Summary</a>
+      <a href="#identity">What AI Says</a>
+      <a href="#sov">Mentions</a>
+      <a href="#performance">Performance</a>
+      <a href="#sources">Sources</a>
+      <a href="#moves">Action Plan</a>
+      <a class="btn-cta" href="#methodology">Methodology</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow"><span class="pill"></span><span class="mono-label">GEO AUDIT REPORT &nbsp;·&nbsp; V2 WITH COMPETITORS</span></div>
+    <h1 class="display">Willow.</h1>
+    <p class="lede">A competitive look at how Willow shows up in Google's AI Overviews compared with Archestra, Obot, MetaMCP, MintMCP, and Runlayer. The headline: nobody is in the race yet. That is the opportunity.</p>
+
+    <div class="meta">
+      <div class="row"><span class="k">Your site</span><span class="v">withwillow.ai (formerly webrix.ai)</span></div>
+      <div class="row"><span class="k">Compared to</span><span class="v">Archestra &nbsp;·&nbsp; Obot &nbsp;·&nbsp; MetaMCP &nbsp;·&nbsp; MintMCP &nbsp;·&nbsp; Runlayer</span></div>
+      <div class="row"><span class="k">Where we looked</span><span class="v">Google AI Overviews, US</span></div>
+      <div class="row"><span class="k">Prepared</span><span class="v">June 2, 2026 &nbsp;by&nbsp; AUQ</span></div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="lbl">AI Visibility Score</div>
+        <div class="num muted">0</div>
+        <div class="sub">out of 100. Verified via URL-matched data. Competitors score the same.</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Real AI mentions</div>
+        <div class="num muted">0</div>
+        <div class="sub">Google AI does not name Willow in any tracked answer. 2,353 raw hits are all about willow trees.</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Category AIO status</div>
+        <div class="num accent" style="font-size:32px; padding-top:12px;">Open</div>
+        <div class="sub">No competitor in this category has AIO presence. First to build content wins.</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Organic search leader</div>
+        <div class="num" style="font-size:32px; padding-top:12px;">Obot</div>
+        <div class="sub">2,664 monthly visits. But their traffic is from Claude API queries, not governance terms.</div>
+      </div>
+    </div>
+
+    <div class="greenfield-banner">
+      <div class="marker">First-mover<br/>window</div>
+      <p>The AI agent governance category is invisible in Google AI Overviews. No brand has established presence yet. The brands that publish authoritative content on governance, MCP security, and shadow AI detection before the category reaches search scale will own the AIO answers when those queries arrive. That window is open now.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EXECUTIVE SUMMARY -->
+<section class="section" id="summary">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">EXECUTIVE SUMMARY</span>
+      <h2>The entire category is at zero. Nobody has started the race. That changes the strategy completely.</h2>
+    </div>
+
+    <div class="grid grid-2" style="gap:32px;">
+      <div class="stack-md">
+        <p class="lede">Willow is building enterprise governance for AI agents at work: governed identity, permissioned tool access, and a full audit trail. The product is real. The category is real. But in Google AI Overviews, neither Willow nor any of its five direct competitors currently exists.</p>
+        <p>That is not bad news. No competitor is ahead. The brand that publishes answer-shaped content on the right category questions first will shape what AI Overviews says about this space for the next several years.</p>
+        <p>One tracking issue to flag immediately: the brand name "Willow" is also a tree. A raw name search returns 2,353 matches, but every one of them is about willow bark, weeping willow trees, or the Willow Go breast pump. This report uses URL-verified data only. The real count is zero, for Willow and every competitor.</p>
+      </div>
+
+      <div class="score-block">
+        <div class="num-side">
+          <div class="mono-label">AI Visibility Score</div>
+          <div class="big">0</div>
+          <div class="band"><span>Greenfield. Race not started.</span></div>
+          <div class="scale">
+            <div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div>
+          </div>
+          <div class="scale-lbl"><span>Absent</span><span>Low</span><span>Competitive</span><span>Dominant</span></div>
+        </div>
+        <div class="components">
+          <div class="mono-label" style="margin-bottom:14px;">Score components</div>
+          <ul>
+            <li><span class="lbl">How AI describes the brand</span><span class="val">0 / 100</span></li>
+            <li><span class="lbl">Inclusion in AI answers</span><span class="val">0 / 100</span></li>
+            <li><span class="lbl">Own pages quoted</span><span class="val">0 / 100</span></li>
+            <li><span class="lbl">Category query coverage</span><span class="val">0 / 100</span></li>
+            <li><span class="lbl">Comparison query presence</span><span class="val">0 / 100</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:80px; margin-bottom:0;">
+      <span class="mono-label">Three things you need to know</span>
+    </div>
+    <div class="findings">
+      <div class="finding">
+        <div class="num">01</div>
+        <h3>Nobody in this category is in Google's AI yet</h3>
+        <p>Willow, Archestra, Obot, MetaMCP, MintMCP, and Runlayer all score zero verified mentions in Google AI Overviews. The category has not yet generated enough search query volume to appear in AIO tracking. The race has not started.</p>
+      </div>
+      <div class="finding">
+        <div class="num">02</div>
+        <h3>The brand name is a tracking liability</h3>
+        <p>"Willow" matches a tree, a breast pump brand, and a press. Any dashboard using the bare name will show thousands of false positives. All tracking must use withwillow.ai as the URL target. Every number in this report is URL-verified.</p>
+      </div>
+      <div class="finding">
+        <div class="num">03</div>
+        <h3>Obot leads in search, but not on the right terms</h3>
+        <p>Obot gets 2,664 monthly organic visits, the most in the category. But their traffic comes from "claude api" queries, not governance or management terms. No competitor is winning the category keywords yet.</p>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:80px; margin-bottom:0;">
+      <span class="mono-label">Top three moves in the next 30 days</span>
+    </div>
+    <div class="findings">
+      <div class="finding">
+        <div class="num">A</div>
+        <h3>Fix how AI identifies the brand</h3>
+        <p>Add the phrase "Willow AI agent governance platform" explicitly to every key page, plus schema.org structured data. Make the brand easy for AI to match without relying on the bare word "Willow."</p>
+      </div>
+      <div class="finding">
+        <div class="num">B</div>
+        <h3>Publish the category-defining answer</h3>
+        <p>Write "What is MCP governance" and "How to govern AI agents in the enterprise." No competitor has published authoritative answers to these questions. The brand that does first will own the AIO slot when those queries scale.</p>
+      </div>
+      <div class="finding">
+        <div class="num">C</div>
+        <h3>Earn one placement in enterprise tech media</h3>
+        <p>AI Overviews learn from high-authority publications. One feature in The New Stack, InfoQ, or TechCrunch about Willow's enterprise governance approach is worth more for AIO visibility than 20 blog posts on the brand's own site.</p>
+      </div>
+    </div>
+
+    <div class="glossary">
+      <div class="mono-label">Quick glossary</div>
+      <dl>
+        <dt>Google AI Overviews</dt>
+        <dd>The AI-generated answer boxes at the top of Google search results. Getting mentioned and cited in those summaries is what GEO (Generative Engine Optimization) is about.</dd>
+        <dt>AI Visibility Score</dt>
+        <dd>A 0-to-100 rating summarizing how visible a brand is in Google AI Overviews. Zero means the brand does not appear in any tracked answer.</dd>
+        <dt>Share of mentions</dt>
+        <dd>Of all the times a brand in this category is mentioned across tracked AI answers, what percentage belongs to each brand.</dd>
+        <dt>Site authority (Domain Rating)</dt>
+        <dd>A score estimating how trustworthy a website is based on how many reputable sites link to it. Higher means easier to rank in search, and more likely AI Overviews will pull from the site.</dd>
+        <dt>GEO</dt>
+        <dd>Generative Engine Optimization. The practice of making a brand's content easy for AI systems to find, understand, and quote in their answers.</dd>
+        <dt>MCP (Model Context Protocol)</dt>
+        <dd>An open protocol letting AI agents connect to external tools and data sources. Willow's platform manages which MCP connections enterprise employees and agents can use, and under what rules.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 1: IDENTITY IN AIO -->
+<section class="section" id="identity">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">01 &nbsp;·&nbsp; What Google's AI Says About Willow</span>
+      <h2>Nothing yet. The category is too new for Google's AI to have an answer. That is the opportunity to build.</h2>
+    </div>
+
+    <div class="split-quotes">
+      <div class="card">
+        <div class="mono-label" style="color:var(--c-magenta);">What the brand says</div>
+        <h3>The governance and access layer for AI agents at work.</h3>
+        <blockquote>
+          One governed Basecamp where every AI agent gets identity, permissioned access to tools and skills, and a full audit trail. Enablement and governance, together.
+          <span class="src">withwillow.ai homepage, June 2026</span>
+        </blockquote>
+        <p>Platform pillars: Identity and Access, Tools and Skills, Governance and Compliance. Features include shadow AI detection, machine users for agent automation, SCIM provisioning with Okta/Entra/JumpCloud, and Slack-based IT approval workflows.</p>
+        <p>Named customers: Wix (5,000+ employees), Riskified, Innovid, Agora, Lansweeper. Certifications: SOC 2 Type II, GDPR. Formerly Webrix.</p>
+      </div>
+
+      <div class="card">
+        <div class="mono-label" style="color:var(--c-magenta);">What Google's AI says</div>
+        <h3>Nothing. The brand does not appear in any tracked AI answer.</h3>
+        <div class="empty-state" style="margin-top:16px;">
+          <div class="icon">0</div>
+          <h3>No AI mentions found</h3>
+          <p>Verified using withwillow.ai URL-matched data. Zero pages from the brand's site are cited in any tracked Google AI Overview.</p>
+        </div>
+        <p style="margin-top:20px;">The 2,353 raw mentions from a name-only search are about: willow trees (symbolism, bark as aspirin, weeping willows for gardens), Willow Go breast pump, Willow Creek Press calendars, eucalyptus "willow" variety. None are about the AI governance company.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="mono-label">Name alert: always use URL-verified tracking</div>
+      <p style="color:rgba(0,0,0,0.78); font-size:15px; line-height:1.5;">Any tracking dashboard that searches for the bare word "Willow" will show thousands of false positives. Set all Brand Radar and AI mention monitoring to use withwillow.ai as the URL target. Never track the bare word "Willow" alone. The correct baseline is zero.</p>
+    </div>
+
+    <div style="margin-top:64px;">
+      <div class="section-head" style="margin-bottom:24px;">
+        <span class="mono-label">Where Willow needs to show up, and what AI says today</span>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th style="width:28%">Query type</th><th style="width:30%">What AI says today</th><th style="width:18%">Opportunity</th><th>Why it matters for Willow</th></tr></thead>
+          <tbody>
+            <tr><td>What is AI agent governance</td><td class="gf">Generic NIST/ISO framework content. No product vendors named.</td><td class="yes">Very high</td><td>Nobody owns this answer. Write it before a competitor does.</td></tr>
+            <tr><td>What is MCP governance</td><td class="gf">No AIO answer exists. Category too new.</td><td class="yes">Very high</td><td>Blank slate. First brand to publish a clear answer wins this slot.</td></tr>
+            <tr><td>How to detect shadow AI in enterprise</td><td class="gf">General IT security content. No AI-specific tools named.</td><td class="yes">Very high</td><td>Willow is the only vendor in this set with shadow AI detection. Own the answer.</td></tr>
+            <tr><td>Enterprise MCP management</td><td class="gf">No AIO coverage yet.</td><td class="yes">Very high</td><td>Pure first-mover. No content leader.</td></tr>
+            <tr><td>AI agent access control enterprise</td><td>IAM and zero-trust content from security incumbents.</td><td>Medium</td><td>Willow needs to position as the AI-agent-specific specialist, not a generic IAM tool.</td></tr>
+            <tr><td>Best AI agent governance platforms</td><td class="gf">No established AI answer. No category list exists.</td><td class="yes">Very high</td><td>Publish an honest comparison article. AIO will pull from it when the query scales.</td></tr>
+            <tr><td>willow vs archestra (or other comparisons)</td><td class="gf">No AIO answer. Comparison pages on the brand's site exist but are not yet AIO-extractable.</td><td class="yes">High</td><td>Restructure the compare pages so AI can quote them directly.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:48px;">
+      <div class="mono-label">Queries that will reach AIO scale next — claim them now</div>
+      <div class="chips" style="margin-top:16px;">
+        <span class="chip hot">What is MCP governance</span>
+        <span class="chip hot">How to govern AI agents at work</span>
+        <span class="chip hot">How to detect shadow AI</span>
+        <span class="chip hot">Enterprise AI agent security</span>
+        <span class="chip">Best AI agent governance platforms</span>
+        <span class="chip">AI agent audit trail compliance</span>
+        <span class="chip">MCP access control enterprise</span>
+        <span class="chip">How to give AI agents an identity</span>
+        <span class="chip">Shadow IT AI detection tools</span>
+        <span class="chip">Willow vs Archestra</span>
+        <span class="chip">Willow vs Obot</span>
+        <span class="chip">AI agent SCIM provisioning</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: SHARE OF MENTIONS -->
+<section class="section" id="sov">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">02 &nbsp;·&nbsp; Share of Mentions in Google's AI</span>
+      <h2>Every brand in this category is at zero. The question is who gets off zero first.</h2>
+    </div>
+
+    <div class="grid grid-2" style="gap:40px; align-items:start;">
+      <div>
+        <div class="mono-label">Verified AI mentions (URL-matched)</div>
+        <h3 style="margin:10px 0 6px;">All brands. All zero.</h3>
+        <p class="muted" style="font-size:15px; margin-bottom:24px;">Using URL-group matching to eliminate false positives. This is the accurate view.</p>
+        <div class="sov-grid">
+          <div class="sov-row">
+            <div class="name">Willow<span class="domain">withwillow.ai</span></div>
+            <div class="bar-track"><div class="bar zero"></div></div>
+            <div class="pct zero-val">0%</div>
+          </div>
+          <div class="sov-row">
+            <div class="name">Archestra<span class="domain">archestra.ai</span></div>
+            <div class="bar-track"><div class="bar zero"></div></div>
+            <div class="pct zero-val">0%</div>
+          </div>
+          <div class="sov-row">
+            <div class="name">Obot<span class="domain">obot.ai</span></div>
+            <div class="bar-track"><div class="bar zero"></div></div>
+            <div class="pct zero-val">0%</div>
+          </div>
+          <div class="sov-row">
+            <div class="name">MetaMCP<span class="domain">metamcp.com</span></div>
+            <div class="bar-track"><div class="bar zero"></div></div>
+            <div class="pct zero-val">0%</div>
+          </div>
+          <div class="sov-row">
+            <div class="name">MintMCP<span class="domain">mintmcp.com</span></div>
+            <div class="bar-track"><div class="bar zero"></div></div>
+            <div class="pct zero-val">0%</div>
+          </div>
+          <div class="sov-row">
+            <div class="name">Runlayer<span class="domain">runlayer.dev</span></div>
+            <div class="bar-track"><div class="bar zero"></div></div>
+            <div class="pct zero-val">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack-md">
+        <div class="info-box">
+          <div class="mono-label">What this actually means</div>
+          <p>When every brand in a category scores zero, it means the category has not yet reached mainstream search volume. The AI Overviews system has not yet generated cached answers for the queries that would surface AI agent governance tools. This is not a measurement error. It is confirmation that the category is in its pre-AIO phase. Whoever builds the content infrastructure now will own the answers when query volume arrives, likely within 12 to 18 months.</p>
+        </div>
+        <div class="card flat" style="background:var(--c-fill-light);">
+          <h4>Why Willow is not behind</h4>
+          <p>A score of zero when all competitors also score zero means no ground has been lost. The gap between Willow and the field is zero. That is very different from a category where one competitor has 60% share. There is no catching up to do, only building forward.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:80px;">
+      <div class="section-head" style="margin-bottom:24px;">
+        <span class="mono-label">Organic search: where each competitor stands today</span>
+        <h3>Obot is the organic leader, but on the wrong terms for this category.</h3>
+      </div>
+      <div class="compare-grid">
+        <div class="compare-card brand">
+          <div class="name">Willow</div>
+          <div class="role">Your brand &nbsp;·&nbsp; withwillow.ai</div>
+          <div class="stat-row"><span class="lbl">AIO mentions</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Ranking keywords</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Monthly organic traffic</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Shadow AI detection</span><span class="val" style="color:#097a3f;">Only brand with this</span></div>
+          <div class="stat-row"><span class="lbl">Enterprise customers</span><span class="val" style="color:#097a3f;">Wix, Riskified, Innovid</span></div>
+        </div>
+        <div class="compare-card">
+          <div class="name">Archestra</div>
+          <div class="role">Competitor &nbsp;·&nbsp; archestra.ai</div>
+          <div class="stat-row"><span class="lbl">AIO mentions</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Ranking keywords</span><span class="val">1</span></div>
+          <div class="stat-row"><span class="lbl">Monthly organic traffic</span><span class="val">147</span></div>
+          <div class="stat-row"><span class="lbl">Deployment</span><span class="val">Self-hosted K8s</span></div>
+          <div class="stat-row"><span class="lbl">Top keyword</span><span class="val">brand name only</span></div>
+        </div>
+        <div class="compare-card">
+          <div class="name">Obot</div>
+          <div class="role">Competitor &nbsp;·&nbsp; obot.ai</div>
+          <div class="stat-row"><span class="lbl">AIO mentions</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Ranking keywords</span><span class="val lead">62</span></div>
+          <div class="stat-row"><span class="lbl">Monthly organic traffic</span><span class="val lead">2,664</span></div>
+          <div class="stat-row"><span class="lbl">Deployment</span><span class="val">Self-hosted K8s</span></div>
+          <div class="stat-row"><span class="lbl">Top keyword</span><span class="val">claude api (not category)</span></div>
+        </div>
+        <div class="compare-card">
+          <div class="name">MetaMCP</div>
+          <div class="role">Competitor &nbsp;·&nbsp; metamcp.com</div>
+          <div class="stat-row"><span class="lbl">AIO mentions</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Ranking keywords</span><span class="val">1</span></div>
+          <div class="stat-row"><span class="lbl">Monthly organic traffic</span><span class="val zero">~0</span></div>
+          <div class="stat-row"><span class="lbl">Deployment</span><span class="val">MCP hub</span></div>
+          <div class="stat-row"><span class="lbl">Top keyword</span><span class="val">brand name only</span></div>
+        </div>
+        <div class="compare-card">
+          <div class="name">MintMCP</div>
+          <div class="role">Competitor &nbsp;·&nbsp; mintmcp.com</div>
+          <div class="stat-row"><span class="lbl">AIO mentions</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Ranking keywords</span><span class="val">28</span></div>
+          <div class="stat-row"><span class="lbl">Monthly organic traffic</span><span class="val">92</span></div>
+          <div class="stat-row"><span class="lbl">Top keywords</span><span class="val">notion/aws/supabase mcp</span></div>
+          <div class="stat-row"><span class="lbl">Category angle</span><span class="val">Connector registry</span></div>
+        </div>
+        <div class="compare-card">
+          <div class="name">Runlayer</div>
+          <div class="role">Competitor &nbsp;·&nbsp; runlayer.dev</div>
+          <div class="stat-row"><span class="lbl">AIO mentions</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Ranking keywords</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Monthly organic traffic</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Deployment</span><span class="val">Agent governance</span></div>
+          <div class="stat-row"><span class="lbl">Status</span><span class="val">No organic presence</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:40px;">
+        <div class="mono-label">Emerging category keywords. Nobody is winning these yet.</div>
+        <div class="tbl-wrap" style="margin-top:16px;">
+          <table>
+            <thead><tr><th style="width:28%">Keyword</th><th style="width:16%">Monthly searches</th><th style="width:20%">Current leader</th><th style="width:12%">Their position</th><th>Willow's opportunity</th></tr></thead>
+            <tbody>
+              <tr><td>mcp registry</td><td class="num">2,700</td><td>Obot</td><td class="num">21</td><td class="yes">High. Willow's marketplace page covers this. Optimize it.</td></tr>
+              <tr><td>notion mcp / aws mcp</td><td class="num">1,900</td><td>MintMCP</td><td class="num">14</td><td>Medium. Willow's connector library competes here.</td></tr>
+              <tr><td>supabase mcp server</td><td class="num">3,200</td><td>MintMCP</td><td class="num">19</td><td>Medium. Connector-specific page opportunity.</td></tr>
+              <tr><td>enterprise ai governance</td><td class="num">est. &lt;500</td><td>No specialist</td><td class="num">N/A</td><td class="yes">Very high. Willow can own this with one strong article.</td></tr>
+              <tr><td>shadow ai detection</td><td class="num">est. &lt;200</td><td>No specialist</td><td class="num">N/A</td><td class="yes">Very high. Willow is the only vendor with this feature.</td></tr>
+              <tr><td>ai agent access control</td><td class="num">est. &lt;300</td><td>No specialist</td><td class="num">N/A</td><td class="yes">Very high. Write the canonical answer.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: AIO PERFORMANCE -->
+<section class="section" id="performance">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">03 &nbsp;·&nbsp; AI Overviews Performance</span>
+      <h2>Willow's baseline is zero. So is every competitor. The baseline is the same for everyone.</h2>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="lbl">Verified AIO mentions</div>
+        <div class="num muted">0</div>
+        <div class="sub">URL-confirmed. Zero pages from withwillow.ai cited in any tracked AI answer.</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Raw "Willow" name mentions</div>
+        <div class="num warn">2,353</div>
+        <div class="sub">All false positives. Trees, bark, breast pumps, press. Do not use this in reporting.</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Own pages cited in AI</div>
+        <div class="num muted">0</div>
+        <div class="sub">No withwillow.ai page is currently quoted in any tracked AI Overview.</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Competitor AI advantage</div>
+        <div class="num muted">0</div>
+        <div class="sub">No competitor has any lead. All are at the same baseline.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:64px;">
+      <div class="section-head" style="margin-bottom:24px;">
+        <span class="mono-label">Why "Willow" is a dangerous tracking word</span>
+      </div>
+      <div class="grid grid-2" style="gap:32px;">
+        <div>
+          <p style="margin-bottom:20px;">Brand monitoring tools count how often a brand name appears in AI answer text. When the brand name is also a common word, the count picks up everyday language. "Willow" is a tree. It appears constantly in gardening, wedding, herbal medicine, and symbolism content.</p>
+          <p>The 2,353 raw mentions look meaningful. They are not. The actual AI answers are about:</p>
+          <div class="chips" style="margin-top:16px;">
+            <span class="chip">Willow tree symbolism</span>
+            <span class="chip">Willow bark as natural aspirin</span>
+            <span class="chip">Weeping willow for gardens</span>
+            <span class="chip">Willow Go breast pump</span>
+            <span class="chip">Willow Creek Press calendars</span>
+            <span class="chip">Eucalyptus "willow" for floristry</span>
+          </div>
+        </div>
+        <div class="callout" style="align-self:start; margin-top:0;">
+          <div class="mono-label">Tracking fix required immediately</div>
+          <p style="color:rgba(0,0,0,0.78); font-size:15px; line-height:1.5; margin-top:8px;">Configure all Brand Radar and AI mention monitoring to use the URL group "withwillow.ai" as the matching target. The phrase "Willow AI agent governance" also works as a name filter. Never track the bare word "Willow" alone. Any report showing Willow mentions in the thousands is reading noise, not brand signal.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:64px;">
+      <div class="section-head" style="margin-bottom:24px;">
+        <span class="mono-label">Willow's unique advantages competitors do not have</span>
+        <h3>The product has differentiators no competitor can claim yet. These are the AIO content topics to build first.</h3>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th style="width:30%">Differentiator</th><th style="width:24%">Competitor status</th><th>Content opportunity</th></tr></thead>
+          <tbody>
+            <tr><td>Shadow AI detection</td><td class="yes">No competitor offers this</td><td>Publish "How to find unauthorized AI tools in your organization." Own this query before anyone else writes about it.</td></tr>
+            <tr><td>Machine users for agent automation</td><td>Archestra and Obot: not supported</td><td>Publish use-case content around agent-to-agent automation workflows.</td></tr>
+            <tr><td>SCIM auto-provisioning (Okta, Entra, JumpCloud)</td><td>Obot: no SCIM (manual only)</td><td>Write about AI agent provisioning and deprovisioning for enterprise IT. Security-leader audience.</td></tr>
+            <tr><td>Managed SaaS (no Kubernetes required)</td><td>Archestra, Obot: require K8s</td><td>"Enterprise AI governance without Kubernetes" is a real buyer need. Write it directly.</td></tr>
+            <tr><td>Named enterprise customers at 5,000+ scale</td><td>No competitor has public references at this scale</td><td>Publish the Wix case study externally. 5,000-employee AI governance is a strong proof point.</td></tr>
+            <tr><td>SOC 2 Type II + GDPR certified</td><td>Archestra: SOC 2. Others: not confirmed</td><td>Write compliance and audit-trail content. CISOs searching for AI governance will find this.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DARK ZONE: CITATION SOURCES -->
+<section class="dark-zone dark" id="sources">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">04 &nbsp;·&nbsp; Citation Sources</span>
+      <h2>Where AI Overviews will learn from once this category reaches scale.</h2>
+      <p class="lede" style="color:rgba(255,255,255,0.75); margin-top:8px;">No category-specific citations exist yet. This section maps where to earn coverage so the brand is in the source pool when AI starts answering governance questions.</p>
+    </div>
+
+    <div class="grid grid-2" style="gap:32px; margin-top:0;">
+      <div>
+        <div class="mono-label">Sites AI Overviews pulls from for enterprise software decisions</div>
+        <div class="grid grid-2" style="margin-top:16px; gap:16px;">
+          <div class="card">
+            <h4 style="margin-bottom:8px;">Enterprise tech publications</h4>
+            <p style="font-size:14px;">The New Stack, InfoQ, TechCrunch, VentureBeat. High authority. Cover enterprise software buying decisions. AIO cites these heavily on "best of" and category-definition queries.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom:8px;">Security and compliance media</h4>
+            <p style="font-size:14px;">CSO Online, Dark Reading, SecurityWeek. Trusted for enterprise security decisions. AIO pulls from these on compliance and governance queries.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom:8px;">Developer communities</h4>
+            <p style="font-size:14px;">Stack Overflow, Hacker News, Reddit (r/sysadmin, r/MachineLearning). AIO cites community discussions on implementation and comparison questions.</p>
+          </div>
+          <div class="card">
+            <h4 style="margin-bottom:8px;">Standards and specs</h4>
+            <p style="font-size:14px;">Model Context Protocol spec, OWASP LLM Top 10, NIST AI RMF. AIO leans on canonical references for definitional queries. Getting cited alongside these signals authority.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mono-label">Willow's current status on each source type</div>
+        <div class="tbl-wrap" style="margin-top:16px; background:rgba(255,255,255,0.02);">
+          <table>
+            <thead><tr><th style="width:46%">Source type</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Enterprise tech publications (The New Stack, InfoQ)</td><td class="no">No coverage found</td></tr>
+              <tr><td>Security publications (CSO Online, Dark Reading)</td><td class="no">No coverage found</td></tr>
+              <tr><td>Developer documentation hubs</td><td class="no">No coverage found</td></tr>
+              <tr><td>YouTube tutorials (AI governance)</td><td class="no">No coverage found</td></tr>
+              <tr><td>Reddit technical communities</td><td class="no">No coverage found</td></tr>
+              <tr><td>Wikipedia: AI governance category</td><td class="no">Category article doesn't exist yet</td></tr>
+              <tr><td>Open-source READMEs (MCP-S OAuth, Secure MCP Gateway)</td><td class="gf">Exists. Needs brand context added.</td></tr>
+              <tr><td>Own blog (withwillow.ai/blog)</td><td class="gf">Exists. Needs answer-shaped articles.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:80px;">
+      <div class="mono-label">Target citation list for 90 days</div>
+      <h3 style="margin:10px 0 24px; color:var(--c-text-dark); font-size:28px; letter-spacing:-0.42px;">Five specific actions that put Willow into AI Overviews' source pool.</h3>
+      <div class="grid grid-2" style="gap:20px;">
+        <div class="card">
+          <div class="mono-label" style="color:var(--c-lavender);">Priority 01</div>
+          <h4 style="margin:8px 0;">Earn one article in The New Stack or InfoQ</h4>
+          <p style="font-size:14px;">These sites are cited by AIO on enterprise DevOps and platform questions. A bylined article or feature on AI agent governance for enterprise would get the brand into the source pool immediately.</p>
+        </div>
+        <div class="card">
+          <div class="mono-label" style="color:var(--c-lavender);">Priority 02</div>
+          <h4 style="margin:8px 0;">Get the Wix case study published externally</h4>
+          <p style="font-size:14px;">5,000-employee AI governance at scale is the category's most compelling proof point. Pitch it to TechCrunch or VentureBeat. AIO cites named customer stories to answer "does this work at enterprise scale."</p>
+        </div>
+        <div class="card">
+          <div class="mono-label" style="color:var(--c-lavender);">Priority 03</div>
+          <h4 style="margin:8px 0;">Earn a mention in a security publication roundup</h4>
+          <p style="font-size:14px;">CSO Online and Dark Reading publish "top AI governance tools" roundups. Getting listed in one creates persistent AIO citations that compound over months.</p>
+        </div>
+        <div class="card">
+          <div class="mono-label" style="color:var(--c-lavender);">Priority 04</div>
+          <h4 style="margin:8px 0;">Strengthen the open-source README brand context</h4>
+          <p style="font-size:14px;">MCP-S OAuth and Secure MCP Gateway are live on GitHub. Add a clear paragraph naming Willow as maintainer, linking to withwillow.ai, and explaining the commercial product. GitHub READMEs are cited by AIO on developer queries.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: 30-DAY MOVES -->
+<section class="section" id="moves">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">05 &nbsp;·&nbsp; 30-Day Priority Moves</span>
+      <h2>Five actions ranked by competitive leverage. Each grounded in a finding above.</h2>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="move">
+        <div class="num">Move 01 &nbsp;·&nbsp; On-site technical</div>
+        <h3>Fix how AI identifies the brand.</h3>
+        <p>Add explicit, quotable brand identity text to every key page. Include a sentence like "Willow is an AI agent governance platform that gives every AI agent an identity, enforced access controls, and a full audit trail." Add schema.org structured data (SoftwareApplication type) with the brand name, description, and product category filled in.</p>
+        <p>This makes it easy for Google to understand what Willow is without parsing prose, and gives AIO a clean sentence to quote as a brand definition.</p>
+      </div>
+      <div class="move">
+        <div class="num">Move 02 &nbsp;·&nbsp; Content</div>
+        <h3>Publish "What is MCP governance."</h3>
+        <p>Write a 1,500-word explanation of what MCP governance means for enterprises. Structure it as a question-answer sequence: what is MCP, why does governance matter, what does enterprise MCP governance include, how do you implement it. AIO can pull individual answers directly.</p>
+        <p>Publish on the Willow blog first, then pitch a condensed version to The New Stack or InfoQ. The blog post builds owned content; the third-party placement builds citation authority.</p>
+      </div>
+      <div class="move">
+        <div class="num">Move 03 &nbsp;·&nbsp; On-site conversion</div>
+        <h3>Restructure compare pages for AI extraction.</h3>
+        <p>The five existing compare pages (vs Archestra, vs Obot, vs MetaMCP, vs MintMCP, vs Runlayer) are written as persuasive landing pages. AIO needs answer-shaped content: a one-sentence summary of each platform at the top, a feature matrix, a "best for" paragraph for each option, and an FAQ section with common questions answered in one sentence.</p>
+        <p>When a buyer asks Google "willow vs archestra," the brand needs an extractable answer ready to quote.</p>
+      </div>
+      <div class="move">
+        <div class="num">Move 04 &nbsp;·&nbsp; Off-site PR</div>
+        <h3>Pitch the Wix case study to enterprise media.</h3>
+        <p>A verified deployment covering 5,000+ employees is the strongest proof point in this category. No competitor has a comparable named customer story at that scale. Pitch TechCrunch, VentureBeat, InfoQ, or The New Stack.</p>
+        <p>A published external story creates a citation that AIO will use when answering "does Willow work at enterprise scale" and similar questions. It also builds backlinks that improve the site's authority score.</p>
+      </div>
+      <div class="move">
+        <div class="num">Move 05 &nbsp;·&nbsp; Category ownership</div>
+        <h3>Claim "shadow AI detection" as a unique topic.</h3>
+        <p>No competitor offers shadow AI detection. Write one authoritative piece on the topic: "How to find unauthorized AI tools in your organization." Frame it as a practical guide, not a product pitch.</p>
+        <p>Pitch it to a security publication. This creates an AIO citation for a query cluster where Willow will be the only named solution, and it builds a category association competitors cannot copy quickly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 90-DAY ROADMAP -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">06 &nbsp;·&nbsp; 90-Day Roadmap</span>
+      <h2>Three sprints, four weeks each. Sprint 1 absorbs the 30-day moves above.</h2>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="sprint">
+        <div class="num">Sprint 01 &nbsp;·&nbsp; Days 1 to 30</div>
+        <h3>Fix foundations. Publish the first category content.</h3>
+        <ul>
+          <li>Add quotable brand identity text to homepage, platform overview, and the top three feature pages.</li>
+          <li>Add schema.org SoftwareApplication structured data to the site.</li>
+          <li>Restructure all five compare pages to be answer-shaped: summary, feature matrix, best-for paragraph, FAQ.</li>
+          <li>Publish "What is MCP governance" on the blog.</li>
+          <li>Configure all AIO tracking to use withwillow.ai as the URL target only.</li>
+        </ul>
+      </div>
+      <div class="sprint">
+        <div class="num">Sprint 02 &nbsp;·&nbsp; Days 31 to 60</div>
+        <h3>Own the category questions. Build earned authority.</h3>
+        <ul>
+          <li>Publish "How to detect shadow AI in your organization." Pitch to CSO Online or Dark Reading.</li>
+          <li>Publish "AI agent governance for enterprise: what your security team needs to know." Target CISO audience.</li>
+          <li>Pitch the Wix deployment story to two enterprise tech publications.</li>
+          <li>Publish one guest article or expert contribution on The New Stack, InfoQ, or DZone.</li>
+          <li>Begin authentic Reddit presence in r/sysadmin and r/MachineLearning with genuine answers on AI governance questions.</li>
+        </ul>
+      </div>
+      <div class="sprint">
+        <div class="num">Sprint 03 &nbsp;·&nbsp; Days 61 to 90</div>
+        <h3>Compound authority. Measure and adjust.</h3>
+        <ul>
+          <li>Publish a benchmark article: "What happens when you deploy AI agents without governance." Use Wix and other customer data.</li>
+          <li>Get listed in at least one "best AI governance tools" roundup by a third-party publication.</li>
+          <li>Strengthen MCP-S OAuth and Secure MCP Gateway GitHub READMEs with clear Willow brand context and links.</li>
+          <li>Re-run this audit. Report on verified mention count, own pages cited, and category query coverage.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUCCESS METRICS -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">07 &nbsp;·&nbsp; Success Metrics</span>
+      <h2>Tracked monthly. All baselines are as of June 2026.</h2>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:30%">Metric</th><th style="width:22%">Current baseline</th><th style="width:22%">Target (90 days)</th><th>How to measure</th></tr></thead>
+        <tbody>
+          <tr><td>Verified AIO mentions (URL-matched)</td><td class="num">0</td><td class="num">3 or more</td><td>Ahrefs Brand Radar, URL group: withwillow.ai</td></tr>
+          <tr><td>Own pages cited in AI Overviews</td><td class="num">0</td><td class="num">2 or more pages</td><td>Brand Radar cited-pages endpoint, URL group only</td></tr>
+          <tr><td>Share of mentions vs. field</td><td>0% (all brands at zero)</td><td>First above zero</td><td>Brand Radar SoV entities, URL groups only. Not name-based.</td></tr>
+          <tr><td>External publications mentioning Willow</td><td class="num">0 tracked</td><td class="num">3 or more placements</td><td>Manual media monitoring</td></tr>
+          <tr><td>Category keywords ranking in top 20</td><td class="num">0</td><td class="num">5 or more</td><td>Ahrefs rank tracker: mcp governance, ai agent governance, shadow ai detection, enterprise mcp management</td></tr>
+          <tr><td>Monthly organic traffic</td><td class="num">0</td><td class="num">200+</td><td>Ahrefs site-explorer-metrics, monthly</td></tr>
+          <tr><td>Compare pages restructured for AI extraction</td><td class="num">0 of 5</td><td class="num">5 of 5</td><td>Manual audit: summary, table, FAQ in each page</td></tr>
+          <tr><td>AI Visibility Score</td><td class="num">0 / 100</td><td class="num">10 / 100</td><td>Re-run this audit in 90 days</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- METHODOLOGY -->
+<section class="section" id="methodology" style="background:var(--c-fill-light);">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">APPENDIX &nbsp;·&nbsp; Methodology and Data Notes</span>
+      <h2>How this audit was built and what the data means.</h2>
+    </div>
+
+    <div class="grid grid-2" style="gap:40px;">
+      <div class="stack-md">
+        <div>
+          <div class="mono-label">Sources</div>
+          <p>Google AI Overviews data: Ahrefs Brand Radar, default prompt database, US country setting. All brand data uses URL-group matching (withwillow.ai, subdomains scope) to remove name-pollution false positives. Organic search metrics: Ahrefs Site Explorer, US, June 2026.</p>
+        </div>
+        <div>
+          <div class="mono-label">Competitor derivation</div>
+          <p>Ahrefs Site Explorer organic competitors returned zero results for withwillow.ai (no ranking keywords yet means no keyword overlap). Competitors were taken from Willow's own published compare pages: Archestra, Cloudflare, MetaMCP, MintMCP, Obot, Runlayer. Cloudflare was excluded from the final set because its brand mentions in AIO are overwhelmingly about CDN and DDoS, not AI Gateway, which would pollute the share-of-mentions comparison.</p>
+        </div>
+      </div>
+      <div class="stack-md">
+        <div>
+          <div class="mono-label">Why all brands show zero</div>
+          <p>Ahrefs Brand Radar operates on a database of prompts reflecting commonly-searched queries. The AI agent governance category has not yet generated enough search query volume to appear in this database. This is not a measurement error. It confirms the category is in its pre-AIO phase. The race has not started. This is the most important finding in the report.</p>
+        </div>
+        <div>
+          <div class="mono-label">What this audit does not cover</div>
+          <p>This audit covers Google AI Overviews only. It does not cover ChatGPT, Perplexity, Gemini, or other AI answer systems. It does not include Google Search Console clickstream data. Adding those inputs would unlock a more complete picture and is recommended for future audit cycles once the brand has established some organic presence.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="big-footer">
+  <div class="container">
+    <div class="word">willow.</div>
+    <div class="meta-row">
+      <div class="left">GEO AUDIT &nbsp;·&nbsp; V2 WITH COMPETITORS &nbsp;·&nbsp; JUNE 2026</div>
+      <div class="right">PREPARED BY AUQ &nbsp;·&nbsp; ANALYTICS@AUQ.IO</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
