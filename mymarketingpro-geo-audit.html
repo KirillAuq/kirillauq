@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Marketing Pro – GEO Audit · AUQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:         #0B1121;
+    --indigo:       #4338CA;
+    --indigo-mid:   #6366F1;
+    --indigo-light: #EEF2FF;
+    --warn:         #d9730d;
+    --warn-light:   #FFFBEB;
+    --green:        #065F46;
+    --green-light:  #ECFDF5;
+    --border:       #E2E8F0;
+    --surface:      #F8FAFC;
+    --text:         #1e293b;
+    --muted:        #64748b;
+    --f-sans:       'Inter', -apple-system, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--f-sans); font-size: 15px; color: var(--text); background: #fff; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+  /* Typography scale */
+  .display { font-size: 64px; font-weight: 700; line-height: 1.0; letter-spacing: -2px; color: var(--navy); }
+  h1 { font-size: 44px; font-weight: 700; line-height: 1.1; letter-spacing: -1px; color: var(--navy); }
+  h2 { font-size: 30px; font-weight: 600; line-height: 1.2; letter-spacing: -0.5px; color: var(--navy); }
+  h3 { font-size: 20px; font-weight: 600; line-height: 1.25; color: var(--navy); }
+  h4 { font-size: 16px; font-weight: 600; color: var(--navy); }
+  p  { color: #4b5563; line-height: 1.65; }
+  p.lede { font-size: 17px; color: #4b5563; }
+  a  { color: var(--indigo); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .caption { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* Layout */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+  .section { padding: 72px 0; border-top: 0.5px solid var(--border); }
+  .section:first-of-type { border-top: none; }
+  .section-head { margin-bottom: 40px; max-width: 780px; }
+  .section-head h2 { margin-top: 8px; }
+
+  /* Mono label → eyebrow */
+  .mono-label {
+    display: inline-block;
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.09em;
+    color: var(--indigo);
+  }
+
+  /* ── NAV ── */
+  nav.topnav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+  }
+  nav.topnav .container { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; padding-bottom: 12px; }
+  .brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; color: var(--navy); text-decoration: none; }
+  .brand .dot { width: 22px; height: 22px; border-radius: 6px; background: var(--navy); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 9px; font-weight: 700; letter-spacing: 0.04em; }
+  nav.topnav .right { display: flex; align-items: center; gap: 20px; }
+  nav.topnav .right a { color: var(--muted); text-decoration: none; font-size: 13px; }
+  nav.topnav .right a:hover { color: var(--text); }
+  .btn-cta { display: inline-flex; align-items: center; background: var(--navy); color: #fff !important; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; }
+  .btn-cta:hover { background: #1a2744; text-decoration: none !important; }
+
+  /* ── HERO ── */
+  .hero { padding: 64px 0 56px; }
+  .hero .eyebrow { display: inline-flex; align-items: center; gap: 10px; padding: 5px 12px; border-radius: 20px; background: var(--indigo-light); margin-bottom: 24px; }
+  .hero .eyebrow .pill { width: 6px; height: 6px; border-radius: 50%; background: var(--indigo); }
+  .hero .display { margin-bottom: 20px; }
+  .hero p.lede { max-width: 68ch; margin-bottom: 32px; }
+  .hero .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 32px; max-width: 900px; margin-bottom: 40px; }
+  .hero .meta .row { display: flex; gap: 8px; align-items: baseline; }
+  .hero .meta .k { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); white-space: nowrap; }
+  .hero .meta .v { font-size: 13px; color: var(--text); }
+
+  /* ── STAT ROW ── */
+  .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); border: 0.5px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 8px; }
+  .stat-card { padding: 20px 22px; border-right: 0.5px solid var(--border); background: #fff; display: flex; flex-direction: column; gap: 8px; }
+  .stat-card:last-child { border-right: none; }
+  .stat-card .lbl { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .stat-card .num { font-size: 40px; font-weight: 700; line-height: 1.0; letter-spacing: -1.5px; color: var(--navy); }
+  .stat-card .num.warn { color: var(--warn); }
+  .stat-card .num.accent { color: var(--indigo); }
+  .stat-card .num.muted { color: var(--muted); }
+  .stat-card .sub { font-size: 12px; color: var(--muted); line-height: 1.45; }
+  .stat-accent { width: 20px; height: 2px; background: var(--indigo); border-radius: 2px; margin-bottom: 6px; }
+
+  /* ── CARDS ── */
+  .card { background: #fff; border: 0.5px solid var(--border); border-radius: 8px; padding: 24px; }
+  .card .mono-label { margin-bottom: 12px; }
+  .card h3 { margin-bottom: 8px; }
+  .card p { color: #4b5563; }
+  .card.flat { background: var(--surface); border-color: var(--border); }
+
+  /* ── TABLES ── */
+  .tbl-wrap { border: 0.5px solid var(--border); border-radius: 8px; overflow: hidden; background: #fff; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: var(--surface); color: var(--muted); text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 0.5px solid var(--border); }
+  tbody td { padding: 11px 14px; border-top: 0.5px solid var(--border); vertical-align: top; color: var(--text); }
+  tbody tr:hover td { background: var(--surface); }
+  tbody td.num { font-variant-numeric: tabular-nums; font-weight: 500; text-align: right; }
+  tbody td.center { text-align: center; }
+  td.no  { color: var(--warn); font-weight: 500; }
+  td.yes { color: var(--green); font-weight: 500; }
+
+  /* ── BLOCKQUOTE ── */
+  blockquote { border-left: 2.5px solid var(--indigo); padding: 4px 0 4px 18px; margin: 14px 0; font-style: italic; font-size: 15px; line-height: 1.55; color: #374151; }
+  blockquote .src { display: block; font-style: normal; margin-top: 8px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+
+  /* ── GRID ── */
+  .grid { display: grid; gap: 20px; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+  /* ── SCORE BLOCK ── */
+  .score-block { display: grid; grid-template-columns: 1.1fr 1fr; gap: 0; background: #fff; border: 0.5px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 20px; }
+  .score-block .num-side { display: flex; flex-direction: column; justify-content: center; gap: 12px; border-right: 0.5px solid var(--border); padding: 32px; background: var(--surface); }
+  .score-block .big { font-size: 96px; line-height: 0.9; letter-spacing: -4px; font-weight: 700; color: var(--warn); }
+  .score-block .band { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: var(--warn-light); border: 0.5px solid rgba(217,115,13,0.3); border-radius: 20px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warn); width: max-content; }
+  .score-block .scale { display: flex; gap: 3px; margin-top: 10px; }
+  .score-block .scale .seg { flex: 1; height: 5px; border-radius: 2px; background: var(--border); }
+  .score-block .scale .seg.on { background: var(--warn); }
+  .score-block .scale-lbl { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+  .score-block .components { padding: 32px; }
+  .score-block .components ul { list-style: none; padding: 0; margin: 0; }
+  .score-block .components li { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 0.5px solid var(--border); font-size: 13px; }
+  .score-block .components li:first-child { border-top: none; }
+  .score-block .components .lbl { color: var(--muted); }
+  .score-block .components .val { font-weight: 600; color: var(--navy); }
+
+  /* ── FINDINGS ── */
+  .findings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+  .finding { border: 0.5px solid var(--border); border-radius: 8px; padding: 20px; background: #fff; }
+  .finding .num { font-size: 28px; font-weight: 700; letter-spacing: -1px; color: var(--indigo); margin-bottom: 8px; }
+  .finding h3 { font-size: 16px; margin-bottom: 6px; }
+  .finding p { font-size: 13px; color: #4b5563; }
+
+  /* ── CHIPS ── */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .chip { display: inline-flex; align-items: center; padding: 6px 12px; border: 0.5px solid var(--border); background: var(--surface); border-radius: 6px; font-size: 12px; color: var(--text); }
+
+  /* ── DESCRIPTOR PILLS ── */
+  .descriptors { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+  .desc-pill { padding: 5px 11px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 6px; font-size: 12px; font-weight: 500; color: var(--text); }
+  .desc-pill.absent { background: var(--warn-light); border-color: rgba(217,115,13,0.25); color: var(--warn); text-decoration: line-through; text-decoration-color: rgba(217,115,13,0.4); }
+
+  /* ── SOV BARS ── */
+  .sov-grid { display: grid; gap: 16px; margin-top: 24px; }
+  .sov-row { display: grid; grid-template-columns: 180px 1fr 70px; gap: 14px; align-items: center; }
+  .sov-row .name { font-weight: 500; font-size: 13px; }
+  .sov-row .name .domain { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-top: 1px; }
+  .sov-row .bar-track { height: 24px; border-radius: 4px; background: var(--surface); border: 0.5px solid var(--border); overflow: hidden; }
+  .sov-row .bar { height: 100%; }
+  .sov-row .bar.brand  { background: var(--indigo); }
+  .sov-row .bar.brand-warn { background: var(--warn); }
+  .sov-row .bar.comp   { background: var(--navy); }
+  .sov-row .bar.zero   { background: repeating-linear-gradient(45deg, rgba(217,115,13,0.2), rgba(217,115,13,0.2) 5px, rgba(217,115,13,0.08) 5px, rgba(217,115,13,0.08) 10px); }
+  .sov-row .pct { font-size: 13px; font-weight: 600; text-align: right; color: var(--text); }
+
+  /* ── COMPARE CARDS ── */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 24px; }
+  .compare-card { border: 0.5px solid var(--border); border-radius: 8px; padding: 22px; background: #fff; }
+  .compare-card.brand { border-color: rgba(67,56,202,0.3); background: var(--indigo-light); }
+  .compare-card .name { font-size: 18px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+  .compare-card .role { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 14px; }
+  .compare-card .stat-row { display: flex; justify-content: space-between; padding: 9px 0; border-top: 0.5px solid var(--border); font-size: 12px; }
+  .compare-card .stat-row:first-of-type { border-top: none; }
+  .compare-card .stat-row .lbl { color: var(--muted); }
+  .compare-card .stat-row .val { font-weight: 600; color: var(--navy); }
+  .compare-card .stat-row .val.zero { color: var(--warn); }
+
+  /* ── H2H TAGS ── */
+  .h2h-tag { display: inline-flex; padding: 3px 9px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; }
+  .h2h-tag.win     { background: var(--green-light); color: var(--green); border: 0.5px solid rgba(6,95,70,0.2); }
+  .h2h-tag.loss    { background: var(--warn-light); color: var(--warn); border: 0.5px solid rgba(217,115,13,0.25); }
+  .h2h-tag.neutral { background: var(--surface); color: var(--muted); border: 0.5px solid var(--border); }
+
+  /* ── ACTION MOVES ── */
+  .move { border: 0.5px solid var(--border); border-radius: 8px; padding: 24px; background: #fff; display: flex; flex-direction: column; gap: 10px; }
+  .move .num { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--indigo); }
+  .move h3 { font-size: 18px; margin: 0; }
+  .move p { font-size: 13px; color: #4b5563; line-height: 1.6; }
+
+  /* ── SPRINT CARDS ── */
+  .sprint { border: 0.5px solid var(--border); border-radius: 8px; padding: 22px; background: #fff; }
+  .sprint .num { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--indigo); }
+  .sprint h3 { margin: 7px 0 12px; font-size: 17px; }
+  .sprint ul { list-style: none; padding: 0; margin: 0; }
+  .sprint li { padding: 9px 0; border-top: 0.5px solid var(--border); font-size: 13px; line-height: 1.5; display: flex; gap: 10px; align-items: flex-start; color: #4b5563; }
+  .sprint li:first-child { border-top: none; }
+  .sprint li::before { content: ""; flex: none; width: 5px; height: 5px; background: var(--indigo); border-radius: 2px; margin-top: 7px; }
+
+  /* ── LIGHT ZONE (replaces dark-zone) ── */
+  .light-zone { background: var(--surface); border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); padding: 72px 0; }
+  .light-zone h2 { color: var(--navy); }
+  .light-zone h3 { color: var(--navy); }
+  .light-zone p { color: #4b5563; }
+  .light-zone .lede { color: #4b5563; }
+  .light-zone .mono-label { color: var(--indigo); }
+
+  /* ── CALLOUT ── */
+  .callout { border: 0.5px solid rgba(217,115,13,0.25); background: var(--warn-light); border-radius: 8px; padding: 20px; margin-top: 20px; }
+  .callout .mono-label { color: var(--warn); margin-bottom: 8px; }
+  .callout p { font-size: 13px; color: #4b5563; }
+
+  /* ── GLOSSARY ── */
+  .glossary { border: 0.5px solid var(--border); background: var(--indigo-light); border-radius: 8px; padding: 24px; margin-top: 20px; }
+  .glossary .mono-label { margin-bottom: 14px; }
+  .glossary dl { display: grid; grid-template-columns: 160px 1fr; gap: 10px 18px; font-size: 13px; line-height: 1.55; }
+  .glossary dt { font-weight: 600; color: var(--navy); }
+  .glossary dd { color: #4b5563; }
+
+  /* ── SPLIT QUOTES ── */
+  .split-quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  /* ── MISC ── */
+  .stack-sm > * + * { margin-top: 12px; }
+  .stack-md > * + * { margin-top: 18px; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .muted { color: var(--muted); }
+
+  /* ── NAV BAR (report label) ── */
+  .auq-badge { background: var(--indigo-light); color: var(--indigo); font-size: 10px; font-weight: 600; padding: 2px 9px; border-radius: 20px; letter-spacing: 0.04em; }
+
+  /* ── FOOTER ── */
+  footer.big-footer { background: var(--surface); border-top: 0.5px solid var(--border); padding: 28px 0; }
+  footer.big-footer .container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  footer.big-footer .footer-brand { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+  footer.big-footer .footer-right { font-size: 12px; color: var(--muted); }
+  footer.big-footer a { color: var(--indigo); text-decoration: none; }
+  footer.big-footer a:hover { text-decoration: underline; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 991px) {
+    .display { font-size: 48px; }
+    h2 { font-size: 26px; }
+    .stats-bar, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .score-block { grid-template-columns: 1fr; }
+    .score-block .num-side { border-right: none; border-bottom: 0.5px solid var(--border); }
+    .split-quotes, .compare-grid, .findings { grid-template-columns: 1fr; }
+    .sov-row { grid-template-columns: 1fr; gap: 6px; }
+    .sov-row .pct { text-align: left; }
+    .glossary dl { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .display { font-size: 36px; letter-spacing: -1px; }
+    .stats-bar { grid-template-columns: 1fr; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .container { padding: 0 16px; }
+    nav.topnav .right a:not(.btn-cta) { display: none; }
+    .section { padding: 48px 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="container">
+    <a class="brand" href="https://auq.io" target="_blank" rel="noopener">
+      <div class="dot">AUQ</div>
+      <span>AUQ.io</span>
+    </a>
+    <div class="right">
+      <a href="#summary">Summary</a>
+      <a href="#identity">What AI Says</a>
+      <a href="#sov">Mentions</a>
+      <a href="#performance">Performance</a>
+      <a href="#research">Sources</a>
+      <a href="#moves">Action Plan</a>
+      <a class="btn-cta" href="#methodology">Methodology</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">
+      <span class="pill"></span>
+      <span class="mono-label">GEO Audit · With Competitors</span>
+    </div>
+    <h1 class="display">My Marketing Pro.</h1>
+    <p class="lede">A look at how My Marketing Pro shows up in Google's AI Overviews — the AI answer box that appears at the top of search results — compared with Data Axle and LocaliQ.</p>
+
+    <div class="meta">
+      <div class="row"><span class="k">Your site</span><span class="v">mymarketingpro.com</span></div>
+      <div class="row"><span class="k">Compared to</span><span class="v">data-axle.com · localiq.com</span></div>
+      <div class="row"><span class="k">Where we looked</span><span class="v">Google AI Overviews, US</span></div>
+      <div class="row"><span class="k">Questions tested</span><span class="v">Category and comparison questions across all three brands</span></div>
+      <div class="row"><span class="k">Prepared</span><span class="v">June 2, 2026 · by AUQ</span></div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-accent"></div>
+        <div class="lbl">AI Visibility Score</div>
+        <div class="num warn">12</div>
+        <div class="sub">out of 100. The brand barely shows up in AI answers today.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-accent"></div>
+        <div class="lbl">Real AI mentions</div>
+        <div class="num">0</div>
+        <div class="sub">Google's AI does not name My Marketing Pro in any answer we tested.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-accent"></div>
+        <div class="lbl">Site authority</div>
+        <div class="num">37</div>
+        <div class="sub">vs. Data Axle 77 and LocaliQ 83. A big gap on the trust score Google uses.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-accent"></div>
+        <div class="lbl">Google rankings</div>
+        <div class="num">0</div>
+        <div class="sub">The site ranks for zero non-branded keywords in the US right now.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="summary">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">Executive Summary</span>
+      <h2>My Marketing Pro is missing from Google's AI Overviews. Both competitors are not.</h2>
+    </div>
+
+    <div class="grid grid-2" style="gap:28px; align-items:start;">
+      <div class="stack-md">
+        <p class="lede">When you ask Google a marketing question and the AI answer box appears at the top, it does not name My Marketing Pro. It does name Data Axle and LocaliQ.</p>
+        <p>One number looks misleading at first. A tracking tool reports that the brand has 28% of the mentions in this category. That number is wrong. The phrase "my marketing pro" is everyday English. The tool is counting those words, not real mentions of the company. After we filter that out by hand, real mentions drop to zero.</p>
+        <p>The cause is not strategy. It is foundation. The site has a low authority score (37 vs. 77 and 83). It ranks for zero keywords in Google's US search results. Google's AI almost always quotes pages that already rank well. Until those pages exist, the brand cannot be quoted.</p>
+      </div>
+
+      <div class="score-block">
+        <div class="num-side">
+          <div class="mono-label">AI Visibility Score</div>
+          <div class="big">12</div>
+          <div class="band">Barely visible</div>
+          <div class="scale">
+            <div class="seg on"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div>
+          </div>
+          <div class="scale-lbl"><span>Barely</span><span>Low</span><span>Competitive</span><span>Dominant</span></div>
+        </div>
+        <div class="components">
+          <div class="mono-label" style="margin-bottom:14px;">What's in the score</div>
+          <ul>
+            <li><span class="lbl">How AI describes the brand</span><span class="val">10 / 100</span></li>
+            <li><span class="lbl">Inclusion in AI answers</span><span class="val">5 / 100</span></li>
+            <li><span class="lbl">Your pages being quoted</span><span class="val">10 / 100</span></li>
+            <li><span class="lbl">Showing up in the category</span><span class="val">15 / 100</span></li>
+            <li><span class="lbl">Showing up on comparison searches</span><span class="val">20 / 100</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:56px;">
+      <span class="mono-label">Three things you need to know</span>
+    </div>
+    <div class="findings">
+      <div class="finding">
+        <div class="num">01</div>
+        <h3>Google's AI does not mention you yet</h3>
+        <p>Across every category and comparison question we asked, no AI Overview names My Marketing Pro as a real brand. The 25 "mentions" the tracking tool reports are accidental word matches, not citations.</p>
+      </div>
+      <div class="finding">
+        <div class="num">02</div>
+        <h3>Your competitors own different corners</h3>
+        <p>LocaliQ wins searches for local SEO and marketing platforms for small business. Data Axle wins searches for B2B data and mailing lists. They almost never show up in the same answer.</p>
+      </div>
+      <div class="finding">
+        <div class="num">03</div>
+        <h3>The site is not ready for Google's AI to find it</h3>
+        <p>You rank for zero search terms in the US. Google's AI pulls quotes from pages that already rank. Until you have pages that rank, you have no source for the AI to quote.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:48px;">
+      <span class="mono-label">Top three things to do in the next 30 days</span>
+    </div>
+    <div class="findings" style="margin-top:16px;">
+      <div class="finding">
+        <div class="num">A</div>
+        <h3>Publish the right kinds of pages</h3>
+        <p>Build pages that directly answer the questions people are asking, structured so Google's AI can quote them. Without these pages, nothing else compounds.</p>
+      </div>
+      <div class="finding">
+        <div class="num">B</div>
+        <h3>Get on the lists Google's AI trusts</h3>
+        <p>Sites like G2, Capterra, Clutch, and "best of" listicles feed answers to Google's AI. The brand needs to be listed on them. Without that, the AI has no source to name you.</p>
+      </div>
+      <div class="finding">
+        <div class="num">C</div>
+        <h3>Pick one fight and win it first</h3>
+        <p>Trying to be the answer for all 11 channels and three plans at once is spreading too thin. Pick one topic where nobody else has won and concentrate on owning it.</p>
+      </div>
+    </div>
+
+    <div class="glossary">
+      <div class="mono-label">Quick glossary</div>
+      <dl>
+        <dt>AI Overview</dt><dd>The AI-generated answer Google now shows at the top of many search results.</dd>
+        <dt>GEO</dt><dd>Generative Engine Optimization. The practice of getting your brand named or quoted by AI answers (Google AI, ChatGPT, Perplexity).</dd>
+        <dt>Site authority (DR)</dt><dd>A 0 to 100 score (Domain Rating) that measures how trusted a site is, based on how many other quality sites link to it. Higher is better.</dd>
+        <dt>Share of mentions</dt><dd>How often your brand shows up in AI answers compared to your competitors. Sometimes called "share of voice."</dd>
+        <dt>Listicle</dt><dd>"Best of" articles like "10 Best Marketing Platforms for Small Business." Google's AI pulls answers from these all the time.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="identity">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">01 · What Google's AI Says About You</span>
+      <h2>What does Google's AI think My Marketing Pro does? Almost nothing.</h2>
+    </div>
+
+    <div class="split-quotes">
+      <div class="card">
+        <div class="mono-label">What the brand says about itself</div>
+        <h3>An all-in-one marketing platform with AI and senior strategists.</h3>
+        <blockquote>Marketing that works while you're working. 250M+ verified profiles, 11 channels, AI doing the math and a senior team doing the judgment, on one platform.<span class="src">From mymarketingpro.com homepage, 2026</span></blockquote>
+        <p>AI agents that build lists, write copy, send messages, and book meetings. Three plans from a free pay-as-you-go option up to a $10K+ managed service. Brand advertising plus direct response in the same campaign.</p>
+        <p style="margin-top:10px;">Channels covered: connected TV, digital billboards, streaming audio, online video, banner ads, email, SMS, social, programmatic, and AI voice calls.</p>
+        <p style="margin-top:10px;">Featured in Forbes, CNBC, Bloomberg, NPR, AdExchanger, The New York Times, and AMC's "The Pitch."</p>
+      </div>
+
+      <div class="card">
+        <div class="mono-label">What Google's AI says</div>
+        <h3>Nothing. The brand doesn't come up.</h3>
+        <blockquote>We asked Google AI Overviews dozens of category and comparison questions. Not a single answer names My Marketing Pro as a brand. The answers go to WebFX, Coalition Technologies, LocaliQ, HubSpot Marketing Hub, Thryv, Marketing 360, Data Axle, BrightLocal, and a long list of others.<span class="src">From AI Overview responses, May–June 2026, US</span></blockquote>
+        <blockquote>The tracking tool says My Marketing Pro has 25 mentions in this set. We read the actual responses. None of them are mentions of the company. They are sentences like "track my marketing pro forma..." or "where my marketing pro and consumer audiences overlap." Coincidental word matches.<span class="src">From manual review of AI Overview text, May 2026</span></blockquote>
+        <p>None of the brand's signature names show up. "Build &amp; Launch," "Grow &amp; Scale," "Drive &amp; Thrive," "Watt," "250M+ profiles" — Google's AI does not know any of these.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="mono-label">A note on that 28% number</div>
+      <p>Tracking tools count how often a brand name appears in AI answers. When the brand name is also a common phrase, the count gets inflated by accident. "My Marketing Pro" matches everyday English, so the tool's headline number is misleading. Throughout this report we use a "real mentions only" view that removes those false matches, so you see what's actually happening.</p>
+    </div>
+
+    <div style="margin-top:48px;">
+      <div class="section-head" style="margin-bottom:16px;">
+        <span class="mono-label">Who Google's AI names where</span>
+        <h3>The topics that matter to My Marketing Pro, and who shows up on each one today.</h3>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th style="width:26%">Topic</th><th style="width:22%">My Marketing Pro</th><th style="width:22%">Data Axle</th><th>LocaliQ</th></tr></thead>
+          <tbody>
+            <tr><td>All-in-one marketing platform for small business</td><td class="no">Missing</td><td>Not how AI describes it</td><td class="yes">Named as a Marketing 360 alternative</td></tr>
+            <tr><td>Local SEO and business listings</td><td class="no">Missing</td><td>Named as the data source behind listing tools</td><td class="yes">Named as "Best for Local SEO"</td></tr>
+            <tr><td>Verified consumer profiles, marketing data</td><td class="no">Missing</td><td class="yes">Named as a B2B and B2C data provider</td><td>Not how AI describes it</td></tr>
+            <tr><td>Mailing lists and direct mail</td><td class="no">Missing</td><td class="yes">Named with DirectMail.com as a list source</td><td>Not how AI describes it</td></tr>
+            <tr><td>Library and small business research tools</td><td class="no">Missing</td><td class="yes">Named for Reference Solutions in libraries</td><td>Not how AI describes it</td></tr>
+            <tr><td>Google Ads and PPC for local business</td><td class="no">Missing</td><td>Not how AI describes it</td><td class="yes">Named, Google Premier Partner</td></tr>
+            <tr><td>AI agents that actually do the work</td><td class="no">Missing</td><td class="no">Missing</td><td class="no">Missing. Nobody owns this yet.</td></tr>
+            <tr><td>Connected TV and digital billboards for SMBs</td><td class="no">Missing</td><td class="no">Missing</td><td class="no">Missing. Nobody owns this yet.</td></tr>
+            <tr><td>Brand ads and direct response in one place</td><td class="no">Missing</td><td class="no">Missing</td><td class="no">Missing. Nobody owns this yet.</td></tr>
+            <tr><td>Salesgenie and lead lookup tools</td><td class="no">Missing</td><td class="yes">Owns it. Salesgenie is theirs.</td><td>Not in this topic</td></tr>
+            <tr><td>WordStream and Google Ads tools</td><td class="no">Missing</td><td class="no">Missing</td><td class="yes">Owns it. WordStream is theirs.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:48px;">
+      <div>
+        <div class="mono-label">How the brand describes itself on the website</div>
+        <h3 style="margin:8px 0 6px;">The story you're telling</h3>
+        <div class="descriptors">
+          <span class="desc-pill">AI-driven</span><span class="desc-pill">Human-backed</span><span class="desc-pill">Data-first</span><span class="desc-pill">250M+ verified profiles</span><span class="desc-pill">11 channels</span><span class="desc-pill">All-in-one</span><span class="desc-pill">Brand and direct</span><span class="desc-pill">AI agents</span><span class="desc-pill">Senior strategists</span><span class="desc-pill">Watt audience graph</span><span class="desc-pill">No long-term contracts</span>
+        </div>
+      </div>
+      <div>
+        <div class="mono-label">What Google's AI does not say about you</div>
+        <h3 style="margin:8px 0 6px;">The story the AI has not picked up yet</h3>
+        <div class="descriptors">
+          <span class="desc-pill absent">My Marketing Pro (as a brand)</span><span class="desc-pill absent">Build &amp; Launch</span><span class="desc-pill absent">Grow &amp; Scale</span><span class="desc-pill absent">Drive &amp; Thrive</span><span class="desc-pill absent">Watt audience graph</span><span class="desc-pill absent">11 channels</span><span class="desc-pill absent">AI that does the work</span><span class="desc-pill absent">Frank O'Brien</span><span class="desc-pill absent">Five Tier</span><span class="desc-pill absent">brand and direct together</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;">
+      <div class="mono-label">Three things that are getting in the way</div>
+      <div class="grid grid-3" style="margin-top:14px;">
+        <div class="card flat">
+          <h4>The name itself is a problem</h4>
+          <p style="margin-top:6px;">"My Marketing Pro" sounds like a phrase, not a brand. AI tools cannot tell the company name apart from sentences that just happen to use those words. A more distinctive name, or always using "MMP" as the official short form, would help.</p>
+        </div>
+        <div class="card flat">
+          <h4>The customer wins are hidden</h4>
+          <p style="margin-top:6px;">The vodka launch, the HVAC story (500% lower customer cost), the Times Square campaign are great proof. But they all sit inside pop-ups that load with JavaScript. Google's AI cannot read pop-ups, so it cannot quote them.</p>
+        </div>
+        <div class="card flat">
+          <h4>"11 channels in one" has no Google AI surface</h4>
+          <p style="margin-top:6px;">Combining brand ads and direct response is the real differentiator. But nobody is asking Google about that combination yet, so there are no AI answers to win. The brand will need to teach Google what the question is.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sov">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">02 · How Often Each Brand Gets Mentioned</span>
+      <h2>Share of mentions in Google's AI Overviews, before and after we filter out false matches.</h2>
+    </div>
+
+    <div class="grid grid-2" style="gap:28px;">
+      <div>
+        <div class="mono-label">What the tracking tool says</div>
+        <h3 style="margin:8px 0 6px;">Tool's first-pass numbers</h3>
+        <p class="muted" style="font-size:13px;">This is what a brand monitoring tool shows you out of the box. It counts how often each brand name appears in AI answer text across the question set we tested.</p>
+        <div class="sov-grid">
+          <div class="sov-row">
+            <div class="name">My Marketing Pro<span class="domain">mymarketingpro.com</span></div>
+            <div class="bar-track"><div class="bar brand-warn" style="width:28%;"></div></div>
+            <div class="pct">28%</div>
+          </div>
+          <div class="sov-row">
+            <div class="name">LocaliQ<span class="domain">localiq.com</span></div>
+            <div class="bar-track"><div class="bar comp" style="width:49%;"></div></div>
+            <div class="pct">49%</div>
+          </div>
+          <div class="sov-row">
+            <div class="name">Data Axle<span class="domain">data-axle.com</span></div>
+            <div class="bar-track"><div class="bar comp" style="width:23%;"></div></div>
+            <div class="pct">23%</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mono-label" style="color:var(--warn);">After we filter out false matches</div>
+        <h3 style="margin:8px 0 6px;">Real numbers</h3>
+        <p class="muted" style="font-size:13px;">We read every AI response by hand. "My Marketing Pro" was matching everyday phrasing, not the company. The corrected picture is much harder.</p>
+        <div class="sov-grid">
+          <div class="sov-row">
+            <div class="name">My Marketing Pro<span class="domain">mymarketingpro.com</span></div>
+            <div class="bar-track"><div class="bar zero" style="width:2%;"></div></div>
+            <div class="pct" style="color:var(--warn);">0%</div>
+          </div>
+          <div class="sov-row">
+            <div class="name">LocaliQ<span class="domain">localiq.com</span></div>
+            <div class="bar-track"><div class="bar comp" style="width:65%;"></div></div>
+            <div class="pct">65%</div>
+          </div>
+          <div class="sov-row">
+            <div class="name">Data Axle<span class="domain">data-axle.com</span></div>
+            <div class="bar-track"><div class="bar comp" style="width:35%;"></div></div>
+            <div class="pct">35%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:48px;">
+      <div class="section-head" style="margin-bottom:16px;">
+        <span class="mono-label">How often the three brands appear together</span>
+        <h3>They almost never do. They each live in their own corner of Google's AI.</h3>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Brand</th><th class="num">Appears alone</th><th class="num">Appears with another</th><th class="num">Total answers</th></tr></thead>
+          <tbody>
+            <tr><td>My Marketing Pro (raw count)</td><td class="num">25</td><td class="num">0</td><td class="num">25</td></tr>
+            <tr><td>LocaliQ</td><td class="num">15</td><td class="num">0</td><td class="num">15</td></tr>
+            <tr><td>Data Axle</td><td class="num">8</td><td class="num">0</td><td class="num">8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="caption" style="margin-top:12px;">Across every question we tested, no AI Overview ever named two of these three brands in the same answer. Google's AI does not treat them as direct alternatives. LocaliQ owns local SEO and small-business marketing, Data Axle owns B2B data and mailing lists, and My Marketing Pro is not on the radar yet.</p>
+    </div>
+
+    <div style="margin-top:48px;">
+      <div class="section-head" style="margin-bottom:16px;">
+        <span class="mono-label">Side-by-side snapshot</span>
+        <h3>The three brands on the signals Google uses to decide what to quote.</h3>
+      </div>
+      <div class="compare-grid">
+        <div class="compare-card brand">
+          <div class="role">Your brand</div>
+          <div class="name">My Marketing Pro</div>
+          <div class="stat-row"><span class="lbl">Site authority (0 to 100)</span><span class="val">37</span></div>
+          <div class="stat-row"><span class="lbl">Google rankings (US)</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Top 3 rankings</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Monthly traffic from Google</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Real AI mentions</span><span class="val zero">0</span></div>
+          <div class="stat-row"><span class="lbl">Share of mentions (real)</span><span class="val zero">0%</span></div>
+        </div>
+        <div class="compare-card">
+          <div class="role">Competitor</div>
+          <div class="name">LocaliQ</div>
+          <div class="stat-row"><span class="lbl">Site authority (0 to 100)</span><span class="val">83</span></div>
+          <div class="stat-row"><span class="lbl">Google rankings (US)</span><span class="val">3,074</span></div>
+          <div class="stat-row"><span class="lbl">Top 3 rankings</span><span class="val">924</span></div>
+          <div class="stat-row"><span class="lbl">Monthly traffic from Google</span><span class="val">11,799</span></div>
+          <div class="stat-row"><span class="lbl">Real AI mentions</span><span class="val">15</span></div>
+          <div class="stat-row"><span class="lbl">Share of mentions (real)</span><span class="val">65%</span></div>
+        </div>
+        <div class="compare-card">
+          <div class="role">Competitor</div>
+          <div class="name">Data Axle</div>
+          <div class="stat-row"><span class="lbl">Site authority (0 to 100)</span><span class="val">77</span></div>
+          <div class="stat-row"><span class="lbl">Google rankings (US)</span><span class="val">490</span></div>
+          <div class="stat-row"><span class="lbl">Top 3 rankings</span><span class="val">140</span></div>
+          <div class="stat-row"><span class="lbl">Monthly traffic from Google</span><span class="val">5,753</span></div>
+          <div class="stat-row"><span class="lbl">Real AI mentions</span><span class="val">8</span></div>
+          <div class="stat-row"><span class="lbl">Share of mentions (real)</span><span class="val">35%</span></div>
+        </div>
+      </div>
+      <p class="caption" style="margin-top:12px;">The site authority gap and the rankings gap are the real story. Google's AI almost always quotes pages that already rank well in regular search. With zero rankings, there is nothing for the AI to quote.</p>
+    </div>
+
+    <div style="margin-top:48px;">
+      <div class="section-head" style="margin-bottom:16px;">
+        <span class="mono-label">Who owns what</span>
+        <h3>The corners each competitor controls, and the spaces still open.</h3>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th style="width:34%">Topic</th><th style="width:18%">Who wins</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Best SEO and PPC agency for local business</td><td><span class="h2h-tag win">LocaliQ wins</span></td><td>Named as "Best for Local SEO" in the most-cited best-of articles. Premier Google Partner.</td></tr>
+            <tr><td>Marketing platforms for small business</td><td><span class="h2h-tag win">LocaliQ wins</span></td><td>Named alongside HubSpot, Thryv, Birdeye, and ActiveCampaign as a Marketing 360 alternative.</td></tr>
+            <tr><td>WordStream and Google Ads tools</td><td><span class="h2h-tag win">LocaliQ wins</span></td><td>Google's AI knows LocaliQ owns WordStream and is owned by Gannett.</td></tr>
+            <tr><td>Mailing lists and direct mail data</td><td><span class="h2h-tag win">Data Axle wins</span></td><td>Named as a primary list provider in "how do I get a mailing list" answers.</td></tr>
+            <tr><td>Local citations and listing tools</td><td><span class="h2h-tag win">Data Axle wins</span></td><td>Named as the data source behind Moz Local and other local-SEO tools.</td></tr>
+            <tr><td>Salesgenie and lead lookup</td><td><span class="h2h-tag win">Data Axle wins</span></td><td>Google's AI knows Data Axle owns Salesgenie.</td></tr>
+            <tr><td>Library research and small business lookups</td><td><span class="h2h-tag win">Data Axle wins</span></td><td>Named as the database libraries use to look up small businesses.</td></tr>
+            <tr><td>AI agents that actually do the work</td><td><span class="h2h-tag neutral">Open</span></td><td>No brand wins this topic in Google's AI today. A real opportunity.</td></tr>
+            <tr><td>Connected TV and digital billboards for SMBs</td><td><span class="h2h-tag neutral">Open</span></td><td>AI answers for connected TV go to The Trade Desk, Hulu, Roku. Nothing aimed at small business.</td></tr>
+            <tr><td>Brand ads and direct response together</td><td><span class="h2h-tag neutral">Open</span></td><td>Google's AI treats brand and direct as different things. The combination is unowned.</td></tr>
+            <tr><td>Pay-as-you-go marketing with data included</td><td><span class="h2h-tag neutral">Open</span></td><td>No vendor is described this way in AI answers today.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="performance">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">03 · Performance Side by Side</span>
+      <h2>How My Marketing Pro stacks up against both competitors on the things Google's AI looks at.</h2>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:38%">Metric</th><th class="num">My Marketing Pro</th><th class="num">LocaliQ</th><th class="num">Data Axle</th></tr></thead>
+        <tbody>
+          <tr><td>AI answers that name the brand as a real source</td><td class="num no">0</td><td class="num">15</td><td class="num">8</td></tr>
+          <tr><td>Answers where the brand appears with a competitor</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+          <tr><td>Raw mention count from the tracking tool</td><td class="num">25 (false matches)</td><td class="num">15</td><td class="num">8</td></tr>
+          <tr><td>Tool's first-pass share of mentions</td><td class="num">28%</td><td class="num">49%</td><td class="num">23%</td></tr>
+          <tr><td>Real share of mentions (after filtering)</td><td class="num no">0%</td><td class="num">65%</td><td class="num">35%</td></tr>
+          <tr><td>Keywords ranking on Google (US)</td><td class="num no">0</td><td class="num">3,074</td><td class="num">490</td></tr>
+          <tr><td>Keywords ranking in the top 3 (US)</td><td class="num no">0</td><td class="num">924</td><td class="num">140</td></tr>
+          <tr><td>Monthly visitors from Google (US)</td><td class="num no">0</td><td class="num">11,799</td><td class="num">5,753</td></tr>
+          <tr><td>Site authority score (0 to 100)</td><td class="num">37</td><td class="num">83</td><td class="num">77</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption" style="margin-top:12px;">The three things Google's AI uses move together. Strong authority, lots of rankings, lots of AI mentions. LocaliQ has all three. Data Axle has two of three. My Marketing Pro has none of them yet.</p>
+
+    <div style="margin-top:48px;">
+      <div class="section-head" style="margin-bottom:16px;">
+        <span class="mono-label">The pages that get quoted</span>
+        <h3>Top performing pages on each competitor's site, and what they rank for.</h3>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th style="width:16%">Brand</th><th style="width:44%">Their best page</th><th>What it ranks for</th></tr></thead>
+          <tbody>
+            <tr><td>LocaliQ</td><td>localiq.com/blog/how-to-support-local-businesses/</td><td>"best ways to support local businesses" (260k searches/mo)</td></tr>
+            <tr><td>LocaliQ</td><td>localiq.com/blog/small-business-email-examples-and-templates/</td><td>"email template" (10k searches/mo, ranked #1)</td></tr>
+            <tr><td>LocaliQ</td><td>localiq.com/blog/social-media-holidays/</td><td>"june social media holidays" (1.3k searches/mo, ranked #4)</td></tr>
+            <tr><td>Data Axle</td><td>data-axle.com/data-solutions/consumer-data/</td><td>"consumer data" (600 searches/mo, ranked #2)</td></tr>
+            <tr><td>Data Axle</td><td>data-axle.com/data-solutions/business-data/</td><td>"business data" (600 searches/mo, ranked #2)</td></tr>
+            <tr><td>Data Axle</td><td>data-axle.com/marketing-solutions/acquisition-email/</td><td>"email acquisition" (150 searches/mo, ranked #2)</td></tr>
+            <tr><td>My Marketing Pro</td><td class="no">No pages ranking in the US right now</td><td class="no">No non-branded searches found</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="caption" style="margin-top:12px;">Two clear patterns. LocaliQ wins through blog posts that already rank for big topics. Data Axle wins through tight pages on each product they sell. My Marketing Pro has neither approach yet.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">04 · What Each Brand Is Known For</span>
+      <h2>The territory each competitor owns, what nobody owns, and where you could play.</h2>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <div class="mono-label">LocaliQ owns</div>
+        <h3 style="margin-top:8px;">Local SEO and marketing for small business.</h3>
+        <p style="margin-top:8px;">"Best for Local SEO" in the rankings Google's AI cites. A natural alternative to Marketing 360. Owner of WordStream. Owned by Gannett (the USA TODAY company). Their blog content carries a lot of weight.</p>
+      </div>
+      <div class="card">
+        <div class="mono-label">Data Axle owns</div>
+        <h3 style="margin-top:8px;">B2B and B2C marketing data.</h3>
+        <p style="margin-top:8px;">Mailing lists and direct mail data. The source behind local SEO listing tools. The database libraries use to look up new businesses. Owner of Salesgenie. A back-end data brand, not a front-end agency.</p>
+      </div>
+      <div class="card" style="border-color: rgba(67,56,202,0.3); background: var(--indigo-light);">
+        <div class="mono-label">Up for grabs</div>
+        <h3 style="margin-top:8px;">Open ground nobody owns.</h3>
+        <p style="margin-top:8px;">AI agents that actually do work. Connected TV and digital billboards aimed at small business. Brand ads and direct response together. Pay-as-you-go marketing platforms with data included. Each of these is a real opening.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;">
+      <div class="mono-label">Topics My Marketing Pro should plausibly be in</div>
+      <div class="chips">
+        <span class="chip">Best AI marketing platform for small business</span>
+        <span class="chip">AI agents for marketing</span>
+        <span class="chip">All-in-one marketing platform with data included</span>
+        <span class="chip">Brand and direct response in one platform</span>
+        <span class="chip">CTV advertising for small business</span>
+        <span class="chip">Programmatic billboards for small business</span>
+        <span class="chip">AI voice dialing for sales</span>
+        <span class="chip">Pay-as-you-go marketing platform</span>
+        <span class="chip">Marketing platform with AI agents</span>
+        <span class="chip">Managed marketing with senior strategists</span>
+        <span class="chip">Marketing platform for solopreneurs</span>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;">
+      <div class="section-head" style="margin-bottom:16px;">
+        <span class="mono-label">Where each brand shows up on the buying journey</span>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th style="width:34%">Stage of the journey</th><th>My Marketing Pro</th><th>LocaliQ</th><th>Data Axle</th></tr></thead>
+          <tbody>
+            <tr><td>Early curiosity ("how do I support local businesses")</td><td class="no">Missing</td><td class="yes">Strong, from their blog</td><td>Light</td></tr>
+            <tr><td>Solution research ("what is local citation building")</td><td class="no">Missing</td><td>Some</td><td class="yes">Named as a data source</td></tr>
+            <tr><td>Comparing options ("best SEO agencies", "Marketing 360 alternatives")</td><td class="no">Missing</td><td class="yes">Named</td><td>Missing</td></tr>
+            <tr><td>Vendor research ("how much does LocaliQ cost", "is X legit")</td><td class="no">Missing</td><td class="yes">Heavy coverage</td><td class="yes">Salesgenie pricing covered</td></tr>
+            <tr><td>Looking for alternatives ("X alternatives")</td><td class="no">Missing</td><td>Light</td><td>Light</td></tr>
+            <tr><td>Company background ("who owns X", "is X owned by Y")</td><td class="no">Missing</td><td class="yes">Owned by Gannett. WordStream parent.</td><td class="yes">Parent of Salesgenie. Used to be Infogroup.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="light-zone" id="research">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">Sources · 05 / 06</span>
+      <h2>Where Google's AI gets its answers, and what those answers actually look like.</h2>
+      <p class="lede" style="margin-top:8px;">Two views from outside the brand. The websites Google's AI quotes for marketing-related questions, and the actual AI responses that show why each competitor wins.</p>
+    </div>
+
+    <div style="margin-top:40px;">
+      <div class="mono-label">05 · Where Google's AI looks</div>
+      <h3 style="margin:8px 0 20px;">The websites Google's AI quoted in our test, ranked by how often.</h3>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th class="num" style="width:5%">#</th><th style="width:32%">Website</th><th class="num" style="width:14%">Times quoted</th><th>Why it matters</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td>www.reddit.com</td><td class="num">9</td><td>Real customer threads. Google's AI trusts these more than any other source in this category.</td></tr>
+            <tr><td class="num">2</td><td>www.youtube.com</td><td class="num">7</td><td>Tutorial and explainer videos from agencies and vendors.</td></tr>
+            <tr><td class="num">3</td><td>firstpagesage.com</td><td class="num">5</td><td>"Best SEO Companies" list. The single most-quoted source for marketing-vendor questions.</td></tr>
+            <tr><td class="num">4</td><td>www.g2.com</td><td class="num">4</td><td>The big software review hub. You need to be listed here.</td></tr>
+            <tr><td class="num">5</td><td>clutch.co</td><td class="num">4</td><td>Top agencies rankings. You need to be listed here.</td></tr>
+            <tr><td class="num">6</td><td>coalitiontechnologies.com</td><td class="num">4</td><td>A competitor agency that gets quoted as a source.</td></tr>
+            <tr><td class="num">7</td><td>en.wikipedia.org</td><td class="num">4</td><td>Brand background and category definitions.</td></tr>
+            <tr><td class="num">8</td><td>www.instagram.com</td><td class="num">3</td><td>Brand presence on the platform.</td></tr>
+            <tr><td class="num">9</td><td>thriveagency.com</td><td class="num">3</td><td>"21 Best SEO Companies" list. You need to be on it.</td></tr>
+            <tr><td class="num">10</td><td>www.salesgenie.com</td><td class="num">3</td><td>Data Axle's own site, used by Google's AI to answer questions about Data Axle itself.</td></tr>
+            <tr><td class="num">11</td><td>www.linkedin.com</td><td class="num">3</td><td>Company pages and employee reviews.</td></tr>
+            <tr><td class="num">12</td><td>research.com, quora.com, bookyourdata.com, outpaceseo.com</td><td class="num">2 each</td><td>Comparison and review sites.</td></tr>
+            <tr><td class="num">13</td><td>www.webfx.com, www.gartner.com, www.searchbloom.com</td><td class="num">2 each</td><td>Authority sites for comparing vendors.</td></tr>
+            <tr><td class="num">14</td><td>www.trustradius.com, www.crunchbase.com, pipeline.zoominfo.com</td><td class="num">2 each</td><td>Vendor research hubs.</td></tr>
+            <tr><td class="num">15</td><td>www.softwareadvice.com</td><td class="num">2</td><td>Software discovery for small business. You need to be listed here.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:16px; font-size:13px;">Three patterns. Real customer chatter on Reddit and YouTube drive most answers. "Best of" articles drive the comparison questions. Software review hubs (G2, Software Advice, Gartner, TrustRadius, Capterra) drive the "is this vendor any good" questions. My Marketing Pro is not yet on any of them.</p>
+
+      <div style="margin-top:32px;">
+        <div class="mono-label">Places to focus the outreach</div>
+        <div class="grid grid-2" style="margin-top:14px;">
+          <div class="card">
+            <h4>"Best of" articles</h4>
+            <p style="margin-top:6px; font-size:13px;">firstpagesage.com, thriveagency.com, onelittleweb.com, outpaceseo.com, silverbackstrategies.com, searchbloom.com. These run the rankings Google's AI quotes most. Pitch the writers to include the brand.</p>
+          </div>
+          <div class="card">
+            <h4>Review sites</h4>
+            <p style="margin-top:6px; font-size:13px;">g2.com, gartner.com, capterra.com, softwareadvice.com, trustradius.com. People use these to evaluate vendors. Set up listings and ask happy customers to leave reviews.</p>
+          </div>
+          <div class="card">
+            <h4>Authority publishers</h4>
+            <p style="margin-top:6px; font-size:13px;">research.com, clutch.co, webfx.com, bizjournals.com, crunchbase.com. Trusted publishers that Google's AI relies on. Pursue placements and keep listings up to date.</p>
+          </div>
+          <div class="card">
+            <h4>Communities</h4>
+            <p style="margin-top:6px; font-size:13px;">reddit.com, quora.com, youtube.com, linkedin.com. The most-quoted community sources. Build authentic founder presence (Frank O'Brien) and customer stories rather than placed posts.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:64px;">
+      <div class="mono-label">06 · Real AI answers we saw</div>
+      <h3 style="margin:8px 0 20px;">Examples that show exactly how each competitor is winning.</h3>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="mono-label">Question · "What SEO company is the best?"</div>
+          <h4 style="margin:10px 0 10px;">LocaliQ named. My Marketing Pro absent.</h4>
+          <blockquote>Best for Local SEO: LocaliQ. Best Overall for ROI: WebFX. Best for Lead Generation: First Page Sage.<span class="src">From Google's AI answer, 6,400 searches/month</span></blockquote>
+          <p style="font-size:13px;">Sources Google quoted: firstpagesage.com, thriveagency.com, onelittleweb.com, clutch.co. None of them include My Marketing Pro today.</p>
+        </div>
+        <div class="card">
+          <div class="mono-label">Question · "Who are the competitors of Marketing 360?"</div>
+          <h4 style="margin:10px 0 10px;">LocaliQ named with HubSpot, Thryv, Birdeye.</h4>
+          <blockquote>Top alternatives in 2026: HubSpot Marketing Hub, Thryv, LocaliQ, Birdeye, ActiveCampaign. LocaliQ is known for AI-driven local marketing, lead management, and ad campaigns.<span class="src">From Google's AI answer, 591 searches/month</span></blockquote>
+          <p style="font-size:13px;">This is the go-to "all-in-one platform for small business" question in Google's AI. My Marketing Pro is the same kind of platform and is not on the list.</p>
+        </div>
+        <div class="card">
+          <div class="mono-label">Question · "How do you get mailing lists?"</div>
+          <h4 style="margin:10px 0 10px;">Data Axle named as a primary list source.</h4>
+          <blockquote>Buy a targeted list: Purchase compliant contact data based on specific demographics from brokers like Data Axle or DirectMail.com.<span class="src">From Google's AI answer, 937 searches/month</span></blockquote>
+          <p style="font-size:13px;">This is exactly the kind of question My Marketing Pro could win, since 250M+ verified consumer profiles is one of the headline features. But Google's AI does not know that yet.</p>
+        </div>
+        <div class="card">
+          <div class="mono-label">Question · "What is local citation building?"</div>
+          <h4 style="margin:10px 0 10px;">Data Axle named as the data behind citation tools.</h4>
+          <blockquote>Target major data aggregators: Make sure your information is submitted to central data providers (like Data Axle or Localeze), which feed information to hundreds of smaller directories.<span class="src">From Google's AI answer, 1,200 searches/month</span></blockquote>
+          <p style="font-size:13px;">Data Axle owns this as a back-end data brand, which is a different layer than where My Marketing Pro plays.</p>
+        </div>
+        <div class="card">
+          <div class="mono-label">Question · "How much does LocaliQ cost?"</div>
+          <h4 style="margin:10px 0 10px;">LocaliQ gets full vendor write-ups.</h4>
+          <blockquote>LocaliQ pricing is not fully transparent and operates on a custom, quote-based model for its managed services, often estimated at $1,000 to $3,000+ per month.<span class="src">From Google's AI answer, 2,700 searches/month</span></blockquote>
+          <p style="font-size:13px;">A real opening here. My Marketing Pro publishes plain pricing ($499, $2,499, $10K+). That is exactly the contrast Google's AI would highlight, if a comparison article existed.</p>
+        </div>
+        <div class="card">
+          <div class="mono-label">Question · "How to find a list of new small businesses?"</div>
+          <h4 style="margin:10px 0 10px;">Data Axle named via library research.</h4>
+          <blockquote>Use public library databases like Data Axle Reference Solutions, which let you filter businesses by founding year.<span class="src">From Google's AI answer, 9,500 searches/month</span></blockquote>
+          <p style="font-size:13px;">Close to My Marketing Pro's live customer search of 250M+ verified consumers. Same buyer need, different brand getting credit.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="moves">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">07 · What To Do in the Next 30 Days</span>
+      <h2>Five moves, in order of impact, each tied to a finding above.</h2>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="move">
+        <div class="num">Move 01 · On the site</div>
+        <h3>Build the right pages.</h3>
+        <p>Publish pages that directly answer the questions buyers ask Google. Examples: "Best AI marketing platform for small business," "AI marketing agents that book meetings," "All-in-one marketing platform with data included," "Pay-as-you-go marketing platform." Each page should start with a one-paragraph plain-English definition, include a comparison table, and end with an FAQ.</p>
+        <p>Without these pages, nothing else compounds. Google's AI almost always quotes pages that already rank in regular search.</p>
+      </div>
+      <div class="move">
+        <div class="num">Move 02 · On the site</div>
+        <h3>Get the customer stories out of pop-ups.</h3>
+        <p>The vodka launch, the HVAC 500% lower customer cost, and the Times Square Nasdaq tower stories are great proof. They all live inside click-to-expand pop-ups today, which Google's AI cannot read. Publish each as a regular page with clear headings and visible numbers. Then Google can quote them.</p>
+      </div>
+      <div class="move">
+        <div class="num">Move 03 · Outside the site</div>
+        <h3>Get on the "best of" lists.</h3>
+        <p>The top six "best marketing platform" and "best SEO agency" lists Google's AI quotes most are firstpagesage.com, thriveagency.com, clutch.co, onelittleweb.com, outpaceseo.com, and silverbackstrategies.com. Pitch each one to add My Marketing Pro, with a clear differentiator and one verifiable customer result. One placement on each can shift Google's AI answers within 60 days.</p>
+      </div>
+      <div class="move">
+        <div class="num">Move 04 · Outside the site</div>
+        <h3>Set up listings on review sites.</h3>
+        <p>Build active vendor listings on g2.com, capterra.com, softwareadvice.com, trustradius.com, and gartner.com. Use the platform to nudge existing customers (starting with the free Build &amp; Launch users, the lowest friction group) to leave reviews. These are the canonical sources Google's AI uses for "is this vendor any good" questions.</p>
+      </div>
+      <div class="move" style="grid-column: span 2;">
+        <div class="num">Move 05 · Positioning</div>
+        <h3>Pick one topic to own this quarter.</h3>
+        <p>Three big topics have no clear winner: "AI agents that actually do the work," "Connected TV and digital billboards for SMBs," and "brand ads and direct response unified." We recommend leading with "AI agents that actually do the work" first. The brand's product already delivers it. No competitor owns it in Google's AI yet. And the proof is easy to show: 4-minute launches, AI voice calls, the sequence generator. Trying to be the answer for all 11 channels and three plans at once is spreading too thin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">08 · The 90-Day Plan</span>
+      <h2>Three months, broken into four-week phases. The first month picks up the moves above.</h2>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="sprint">
+        <div class="num">Month 1 · Days 1 to 30</div>
+        <h3>Build the foundation.</h3>
+        <ul>
+          <li>Publish six answer-style pages targeting the questions Google's AI actually asks.</li>
+          <li>Convert all three customer stories into standalone pages, out of pop-ups.</li>
+          <li>Set up vendor listings on G2, Capterra, Software Advice, TrustRadius, and Gartner.</li>
+          <li>Update the homepage to include the brand's signature names (Watt, Build &amp; Launch, Grow &amp; Scale, Drive &amp; Thrive) in plain text so they can be quoted.</li>
+        </ul>
+      </div>
+      <div class="sprint">
+        <div class="num">Month 2 · Days 31 to 60</div>
+        <h3>Get named in the lists.</h3>
+        <ul>
+          <li>Outreach to "best of" publishers Google's AI quotes. Lead with a real customer result and the AI-agent angle.</li>
+          <li>Push for customer reviews on G2 and Capterra. Target: 25 verified reviews on G2 by day 60.</li>
+          <li>Publish a public AI Marketing Agent report under the founder's name. Make it the go-to reference for the topic.</li>
+          <li>Refresh Crunchbase, LinkedIn, and (if pursued) Wikipedia with current positioning.</li>
+        </ul>
+      </div>
+      <div class="sprint">
+        <div class="num">Month 3 · Days 61 to 90</div>
+        <h3>Compound and measure.</h3>
+        <ul>
+          <li>Re-run this audit. Look for real share-of-mentions moving up, AI mentions appearing, keywords starting to rank, and inclusion on the target lists.</li>
+          <li>Publish founder-led videos to YouTube on the chosen topic. Google's AI quotes YouTube heavily in this category.</li>
+          <li>Build authentic presence on Reddit through customer-story support, not placed posts.</li>
+          <li>Decide whether to expand to a second topic next quarter (brand and direct combined, or CTV for small business).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">09 · What to Track</span>
+      <h2>Check these every month. The numbers in the right column are where you start today.</h2>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:32%">What to measure</th><th style="width:26%">Where you are today</th><th>What it tells you</th></tr></thead>
+        <tbody>
+          <tr><td>How Google's AI describes you</td><td>Doesn't describe you yet.</td><td>Whether the AI starts using your brand language: AI-driven, 250M+ profiles, 11 channels.</td></tr>
+          <tr><td>Real AI mentions (after filtering false matches)</td><td class="num">0</td><td>How many AI answers actually name My Marketing Pro as a brand.</td></tr>
+          <tr><td>Real share of mentions vs. competitors</td><td class="num">0% vs. LocaliQ 65%, Data Axle 35%</td><td>Real share of AI mentions across the question set, no false matches.</td></tr>
+          <tr><td>How often you appear with a competitor</td><td class="num">0%</td><td>Share of AI answers where you show up alongside Data Axle or LocaliQ. Getting into the same answer is its own milestone.</td></tr>
+          <tr><td>Google keyword rankings (US)</td><td class="num">0</td><td>How many search terms your site ranks for in the US.</td></tr>
+          <tr><td>Inclusion on the target "best of" lists</td><td class="num">0 of 6 lists</td><td>Whether you've been added to the rankings Google's AI quotes most.</td></tr>
+          <tr><td>Review-site presence</td><td class="num">0 of 5 sites</td><td>Active listings with up-to-date positioning on G2, Capterra, Software Advice, TrustRadius, Gartner.</td></tr>
+          <tr><td>Owning your chosen topic</td><td>Not started.</td><td>Whether Google's AI names My Marketing Pro on at least one "AI marketing agent" question.</td></tr>
+          <tr><td>Branded search visibility</td><td>Cannot measure yet because the name catches false matches.</td><td>Whether Google's AI produces a real answer for "what is My Marketing Pro" or "MMP reviews."</td></tr>
+          <tr><td>Overall AI Visibility Score</td><td class="num">12 / 100</td><td>The composite score from this report.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="methodology" style="background:var(--surface);">
+  <div class="container">
+    <div class="section-head">
+      <span class="mono-label">Appendix · How We Did This</span>
+      <h2>The methodology behind the report, in plain English.</h2>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="stack-md">
+        <div><div class="mono-label">Where the data came from</div><p style="margin-top:6px;">We pulled live Google AI Overview answers and search data using premium research tools. All numbers are US-based, captured in late May and early June 2026.</p></div>
+        <div><div class="mono-label">How we ran the test</div><p style="margin-top:6px;">We tracked three brands: My Marketing Pro, Data Axle, and LocaliQ. We fed Google's AI a standard set of category and comparison questions, recorded every answer, and counted who got mentioned. We also read every answer by hand to filter out false matches.</p></div>
+        <div><div class="mono-label">Why the "real" share of mentions is different</div><p style="margin-top:6px;">The tracking tool counted 25 mentions for My Marketing Pro. We read all of them. None were actual mentions of the brand. They were sentences like "track my marketing pro forma" that just happen to contain the phrase. So we set real mentions to zero and recalculated the percentages between the two real competitors.</p></div>
+      </div>
+      <div class="stack-md">
+        <div><div class="mono-label">What the limits are</div><p style="margin-top:6px;">You chose the competitors. They are valid business competitors, but Google's AI does not see them as direct comparison points to My Marketing Pro right now (the three brands never share an answer). The picture here is more about positioning than head-to-head.</p></div>
+        <div><div class="mono-label">A note about the brand name</div><p style="margin-top:6px;">"My Marketing Pro" is also a common English phrase. That makes it harder for tracking tools and AI systems to tell the brand apart from regular sentences. Either a more distinctive name, or always using "MMP" as the trademarked short form, would make progress easier to measure.</p></div>
+        <div><div class="mono-label">What this report doesn't cover</div><p style="margin-top:6px;">It doesn't compare you to the brands you call competitors on your own homepage (Mailchimp, HubSpot, Salesforce Marketing Cloud). It also doesn't connect to your live Google Search Console data. Both are useful next steps.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="big-footer">
+  <div class="container">
+    <div class="footer-brand">
+      <div class="brand dot" style="width:22px;height:22px;border-radius:6px;background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700;">AUQ</div>
+      GEO Audit · My Marketing Pro · June 2026 · Prepared by <a href="https://auq.io" target="_blank" rel="noopener">AUQ.io</a>
+    </div>
+    <div class="footer-right">
+      <a href="mailto:analytics@auq.io">analytics@auq.io</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
