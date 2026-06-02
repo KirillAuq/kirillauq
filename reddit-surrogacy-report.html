@@ -97,7 +97,15 @@
       letter-spacing: 0.05em;
       white-space: nowrap;
       background: #fafaf9;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
     }
+    .data-table th:hover { color: #37352f; background: #f0f0ef; }
+    .data-table th.sort-asc::after  { content: ' ↑'; opacity: 0.8; }
+    .data-table th.sort-desc::after { content: ' ↓'; opacity: 0.8; }
+    .data-table th.sort-asc,
+    .data-table th.sort-desc { color: #37352f; }
     .data-table td {
       padding: 10px 14px;
       border-bottom: 1px solid #f0f0ef;
@@ -555,7 +563,7 @@
 </div>
 
 <script>
-  // Generic filter chip handler
+  // Filter chips
   document.querySelectorAll('[data-filter-group]').forEach(group => {
     const groupId = group.dataset.filterGroup;
     group.querySelectorAll('.filter-chip').forEach(chip => {
@@ -566,6 +574,40 @@
         document.querySelectorAll(`[data-table="${groupId}"] tbody tr[data-tag]`).forEach(row => {
           row.style.display = (val === 'all' || row.dataset.tag === val) ? '' : 'none';
         });
+      });
+    });
+  });
+
+  // Sortable tables
+  document.querySelectorAll('.data-table').forEach(table => {
+    const headers = table.querySelectorAll('th');
+    headers.forEach((th, colIndex) => {
+      let dir = 0; // 0=none, 1=asc, -1=desc
+      th.addEventListener('click', () => {
+        dir = dir === 1 ? -1 : 1;
+        headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+        th.classList.add(dir === 1 ? 'sort-asc' : 'sort-desc');
+
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.sort((a, b) => {
+          const aCell = a.cells[colIndex];
+          const bCell = b.cells[colIndex];
+          if (!aCell || !bCell) return 0;
+
+          const aText = aCell.innerText.trim().replace(/,/g, '');
+          const bText = bCell.innerText.trim().replace(/,/g, '');
+          const aNum = parseFloat(aText);
+          const bNum = parseFloat(bText);
+
+          if (!isNaN(aNum) && !isNaN(bNum)) {
+            return dir * (aNum - bNum);
+          }
+          return dir * aText.localeCompare(bText);
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
       });
     });
   });
