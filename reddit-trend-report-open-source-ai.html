@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)file:///Users/kirill/Downloads/reddit_report_open_source_ai.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reddit Trend Report · Open Source AI Models</title>
+<link href="./Reddit Trend Report · Open Source AI Models_files/css2" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f12;
+    --surface: #141720;
+    --surface2: #1c2030;
+    --border: #252a3a;
+    --accent: #f0c040;
+    --accent2: #4fd1c5;
+    --red: #f66;
+    --text: #e8eaf0;
+    --muted: #7a8099;
+    --tag-bg: #1e2535;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Literata', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 48px 0 36px;
+    background: linear-gradient(180deg, #0a0c10 0%, var(--bg) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(240,192,64,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .container { max-width: 1140px; margin: 0 auto; padding: 0 28px; }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 18px; height: 2px;
+    background: var(--accent);
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  h1 span { color: var(--accent); }
+  .subtitle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  /* STAT CARDS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 40px 0;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px 22px 18px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .stat-card:hover { border-color: var(--accent); }
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .stat-card:hover::after { opacity: 1; }
+  .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+  .stat-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* SECTIONS */
+  section { padding: 52px 0; border-bottom: 1px solid var(--border); }
+  section:last-child { border-bottom: none; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+  .section-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--tag-bg);
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  /* TABLES */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead tr {
+    background: var(--surface2);
+    border-bottom: 2px solid var(--border);
+  }
+  th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 16px;
+    text-align: left;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.15s;
+  }
+  th:hover { color: var(--accent); }
+  th.sorted { color: var(--accent); }
+  th.sort-asc::after { content: ' ↑'; }
+  th.sort-desc::after { content: ' ↓'; }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface); }
+  td {
+    padding: 13px 16px;
+    vertical-align: middle;
+    color: var(--text);
+  }
+  td.num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    text-align: right;
+    color: var(--accent2);
+  }
+  td.rank {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    width: 36px;
+  }
+
+  /* LINKS */
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  a:hover { border-color: var(--accent); }
+  .thread-link {
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.4;
+    border-bottom: 1px solid transparent;
+  }
+  .thread-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* SUBREDDIT PILL */
+  .sub-pill {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    background: rgba(79,209,197,0.08);
+    border: 1px solid rgba(79,209,197,0.2);
+    border-radius: 20px;
+    padding: 2px 9px;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .sub-pill:hover { background: rgba(79,209,197,0.16); border-color: var(--accent2); }
+
+  /* BAR CHART MINI */
+  .bar-cell { min-width: 120px; }
+  .bar-track {
+    background: var(--surface2);
+    border-radius: 3px;
+    height: 6px;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transition: width 0.4s ease;
+  }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter-bar input, .filter-bar select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .filter-bar input::placeholder { color: var(--muted); }
+  .filter-bar input:focus, .filter-bar select:focus { border-color: var(--accent); }
+  .filter-bar select option { background: var(--surface); }
+
+  /* INSIGHT CARDS */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .insight-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--accent);
+  }
+  .insight-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .insight-body {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .insight-body a { color: var(--accent2); font-size: 12px; }
+
+  /* KEYWORD TABLE INTENT */
+  .intent-badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .intent-comparison { background: rgba(240,192,64,0.12); color: var(--accent); border: 1px solid rgba(240,192,64,0.3); }
+  .intent-how-to { background: rgba(79,209,197,0.1); color: var(--accent2); border: 1px solid rgba(79,209,197,0.25); }
+  .intent-informational { background: rgba(150,150,255,0.1); color: #a0a0ff; border: 1px solid rgba(150,150,255,0.25); }
+
+  /* AUDIENCE CALLOUT */
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 24px 28px;
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: #bcc0d0;
+    margin-bottom: 20px;
+  }
+  .callout strong { color: #fff; }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 0;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  /* NO RESULTS */
+  .no-results {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    display: none;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .stat-card, .insight-card { animation: fadeUp 0.4s ease both; }
+  .stat-card:nth-child(1) { animation-delay: 0.05s; }
+  .stat-card:nth-child(2) { animation-delay: 0.1s; }
+  .stat-card:nth-child(3) { animation-delay: 0.15s; }
+  .stat-card:nth-child(4) { animation-delay: 0.2s; }
+  .stat-card:nth-child(5) { animation-delay: 0.25s; }
+
+  /* NAV */
+  nav {
+    background: rgba(13,15,18,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0;
+  }
+  .nav-inner {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-inner a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 14px 18px;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .nav-inner a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="eyebrow">Reddit Trend Report · June 02, 2026 · Past 30 days</div>
+    <h1>Open Source <span>AI Models</span></h1>
+    <div class="subtitle">107 posts across 61 subreddits · 3,159 comments · 9,315 upvotes</div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Posts</div>
+        <div class="stat-value">107</div>
+        <div class="stat-sub">across 61 subreddits</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Comments</div>
+        <div class="stat-value">3,159</div>
+        <div class="stat-sub">avg 30 / post</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Upvotes</div>
+        <div class="stat-value">9,315</div>
+        <div class="stat-sub">across all posts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Top Community</div>
+        <div class="stat-value" style="font-size:22px; margin-top:2px;">r/LocalLLaMA</div>
+        <div class="stat-sub">607 comments · 12 posts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">High-engagement Posts</div>
+        <div class="stat-value">16</div>
+        <div class="stat-sub">2× above avg comments</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="file:///Users/kirill/Downloads/reddit_report_open_source_ai.html#communities">Communities</a>
+      <a href="file:///Users/kirill/Downloads/reddit_report_open_source_ai.html#top-posts">Top Posts</a>
+      <a href="file:///Users/kirill/Downloads/reddit_report_open_source_ai.html#insights">Trend Insights</a>
+      <a href="file:///Users/kirill/Downloads/reddit_report_open_source_ai.html#pain-points">Pain Points</a>
+      <a href="file:///Users/kirill/Downloads/reddit_report_open_source_ai.html#audience">Audience</a>
+      <a href="file:///Users/kirill/Downloads/reddit_report_open_source_ai.html#keywords">SEO Keywords</a>
+    </div>
+  </div>
+</nav>
+
+<!-- COMMUNITIES -->
+<section id="communities">
+  <div class="container">
+    <div class="section-header">
+      <h2>Top Communities by Discussion Volume</h2>
+      <span class="section-count">Top 10</span>
+    </div>
+    <div class="table-wrap">
+      <table id="commTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable(&#39;commTable&#39;,0,&#39;num&#39;)" title="Sort">#</th>
+            <th onclick="sortTable(&#39;commTable&#39;,1,&#39;str&#39;)" title="Sort">Subreddit</th>
+            <th onclick="sortTable(&#39;commTable&#39;,2,&#39;num&#39;)" title="Sort" class="sorted sort-asc">Posts</th>
+            <th onclick="sortTable(&#39;commTable&#39;,3,&#39;num&#39;)" title="Sort" class="">Comments</th>
+            <th onclick="sortTable(&#39;commTable&#39;,4,&#39;num&#39;)" title="Sort">Upvotes</th>
+            <th>Activity</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+        <tr>
+            <td class="rank">1</td>
+            <td><a href="https://reddit.com/r/LocalLLaMA" target="_blank" class="sub-pill">r/LocalLLaMA</a></td>
+            <td class="num">12</td>
+            <td class="num">607</td>
+            <td class="num">1,202</td>
+            <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></td>
+          </tr><tr>
+            <td class="rank">2</td>
+            <td><a href="https://reddit.com/r/SillyTavernAI" target="_blank" class="sub-pill">r/SillyTavernAI</a></td>
+            <td class="num">2</td>
+            <td class="num">220</td>
+            <td class="num">118</td>
+            <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:36%"></div></div></td>
+          </tr><tr>
+            <td class="rank">3</td>
+            <td><a href="https://reddit.com/r/LocalLLM" target="_blank" class="sub-pill">r/LocalLLM</a></td>
+            <td class="num">3</td>
+            <td class="num">182</td>
+            <td class="num">379</td>
+            <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:30%"></div></div></td>
+          </tr><tr>
+            <td class="rank">4</td>
+            <td><a href="https://reddit.com/r/AI_Agents" target="_blank" class="sub-pill">r/AI_Agents</a></td>
+            <td class="num">8</td>
+            <td class="num">143</td>
+            <td class="num">86</td>
+            <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:23%"></div></div></td>
+          </tr><tr>
+            <td class="rank">5</td>
+            <td><a href="https://reddit.com/r/Futurology" target="_blank" class="sub-pill">r/Futurology</a></td>
+            <td class="num">1</td>
+            <td class="num">139</td>
+            <td class="num">412</td>
+            <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:23%"></div></div></td>
+          </tr><tr>
+            <td class="rank">6</td>
+            <td><a href="https://reddit.com/r/macapps" target="_blank" class="sub-pill">r/macapps</a></td>
+            <td class="num">1</td>
+            <td class="num">131</td>
+            <td class="num">211</td>
+            <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:22%"></div></div></td>
+          </tr><tr>
+            <td class="rank">7</td>
+            <td><a href="https://reddit.com/r/perchance" target="_blank" class="sub-pill">r/perchance</a></td>
+            <td class="num">1</td>
+            <td class="num">103</td>
+            <td class="num">175</td>
+            <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:17%"></div></div></td>
+          </tr><tr>
+            <td class="rank">8</td>
+            <td><a href="https://reddit.com/r/aiArt" target="_blank" class="sub-pill">r/aiArt</a></td>
+            <td class="num">1</td>
+            <td class="num">100</td>
+            <td class="num">162</td>
+            <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:16%"></div></div></td>
+          </tr><tr>
+            <td class="rank">9</td>
+            <td><a href="https://reddit.com/r/vibecoding" target="_blank" class="sub-pill">r/vibecoding</a></td>
+            <td class="num">5</td>
+            <td class="num">93</td>
+            <td class="num">35</td>
+            <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:15%"></div></div></td>
+          </tr><tr>
+            <td class="rank">10</td>
+            <td><a href="https://reddit.com/r/PromptEngineering" target="_blank" class="sub-pill">r/PromptEngineering</a></td>
+            <td class="num">2</td>
+            <td class="num">88</td>
+            <td class="num">349</td>
+            <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:14%"></div></div></td>
+          </tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- TOP POSTS -->
+<section id="top-posts">
+  <div class="container">
+    <div class="section-header">
+      <h2>Top Posts by Comment Count</h2>
+      <span class="section-count">25 posts</span>
+    </div>
+    <div class="filter-bar">
+      <input type="text" id="postSearch" placeholder="Search threads…" oninput="filterPosts()">
+      <select id="subFilter" onchange="filterPosts()">
+        <option value="">All subreddits</option>
+        <option>r/SillyTavernAI</option>
+        <option>r/LocalLLaMA</option>
+        <option>r/Futurology</option>
+        <option>r/macapps</option>
+        <option>r/perchance</option>
+        <option>r/aiArt</option>
+        <option>r/ClaudeAI</option>
+        <option>r/LocalLLM</option>
+        <option>r/SoftwareLabs</option>
+        <option>r/agi</option>
+        <option>r/PromptEngineering</option>
+        <option>r/Qwen_AI</option>
+        <option>r/OpenAI</option>
+        <option>r/homelab</option>
+        <option>r/ai_trading</option>
+        <option>r/vibecoding</option>
+        <option>r/better_claw</option>
+        <option>r/AI_Agents</option>
+        <option>r/ITpolska</option>
+      </select>
+      <select id="commentFilter" onchange="filterPosts()">
+        <option value="0">Any comment count</option>
+        <option value="50">50+ comments</option>
+        <option value="75">75+ comments</option>
+        <option value="100">100+ comments</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table id="postsTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable(&#39;postsTable&#39;,0,&#39;num&#39;)">#</th>
+            <th>Thread Title</th>
+            <th onclick="sortTable(&#39;postsTable&#39;,2,&#39;str&#39;)">Subreddit</th>
+            <th onclick="sortTable(&#39;postsTable&#39;,3,&#39;num&#39;)">💬 Comments</th>
+            <th onclick="sortTable(&#39;postsTable&#39;,4,&#39;num&#39;)">⬆️ Upvotes</th>
+          </tr>
+        </thead>
+        <tbody id="postsBody">
+          <tr data-sub="r/SillyTavernAI" data-comments="179">
+            <td class="rank">1</td>
+            <td><a href="https://reddit.com/r/SillyTavernAI/comments/1tb7p4y/im_burnt_out_newer_models_rant/" target="_blank" class="thread-link">I'm burnt out (newer models rant)</a></td>
+            <td><a href="https://reddit.com/r/SillyTavernAI" target="_blank" class="sub-pill">r/SillyTavernAI</a></td>
+            <td class="num">179</td>
+            <td class="num">82</td>
+          </tr>
+          <tr data-sub="r/LocalLLaMA" data-comments="148">
+            <td class="rank">2</td>
+            <td><a href="https://reddit.com/r/LocalLLaMA/comments/1t3bxrv/open_source_models_are_going_to_be_the_future_on/" target="_blank" class="thread-link">Open source models are going to be the future on Cursor, OpenCode etc.</a></td>
+            <td><a href="https://reddit.com/r/LocalLLaMA" target="_blank" class="sub-pill">r/LocalLLaMA</a></td>
+            <td class="num">148</td>
+            <td class="num">208</td>
+          </tr>
+          <tr data-sub="r/Futurology" data-comments="139">
+            <td class="rank">3</td>
+            <td><a href="https://reddit.com/r/Futurology/comments/1t2kqyu/deepseek_v4_is_a_sign_that_the_future_world_aios/" target="_blank" class="thread-link">Deepseek V4 is a sign that the future world AI-OS may be open source &amp; Chinese</a></td>
+            <td><a href="https://reddit.com/r/Futurology" target="_blank" class="sub-pill">r/Futurology</a></td>
+            <td class="num">139</td>
+            <td class="num">412</td>
+          </tr>
+          <tr data-sub="r/macapps" data-comments="131">
+            <td class="rank">4</td>
+            <td><a href="https://reddit.com/r/macapps/comments/1tnck57/os_cotabby_the_free_opensource_alternative_to/" target="_blank" class="thread-link">[OS] Cotabby: the free, open-source alternative to Cotypist AI Autocomplete</a></td>
+            <td><a href="https://reddit.com/r/macapps" target="_blank" class="sub-pill">r/macapps</a></td>
+            <td class="num">131</td>
+            <td class="num">211</td>
+          </tr>
+          <tr data-sub="r/LocalLLaMA" data-comments="127">
+            <td class="rank">5</td>
+            <td><a href="https://reddit.com/r/LocalLLaMA/comments/1tkfvvj/deepseek_is_pushing_forward_with_1029_billion/" target="_blank" class="thread-link">DeepSeek is pushing forward with $10.29 billion financing round</a></td>
+            <td><a href="https://reddit.com/r/LocalLLaMA" target="_blank" class="sub-pill">r/LocalLLaMA</a></td>
+            <td class="num">127</td>
+            <td class="num">754</td>
+          </tr>
+          <tr data-sub="r/perchance" data-comments="103">
+            <td class="rank">6</td>
+            <td><a href="https://reddit.com/r/perchance/comments/1t8yh8q/how_is_perchance_ai_affording_this_this_makes_no/" target="_blank" class="thread-link">How Is Perchance AI Affording This? this makes no sense</a></td>
+            <td><a href="https://reddit.com/r/perchance" target="_blank" class="sub-pill">r/perchance</a></td>
+            <td class="num">103</td>
+            <td class="num">175</td>
+          </tr>
+          <tr data-sub="r/aiArt" data-comments="100">
+            <td class="rank">7</td>
+            <td><a href="https://reddit.com/r/aiArt/comments/1tcu6xz/you_would_think_is_not_that_hard_but_among_all/" target="_blank" class="thread-link">You would think it's not that hard, but among all the open source and 3 biggest closed source models…</a></td>
+            <td><a href="https://reddit.com/r/aiArt" target="_blank" class="sub-pill">r/aiArt</a></td>
+            <td class="num">100</td>
+            <td class="num">162</td>
+          </tr>
+          <tr data-sub="r/ClaudeAI" data-comments="87">
+            <td class="rank">8</td>
+            <td><a href="https://reddit.com/r/ClaudeAI/comments/1tcpe8y/i_tested_gpt55_codex_against_opus_47_claude_code/" target="_blank" class="thread-link">I tested GPT-5.5 Codex against Opus 4.7 Claude Code — it's about time Anthropic…</a></td>
+            <td><a href="https://reddit.com/r/ClaudeAI" target="_blank" class="sub-pill">r/ClaudeAI</a></td>
+            <td class="num">87</td>
+            <td class="num">241</td>
+          </tr>
+          <tr data-sub="r/LocalLLM" data-comments="85">
+            <td class="rank">9</td>
+            <td><a href="https://reddit.com/r/LocalLLM/comments/1t614xu/i_feel_left_behind_where_are_these_advanced/" target="_blank" class="thread-link">I feel left behind. Where are these advanced "Agent-based" local LLM interfaces?</a></td>
+            <td><a href="https://reddit.com/r/LocalLLM" target="_blank" class="sub-pill">r/LocalLLM</a></td>
+            <td class="num">85</td>
+            <td class="num">209</td>
+          </tr>
+          <tr data-sub="r/LocalLLaMA" data-comments="75">
+            <td class="rank">10</td>
+            <td><a href="https://reddit.com/r/LocalLLaMA/comments/1tasc9x/honest_question_is_there_any_model_of_any_size/" target="_blank" class="thread-link">Honest question: Is there ANY model of ANY size that is open source and can compete…</a></td>
+            <td><a href="https://reddit.com/r/LocalLLaMA" target="_blank" class="sub-pill">r/LocalLLaMA</a></td>
+            <td class="num">75</td>
+            <td class="num">0</td>
+          </tr>
+          <tr data-sub="r/SoftwareLabs" data-comments="74">
+            <td class="rank">11</td>
+            <td><a href="https://reddit.com/r/SoftwareLabs/comments/1trek9z/open_source_ai_is_moving_faster_than_anyone/" target="_blank" class="thread-link">Open Source AI Is Moving Faster Than Anyone Expected</a></td>
+            <td><a href="https://reddit.com/r/SoftwareLabs" target="_blank" class="sub-pill">r/SoftwareLabs</a></td>
+            <td class="num">74</td>
+            <td class="num">346</td>
+          </tr>
+          <tr data-sub="r/LocalLLM" data-comments="74">
+            <td class="rank">12</td>
+            <td><a href="https://reddit.com/r/LocalLLM/comments/1taj621/no_more_www_google_searches_by_january_2027/" target="_blank" class="thread-link">No more www google searches by January 2027.</a></td>
+            <td><a href="https://reddit.com/r/LocalLLM" target="_blank" class="sub-pill">r/LocalLLM</a></td>
+            <td class="num">74</td>
+            <td class="num">167</td>
+          </tr>
+          <tr data-sub="r/LocalLLaMA" data-comments="68">
+            <td class="rank">13</td>
+            <td><a href="https://reddit.com/r/LocalLLaMA/comments/1tdvvf2/founding_supralabs_real_opensource_ai_models_for/" target="_blank" class="thread-link">[FOUNDING] SupraLabs — real open-source AI models for you!</a></td>
+            <td><a href="https://reddit.com/r/LocalLLaMA" target="_blank" class="sub-pill">r/LocalLLaMA</a></td>
+            <td class="num">68</td>
+            <td class="num">78</td>
+          </tr>
+          <tr data-sub="r/agi" data-comments="67">
+            <td class="rank">14</td>
+            <td><a href="https://reddit.com/r/agi/comments/1tmrced/because_of_anthropics_leak_open_source_coding/" target="_blank" class="thread-link">Because of Anthropic's Leak, Open Source Coding Models That Match Claude Code and Mythos…</a></td>
+            <td><a href="https://reddit.com/r/agi" target="_blank" class="sub-pill">r/agi</a></td>
+            <td class="num">67</td>
+            <td class="num">0</td>
+          </tr>
+          <tr data-sub="r/PromptEngineering" data-comments="65">
+            <td class="rank">15</td>
+            <td><a href="https://reddit.com/r/PromptEngineering/comments/1t6ssn5/claude_design_is_cool_but_the_opensource/" target="_blank" class="thread-link">Claude Design is cool, but the open-source community just shipped a free, local-first alternative…</a></td>
+            <td><a href="https://reddit.com/r/PromptEngineering" target="_blank" class="sub-pill">r/PromptEngineering</a></td>
+            <td class="num">65</td>
+            <td class="num">338</td>
+          </tr>
+          <tr data-sub="r/Qwen_AI" data-comments="62">
+            <td class="rank">16</td>
+            <td><a href="https://reddit.com/r/Qwen_AI/comments/1tk07ej/qwen_37max_beats_opus_47_and_gpt55/" target="_blank" class="thread-link">Qwen 3.7-max beats Opus 4.7 and GPT-5.5</a></td>
+            <td><a href="https://reddit.com/r/Qwen_AI" target="_blank" class="sub-pill">r/Qwen_AI</a></td>
+            <td class="num">62</td>
+            <td class="num">545</td>
+          </tr>
+          <tr data-sub="r/OpenAI" data-comments="54">
+            <td class="rank">17</td>
+            <td><a href="https://reddit.com/r/OpenAI/comments/1t50sf4/state_of_the_art_llms/" target="_blank" class="thread-link">State of the art LLMs</a></td>
+            <td><a href="https://reddit.com/r/OpenAI" target="_blank" class="sub-pill">r/OpenAI</a></td>
+            <td class="num">54</td>
+            <td class="num">2,926</td>
+          </tr>
+          <tr data-sub="r/homelab" data-comments="52">
+            <td class="rank">18</td>
+            <td><a href="https://reddit.com/r/homelab/comments/1tf4be1/do_you_think_opensource_ai_will_close_the_gap_to/" target="_blank" class="thread-link">Do you think open-source AI will close the gap to current day closed source?</a></td>
+            <td><a href="https://reddit.com/r/homelab" target="_blank" class="sub-pill">r/homelab</a></td>
+            <td class="num">52</td>
+            <td class="num">0</td>
+          </tr>
+          <tr data-sub="r/LocalLLaMA" data-comments="52">
+            <td class="rank">19</td>
+            <td><a href="https://reddit.com/r/LocalLLaMA/comments/1tp6pg7/i_ran_8_openweight_models_as_agents_in_a/" target="_blank" class="thread-link">I ran 8 open-weight models as agents in a persistent MMO for 10 days. Here's the 93k event log.</a></td>
+            <td><a href="https://reddit.com/r/LocalLLaMA" target="_blank" class="sub-pill">r/LocalLLaMA</a></td>
+            <td class="num">52</td>
+            <td class="num">109</td>
+          </tr>
+          <tr data-sub="r/ai_trading" data-comments="50">
+            <td class="rank">20</td>
+            <td><a href="https://reddit.com/r/ai_trading/comments/1tfidek/creating_an_ai_model_that_actually_makes_you_rich/" target="_blank" class="thread-link">Creating an AI model that actually makes you rich.</a></td>
+            <td><a href="https://reddit.com/r/ai_trading" target="_blank" class="sub-pill">r/ai_trading</a></td>
+            <td class="num">50</td>
+            <td class="num">1</td>
+          </tr>
+          <tr data-sub="r/vibecoding" data-comments="47">
+            <td class="rank">21</td>
+            <td><a href="https://reddit.com/r/vibecoding/comments/1t8m55w/how_to_run_claude_code_for_free/" target="_blank" class="thread-link">How to run Claude Code for free!</a></td>
+            <td><a href="https://reddit.com/r/vibecoding" target="_blank" class="sub-pill">r/vibecoding</a></td>
+            <td class="num">47</td>
+            <td class="num">28</td>
+          </tr>
+          <tr data-sub="r/better_claw" data-comments="46">
+            <td class="rank">22</td>
+            <td><a href="https://reddit.com/r/better_claw/comments/1tjuuem/i_tested_every_free_llm_provider_for_ai_agents/" target="_blank" class="thread-link">I tested every free LLM provider for AI agents. Here's the only 3 worth using.</a></td>
+            <td><a href="https://reddit.com/r/better_claw" target="_blank" class="sub-pill">r/better_claw</a></td>
+            <td class="num">46</td>
+            <td class="num">168</td>
+          </tr>
+          <tr data-sub="r/AI_Agents" data-comments="41">
+            <td class="rank">23</td>
+            <td><a href="https://reddit.com/r/AI_Agents/comments/1tbw58m/what_model_are_you_using_for_your_personal_ai/" target="_blank" class="thread-link">what model are you using for your personal AI agent?</a></td>
+            <td><a href="https://reddit.com/r/AI_Agents" target="_blank" class="sub-pill">r/AI_Agents</a></td>
+            <td class="num">41</td>
+            <td class="num">11</td>
+          </tr>
+          <tr data-sub="r/SillyTavernAI" data-comments="41">
+            <td class="rank">24</td>
+            <td><a href="https://reddit.com/r/SillyTavernAI/comments/1t6sn2u/best_uncensored_image_gen_models/" target="_blank" class="thread-link">Best Uncensored Image Gen models</a></td>
+            <td><a href="https://reddit.com/r/SillyTavernAI" target="_blank" class="sub-pill">r/SillyTavernAI</a></td>
+            <td class="num">41</td>
+            <td class="num">36</td>
+          </tr>
+          <tr data-sub="r/ITpolska" data-comments="39">
+            <td class="rank">25</td>
+            <td><a href="https://reddit.com/r/ITpolska/comments/1to06tg/najlepszy_ai_model_do_programowania_wed%C5%82ug_was/" target="_blank" class="thread-link">Najlepszy AI model do programowania według Was</a></td>
+            <td><a href="https://reddit.com/r/ITpolska" target="_blank" class="sub-pill">r/ITpolska</a></td>
+            <td class="num">39</td>
+            <td class="num">3</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="no-results" id="noResults">No threads match your filters.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TREND INSIGHTS -->
+<section id="insights">
+  <div class="container">
+    <div class="section-header">
+      <h2>Trend Insights</h2>
+      <span class="section-count">5 themes</span>
+    </div>
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-title">Cost Arbitrage &amp; Subscription Fatigue</div>
+        <div class="insight-body">Users cite pricing shock from proprietary tools — Claude Opus at $10/2 prompts, GPT-5.5 at enterprise rates — as the primary driver toward open-source. The "Uber economics" narrative: cheap acquisition followed by surprise price hikes. Content opportunity: total cost-of-ownership comparisons. <a href="https://reddit.com/r/LocalLLaMA/comments/1t3bxrv/open_source_models_are_going_to_be_the_future_on/" target="_blank">→ Key thread</a></div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-title">Performance Parity at Lower Tiers</div>
+        <div class="insight-body">Qwen 3.6–3.7, Gemma 4, and DeepSeek V4 are repeatedly cited as matching premium model quality at a fraction of cost. 87 tokens/sec reported on consumer hardware; 3× speed gains noted for Gemma 4. Opportunity: benchmark comparisons for coding, image gen, and multimodal use cases. <a href="https://reddit.com/r/SoftwareLabs/comments/1trek9z/open_source_ai_is_moving_faster_than_anyone/" target="_blank">→ Key thread</a></div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-title">Geopolitical &amp; Sovereignty Narrative</div>
+        <div class="insight-body">China's open-source momentum (DeepSeek, Qwen, Alibaba) is framed as a sovereignty play. Chinese models went from 1.2% to ~30% adoption in 12 months. European data residency concerns are rising. Content: data privacy, regulatory compliance, localization strategies. <a href="https://reddit.com/r/Futurology/comments/1t2kqyu/deepseek_v4_is_a_sign_that_the_future_world_aios/" target="_blank">→ Key thread</a></div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-title">Local-First Architecture &amp; Privacy</div>
+        <div class="insight-body">Running models entirely offline removes cloud dependency and data exposure. Users confirm zero token meters and security benefits for enterprise deployments. Deployment tools mentioned: LMStudio, Ollama. Content gap: step-by-step local deployment tutorials and hardware matrices. <a href="https://reddit.com/r/SoftwareLabs/comments/1trek9z/open_source_ai_is_moving_faster_than_anyone/" target="_blank">→ Key thread</a></div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-title">Practical Integration Friction</div>
+        <div class="insight-body">Posts frequently ask "where do I find models?", "which model for my use case?", and "how do I make this work reliably?" Opus/Codex parity remains elusive at scale. Gap: model selection decision trees, real-world agent tutorials, and reliability comparisons for production. <a href="https://reddit.com/r/OpenSourceAI/comments/1tnr50q/where_do_i_find_all_the_opensource_models_a_lot/" target="_blank">→ Key thread</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAIN POINTS -->
+<section id="pain-points">
+  <div class="container">
+    <div class="section-header">
+      <h2>Pain Points</h2>
+      <span class="section-count">5 identified</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Pain Point</th>
+            <th>What Users Say</th>
+            <th>Content Opportunity</th>
+            <th>Key Thread</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:#fff">Hardware Cost vs. Subscription</strong></td>
+            <td style="font-size:13px; color:var(--muted)">$500–$10k GPU upfront vs. rising API costs. DGX at $10k for mediocre output. "Subsidized models won't stay cheap forever."</td>
+            <td style="font-size:13px; color:var(--accent2)">ROI calculator: hardware + electricity vs. 3-year cloud subscription</td>
+            <td><a href="https://reddit.com/r/LocalLLaMA/comments/1tasc9x/honest_question_is_there_any_model_of_any_size/" target="_blank" style="font-size:12px">r/LocalLLaMA →</a></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#fff">Model Quality for Production Coding</strong></td>
+            <td style="font-size:13px; color:var(--muted)">GLM-5.1 and K2.6 are "halfway between Sonnet and Opus." Underperform on vague tasks without explicit prompting. Senior devs warn against prod deployment without security harnesses.</td>
+            <td style="font-size:13px; color:var(--accent2)">Side-by-side code review: Claude vs. open-source on complex refactoring</td>
+            <td><a href="https://reddit.com/r/SoftwareLabs/comments/1trek9z/open_source_ai_is_moving_faster_than_anyone/" target="_blank" style="font-size:12px">r/SoftwareLabs →</a></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#fff">Ecosystem Fragmentation &amp; Discovery</strong></td>
+            <td style="font-size:13px; color:var(--muted)">No single source lists all open-weight models, trade-offs, or deployment methods. Users describe it as "weirdly hard to navigate."</td>
+            <td style="font-size:13px; color:var(--accent2)">Comprehensive model registry with filtering by parameters, license, benchmarks</td>
+            <td><a href="https://reddit.com/r/vibecoding/comments/1tqvedp/the_open_source_ai_ecosystem_is_weirdly_hard_to_navigate/" target="_blank" style="font-size:12px">r/vibecoding →</a></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#fff">Trust &amp; Transparency in Business Models</strong></td>
+            <td style="font-size:13px; color:var(--muted)">How can free-tier AI generation at scale be profitable without hidden data collection? Skepticism persists even after founder clarifications.</td>
+            <td style="font-size:13px; color:var(--accent2)">Explainer: how open-source AI platforms make money (ads, donations, SaaS, data)</td>
+            <td><a href="https://reddit.com/r/perchance/comments/1t8yh8q/how_is_perchance_ai_affording_this_this_makes_no/" target="_blank" style="font-size:12px">r/perchance →</a></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#fff">Agentic Reliability &amp; Tool Integration</strong></td>
+            <td style="font-size:13px; color:var(--muted)">Most open models fail on complex multi-step tasks. Users ask "where are advanced agent interfaces?" "What breaks first" is a key comparison frame.</td>
+            <td style="font-size:13px; color:var(--accent2)">Agent benchmark: Cursor + open-weights vs. Claude Code; failure modes &amp; workarounds</td>
+            <td><a href="https://reddit.com/r/LocalLLM/comments/1t614xu/i_feel_left_behind_where_are_these_advanced/" target="_blank" style="font-size:12px">r/LocalLLM →</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE -->
+<section id="audience">
+  <div class="container">
+    <div class="section-header">
+      <h2>Audience Analysis</h2>
+    </div>
+    <div class="callout">
+      <strong>Who they are:</strong> Technical decision-makers (developers, architects, DevOps engineers) and cost-conscious innovators (startups, indie builders, researchers), aged 25–45, mostly in Western tech hubs with growing Chinese developer pockets. Intermediate-to-advanced technical skills — they understand GPU costs and inference trade-offs.
+    </div>
+    <div class="callout">
+      <strong>Primary drivers:</strong> Cost reduction, latency control, and avoiding vendor lock-in — especially after pricing shocks. Privacy and sovereignty are secondary benefits, not ideological commitments.
+    </div>
+    <div class="callout">
+      <strong>Content preferences:</strong> Skeptical of marketing claims. They want benchmarks, real-world code examples, and honest failure modes. They live in <a href="https://reddit.com/r/LocalLLaMA" target="_blank">r/LocalLLaMA</a>, <a href="https://reddit.com/r/vibecoding" target="_blank">r/vibecoding</a>, and <a href="https://reddit.com/r/AI_Agents" target="_blank">r/AI_Agents</a> — not mainstream tech forums. Adopt a <strong>transparent, no-BS tone</strong> that cites reproducible benchmarks and acknowledges trade-offs explicitly.
+    </div>
+  </div>
+</section>
+
+<!-- SEO KEYWORDS -->
+<section id="keywords">
+  <div class="container">
+    <div class="section-header">
+      <h2>SEO Keywords &amp; Article Opportunities</h2>
+      <span class="section-count">20 keywords</span>
+    </div>
+    <div class="filter-bar">
+      <input type="text" id="kwSearch" placeholder="Search keywords…" oninput="filterKeywords()">
+      <select id="intentFilter" onchange="filterKeywords()">
+        <option value="">All intents</option>
+        <option value="Comparison">Comparison</option>
+        <option value="How-to">How-to</option>
+        <option value="Informational">Informational</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table id="kwTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable(&#39;kwTable&#39;,0,&#39;str&#39;)">Keyword</th>
+            <th onclick="sortTable(&#39;kwTable&#39;,1,&#39;str&#39;)">Intent</th>
+            <th>Suggested Article Title</th>
+          </tr>
+        </thead>
+        <tbody id="kwBody">
+          <tr data-intent="Comparison">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">open source LLM vs Claude Opus</td>
+            <td><span class="intent-badge intent-comparison">Comparison</span></td>
+            <td style="font-size:13px">Open Source LLM vs. Claude Opus: Benchmarks &amp; Real-World Performance (2025)</td>
+          </tr>
+          <tr data-intent="How-to">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">run local LLM on Mac</td>
+            <td><span class="intent-badge intent-how-to">How-to</span></td>
+            <td style="font-size:13px">How to Run Local LLMs on Mac: Ollama + Qwen Setup Guide</td>
+          </tr>
+          <tr data-intent="Comparison">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">DeepSeek V4 cost comparison</td>
+            <td><span class="intent-badge intent-comparison">Comparison</span></td>
+            <td style="font-size:13px">DeepSeek V4 vs. GPT-5: Cost, Speed &amp; Quality Breakdown</td>
+          </tr>
+          <tr data-intent="Informational">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">best open source coding model</td>
+            <td><span class="intent-badge intent-informational">Informational</span></td>
+            <td style="font-size:13px">Best Open-Source Coding Models: GLM-5.1, Qwen 3.7 vs. Proprietary</td>
+          </tr>
+          <tr data-intent="Informational">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">local LLM inference cost</td>
+            <td><span class="intent-badge intent-informational">Informational</span></td>
+            <td style="font-size:13px">Local LLM Inference Costs: Hardware vs. Cloud Subscriptions</td>
+          </tr>
+          <tr data-intent="Comparison">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">Qwen 3.6 vs Gemma 4 performance</td>
+            <td><span class="intent-badge intent-comparison">Comparison</span></td>
+            <td style="font-size:13px">Qwen 3.6 vs. Gemma 4: Speed, Quality &amp; Resource Usage</td>
+          </tr>
+          <tr data-intent="How-to">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">free local AI generator no cloud</td>
+            <td><span class="intent-badge intent-how-to">How-to</span></td>
+            <td style="font-size:13px">Free Local AI Image Generator: No Cloud, No Credits (Setup Guide)</td>
+          </tr>
+          <tr data-intent="Informational">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">open source AI model benchmarks</td>
+            <td><span class="intent-badge intent-informational">Informational</span></td>
+            <td style="font-size:13px">Open Source AI Model Benchmarks 2025: Across Coding, Chat &amp; Vision</td>
+          </tr>
+          <tr data-intent="How-to">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">how to self-host LLM</td>
+            <td><span class="intent-badge intent-how-to">How-to</span></td>
+            <td style="font-size:13px">How to Self-Host an LLM: Privacy, Cost &amp; Reliability Guide</td>
+          </tr>
+          <tr data-intent="Informational">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">Chinese open source AI models</td>
+            <td><span class="intent-badge intent-informational">Informational</span></td>
+            <td style="font-size:13px">Chinese Open Source AI Models: DeepSeek, Qwen &amp; Market Impact</td>
+          </tr>
+          <tr data-intent="Comparison">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">LLM local vs cloud deployment</td>
+            <td><span class="intent-badge intent-comparison">Comparison</span></td>
+            <td style="font-size:13px">Local vs. Cloud LLM Deployment: Privacy, Cost &amp; Performance Trade-Offs</td>
+          </tr>
+          <tr data-intent="Informational">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">open source AI model license</td>
+            <td><span class="intent-badge intent-informational">Informational</span></td>
+            <td style="font-size:13px">Open Source AI Model Licenses Explained: What You Can &amp; Can't Do</td>
+          </tr>
+          <tr data-intent="Comparison">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">cheapest LLM API alternative</td>
+            <td><span class="intent-badge intent-comparison">Comparison</span></td>
+            <td style="font-size:13px">Cheapest LLM API Alternatives to OpenAI &amp; Anthropic (2025)</td>
+          </tr>
+          <tr data-intent="How-to">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">reliable open source agent framework</td>
+            <td><span class="intent-badge intent-how-to">How-to</span></td>
+            <td style="font-size:13px">Building Reliable AI Agents with Open-Source Models: Frameworks &amp; Patterns</td>
+          </tr>
+          <tr data-intent="How-to">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">run Qwen locally GPU requirements</td>
+            <td><span class="intent-badge intent-how-to">How-to</span></td>
+            <td style="font-size:13px">Running Qwen 3.7 Locally: GPU Requirements &amp; Performance Tuning</td>
+          </tr>
+          <tr data-intent="Comparison">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">open source vs proprietary AI production</td>
+            <td><span class="intent-badge intent-comparison">Comparison</span></td>
+            <td style="font-size:13px">Open Source vs. Proprietary AI for Production: Security &amp; Compliance</td>
+          </tr>
+          <tr data-intent="How-to">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">LLM quantization local inference</td>
+            <td><span class="intent-badge intent-how-to">How-to</span></td>
+            <td style="font-size:13px">LLM Quantization Guide: Faster Local Inference on Consumer GPUs</td>
+          </tr>
+          <tr data-intent="Informational">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">open source multimodal AI model</td>
+            <td><span class="intent-badge intent-informational">Informational</span></td>
+            <td style="font-size:13px">Best Open-Source Multimodal AI Models: Vision + Text (Comparison)</td>
+          </tr>
+          <tr data-intent="Informational">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">digital sovereignty AI Europe</td>
+            <td><span class="intent-badge intent-informational">Informational</span></td>
+            <td style="font-size:13px">Digital Sovereignty &amp; AI: Why Europe &amp; China Choose Open Source</td>
+          </tr>
+          <tr data-intent="How-to">
+            <td style="font-family:&#39;IBM Plex Mono&#39;,monospace; font-size:12px; color:var(--accent)">how much GPU VRAM for local LLM</td>
+            <td><span class="intent-badge intent-how-to">How-to</span></td>
+            <td style="font-size:13px">GPU VRAM Requirements for Local LLMs: 8GB, 16GB, 24GB Charts</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="no-results" id="kwNoResults">No keywords match your filters.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Reddit Trend Analyzer · <code style="color:var(--accent)">open source ai models</code> · June 02, 2026 · 107 posts · 61 subreddits
+  </div>
+</footer>
+
+<script>
+  // ── FILTER: Posts table ──
+  function filterPosts() {
+    const q = document.getElementById('postSearch').value.toLowerCase();
+    const sub = document.getElementById('subFilter').value;
+    const minComments = parseInt(document.getElementById('commentFilter').value) || 0;
+    const rows = document.querySelectorAll('#postsBody tr');
+    let visible = 0;
+    rows.forEach(row => {
+      const title = row.querySelector('.thread-link')?.textContent.toLowerCase() || '';
+      const rowSub = row.dataset.sub || '';
+      const comments = parseInt(row.dataset.comments) || 0;
+      const matchQ = !q || title.includes(q);
+      const matchSub = !sub || rowSub === sub;
+      const matchComments = comments >= minComments;
+      const show = matchQ && matchSub && matchComments;
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  // ── FILTER: Keywords table ──
+  function filterKeywords() {
+    const q = document.getElementById('kwSearch').value.toLowerCase();
+    const intent = document.getElementById('intentFilter').value;
+    const rows = document.querySelectorAll('#kwBody tr');
+    let visible = 0;
+    rows.forEach(row => {
+      const kw = row.cells[0].textContent.toLowerCase();
+      const article = row.cells[2].textContent.toLowerCase();
+      const rowIntent = row.dataset.intent || '';
+      const matchQ = !q || kw.includes(q) || article.includes(q);
+      const matchIntent = !intent || rowIntent === intent;
+      const show = matchQ && matchIntent;
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('kwNoResults').style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  // ── SORT: Generic table sorter ──
+  const sortState = {};
+  function sortTable(tableId, colIndex, type) {
+    const table = document.getElementById(tableId);
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr[data-sub], tr[data-intent], tr'));
+    const key = `${tableId}-${colIndex}`;
+    const asc = sortState[key] !== 'asc';
+    sortState[key] = asc ? 'asc' : 'desc';
+
+    // Update header indicators
+    table.querySelectorAll('th').forEach((th, i) => {
+      th.classList.remove('sorted','sort-asc','sort-desc');
+      if (i === colIndex) {
+        th.classList.add('sorted', asc ? 'sort-asc' : 'sort-desc');
+      }
+    });
+
+    rows.sort((a, b) => {
+      const aVal = a.cells[colIndex]?.textContent.trim().replace(/[,↑↓]/g,'') || '';
+      const bVal = b.cells[colIndex]?.textContent.trim().replace(/[,↑↓]/g,'') || '';
+      if (type === 'num') {
+        return asc ? parseFloat(aVal)||0 - (parseFloat(bVal)||0) : (parseFloat(bVal)||0) - (parseFloat(aVal)||0);
+      }
+      return asc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+    });
+    rows.forEach(r => tbody.appendChild(r));
+  }
+</script>
+
+
+</body></html>
