@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Angular A/B Testing Tools | Convert Experiences</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =============================================
+   DESIGN TOKENS
+   ============================================= */
+:root {
+  --blue-600:#0066FF; --blue-700:#0052CC;
+  --blue-50:#EEF4FF;  --blue-100:#DBEAFE; --blue-200:#E0E7FF;
+  --violet-50:#EDE9FE; --violet-100:#F5F0FF; --violet-200:#C4B5FD;
+  --violet-600:#7C3AED; --violet-700:#6D28D9; --violet-800:#5B21B6; --violet-900:#4C1D95;
+  --green-50:#EDFAF5; --green-400:#6EE7B7; --green-500:#10B981; --green-600:#059669;
+  --orange-50:#FFF7ED; --orange-400:#FB923C; --orange-500:#F97316;
+  --ink-900:#2A3442; --ink-800:#3C4659; --ink-700:#586478; --ink-600:#7E8AA0;
+  --ink-500:#A6B1C2; --ink-400:#D0D7E1; --ink-300:#E7EBF1; --ink-200:#F4F6F9; --ink-100:#FFFFFF;
+  --cream:#FAFAF7; --cream-hover:#F5F4EE;
+  --action:var(--blue-600); --action-hover:var(--blue-700);
+  --link:var(--violet-600);
+  --text:var(--ink-900); --text-secondary:var(--ink-700); --text-muted:var(--ink-600);
+  --border:var(--ink-400); --border-subtle:var(--ink-300);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--cream);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+.container { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+/* NAV */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,250,247,0.94);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--ink-300);
+}
+.nav__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px; max-width: 1180px; margin: 0 auto; padding: 0 32px;
+}
+.nav__logo { display: flex; align-items: center; gap: 10px; }
+.nav__logo-mark {
+  width: 32px; height: 32px; background: var(--blue-600);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+}
+.nav__wordmark { font-size: 16px; font-weight: 600; color: var(--ink-900); letter-spacing: -0.3px; }
+.nav__links { display: flex; align-items: center; gap: 28px; list-style: none; }
+.nav__links a { font-size: 14px; font-weight: 500; color: var(--ink-800); transition: color .15s; }
+.nav__links a:hover { color: var(--blue-600); }
+.nav__actions { display: flex; align-items: center; gap: 10px; }
+.btn-ghost {
+  padding: 8px 18px; font-size: 14px; font-weight: 500; color: var(--ink-800);
+  border: 1px solid var(--ink-400); border-radius: 8px; background: transparent;
+  cursor: pointer; transition: border-color .15s, color .15s;
+}
+.btn-ghost:hover { border-color: var(--ink-700); color: var(--ink-900); }
+.btn-primary {
+  padding: 8px 18px; font-size: 14px; font-weight: 500; color: #fff;
+  background: var(--action); border: none; border-radius: 8px;
+  cursor: pointer; transition: background .15s;
+}
+.btn-primary:hover { background: var(--action-hover); }
+@media (max-width:900px) { .nav__links { display: none; } }
+
+/* HERO */
+.hero {
+  background: linear-gradient(160deg, #0B1220 0%, #0D1535 55%, #150D2E 100%);
+  padding: 96px 0; position: relative; overflow: hidden;
+  border-top: 1px solid var(--ink-300);
+}
+.hero__glow-1 {
+  position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+  width: 800px; height: 500px;
+  background: radial-gradient(ellipse, rgba(0,102,255,.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero__glow-2 {
+  position: absolute; bottom: -150px; right: -100px;
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(124,58,237,.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero__grid {
+  display: grid; grid-template-columns: 1fr 400px; gap: 64px;
+  align-items: center; position: relative; z-index: 1;
+}
+.hero__eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(124,58,237,.15); border: 1px solid rgba(196,181,253,.3);
+  border-radius: 100px; padding: 5px 14px;
+  font-size: 12px; font-weight: 600; color: var(--violet-200);
+  letter-spacing: .06em; text-transform: uppercase; margin-bottom: 24px;
+}
+.hero__eyebrow-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--violet-600); box-shadow: 0 0 6px var(--violet-600);
+}
+.hero h1 {
+  font-size: clamp(30px,3.8vw,52px); font-weight: 600; color: #fff;
+  letter-spacing: -1px; line-height: 1.12; margin-bottom: 20px;
+}
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--blue-600) 0%, var(--violet-600) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero__sub { font-size: 18px; color: rgba(255,255,255,.65); line-height: 1.65; margin-bottom: 36px; max-width: 540px; }
+.hero__ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero__cta-primary {
+  padding: 13px 24px; font-size: 15px; font-weight: 600; color: #fff;
+  background: var(--blue-600); border: none; border-radius: 9px;
+  cursor: pointer; transition: background .15s, transform .15s;
+}
+.hero__cta-primary:hover { background: var(--blue-700); transform: translateY(-1px); }
+.hero__cta-secondary {
+  padding: 13px 24px; font-size: 15px; font-weight: 500; color: rgba(255,255,255,.85);
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18);
+  border-radius: 9px; cursor: pointer; transition: background .15s, border-color .15s;
+}
+.hero__cta-secondary:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.3); }
+.hero__form-card {
+  background: var(--cream); border: 1px solid var(--ink-300); border-radius: 16px;
+  padding: 32px; box-shadow: 0 8px 40px rgba(0,0,0,.22), 0 2px 8px rgba(0,0,0,.1);
+}
+.hero__form-title { font-size: 16px; font-weight: 600; color: var(--ink-900); letter-spacing: -.3px; margin-bottom: 20px; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-700); margin-bottom: 5px; letter-spacing: .03em; }
+.form-group input {
+  width: 100%; padding: 10px 14px; font-size: 14px; font-family: inherit;
+  color: var(--ink-900); background: var(--ink-100);
+  border: 1px solid var(--ink-300); border-radius: 8px; outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.form-group input:focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px rgba(0,102,255,.12); }
+.form-group input::placeholder { color: var(--ink-500); }
+.form-submit {
+  width: 100%; padding: 12px; font-size: 15px; font-weight: 600;
+  color: #fff; background: var(--blue-600); border: none; border-radius: 9px;
+  cursor: pointer; margin-top: 4px; transition: background .15s;
+}
+.form-submit:hover { background: var(--blue-700); }
+.form-trust { text-align: center; font-size: 11.5px; color: var(--ink-600); margin-top: 12px; }
+@media (max-width:900px) { .hero__grid { grid-template-columns: 1fr; } }
+
+/* TRUST STRIP */
+.trust-strip { background: var(--ink-100); border-top: 1px solid var(--ink-300); padding: 15px 0; }
+.trust-strip__inner { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.trust-label { font-size: 11px; font-weight: 600; color: var(--ink-600); text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
+.trust-divider { width: 1px; height: 18px; background: var(--ink-300); flex-shrink: 0; }
+.trust-items { display: flex; flex-wrap: wrap; gap: 20px; }
+.trust-item { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--ink-800); }
+
+/* SECTION COMMON */
+section { border-top: 1px solid var(--ink-300); }
+.section-header { margin-bottom: 56px; }
+.section-label { display: inline-block; font-size: 11px; font-weight: 600; color: var(--violet-600); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+.section-h2 { font-size: clamp(26px,3vw,36px); font-weight: 700; color: var(--ink-900); letter-spacing: -.5px; line-height: 1.2; margin-bottom: 14px; }
+.section-sub { font-size: 17px; color: var(--ink-700); max-width: 640px; line-height: 1.6; }
+
+/* BULLET LIST */
+.bullet-list { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 22px; }
+.bullet-list li { display: flex; align-items: flex-start; gap: 9px; font-size: 15px; color: var(--ink-700); line-height: 1.5; }
+.bullet-list li::before {
+  content: ''; flex-shrink: 0; width: 16px; height: 16px; margin-top: 1px;
+  background: var(--blue-50); border-radius: 50%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3 8.5l3 3 7-7' stroke='%230066FF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-size: contain;
+}
+
+/* CARD BASE */
+.card {
+  background: radial-gradient(ellipse at top left, var(--blue-50) 0%, var(--ink-100) 55%);
+  border: 1px solid var(--ink-300); border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05); overflow: hidden;
+  transition: box-shadow .2s, transform .2s;
+}
+.card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.07); transform: translateY(-2px); }
+.card-head { display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--ink-300); }
+.card-dot { width: 10px; height: 10px; border-radius: 50%; }
+.card-dot + .card-dot { margin-left: 4px; }
+.card-title { font-size: 12px; font-weight: 500; color: var(--ink-600); margin-left: 10px; letter-spacing: .02em; }
+.card-body { padding: 20px; }
+.card-stat { background: var(--ink-200); padding: 14px 22px; border-top: 1px solid var(--ink-300); }
+.card-stat strong { font-size: 13px; font-weight: 600; color: var(--blue-600); }
+.card-stat span { font-size: 12px; color: var(--ink-600); }
+
+/* DARK CODE CARD */
+.card--dark { background: #0B1220; border-color: transparent; }
+.card--dark .card-head { border-bottom-color: rgba(255,255,255,.08); }
+.card--dark .card-dot { background: #334155 !important; }
+.card--dark .card-title { color: #475569; }
+pre.code-block {
+  font-family: 'Fira Code', 'Cascadia Code', monospace; font-size: 11.5px;
+  line-height: 1.7; color: #94A3B8; overflow-x: auto; white-space: pre;
+}
+.tok-comment { color: #64748B; } .tok-keyword { color: #93C5FD; }
+.tok-string { color: #86EFAC; } .tok-fn { color: #FCD34D; }
+.tok-var { color: #F0ABFC; } .tok-type { color: #67E8F9; }
+.tok-num { color: #FB923C; }
+
+/* TIMELINE CARD */
+.timeline-row { display: flex; align-items: flex-start; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--ink-300); }
+.timeline-row:last-child { border-bottom: none; }
+.timeline-icon { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+.timeline-icon--bad { background: #FEF2F2; color: #EF4444; }
+.timeline-icon--good { background: var(--green-50); color: var(--green-600); }
+.timeline-label { font-size: 13px; font-weight: 600; color: var(--ink-900); line-height: 1.3; margin-bottom: 2px; }
+.timeline-desc { font-size: 11.5px; color: var(--ink-600); line-height: 1.5; }
+.card--dark .timeline-row { border-bottom-color: rgba(255,255,255,.07); }
+.card--dark .timeline-label { color: #CBD5E1; }
+.card--dark .timeline-desc { color: #64748B; }
+
+/* SUPPORT CARD */
+.support-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--ink-300); }
+.support-row:last-child { border-bottom: none; }
+.support-name { font-size: 13px; font-weight: 600; color: var(--ink-900); }
+.support-badge { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; }
+.badge--green { background: var(--green-50); color: var(--green-600); }
+.badge--amber { background: #FFFBEB; color: #92400E; }
+.badge--red { background: #FEF2F2; color: #991B1B; }
+.support-note { font-size: 11.5px; font-weight: 600; color: var(--ink-700); text-align: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--ink-300); }
+
+/* CLIENT ACCOUNTS CARD */
+.client-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--ink-300); }
+.client-row:last-child { border-bottom: none; }
+.client-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-right: 10px; }
+.client-info { flex: 1; }
+.client-name { font-size: 13px; font-weight: 600; color: var(--ink-900); }
+.client-desc { font-size: 11px; color: var(--ink-600); }
+.client-role { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+.role--owner { background: var(--blue-50); color: var(--blue-600); }
+.role--editor { background: var(--violet-50); color: var(--violet-600); }
+.role--viewer { background: var(--ink-200); color: var(--ink-700); }
+.client-footer { background: var(--ink-200); padding: 10px 16px; border-top: 1px solid var(--ink-300); font-size: 11px; font-weight: 500; color: var(--ink-700); text-align: center; }
+
+/* PIPELINE CARD */
+.pipeline-step { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--ink-300); }
+.pipeline-step:last-child { border-bottom: none; }
+.pipeline-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.step--done { background: var(--green-50); color: var(--green-600); border: 1px solid rgba(16,185,129,.3); }
+.step--active { background: var(--blue-50); color: var(--blue-600); border: 1.5px solid var(--blue-600); }
+.pipeline-label { font-size: 13px; font-weight: 600; color: var(--ink-900); margin-bottom: 2px; }
+.pipeline-desc { font-size: 11.5px; color: var(--ink-600); margin-bottom: 4px; }
+.pipeline-badge { display: inline-block; font-size: 10px; font-weight: 600; color: var(--ink-700); background: var(--ink-200); padding: 2px 7px; border-radius: 4px; }
+
+/* FOR WHOM */
+.for-whom { background: var(--ink-100); padding: 96px 0; }
+.for-whom__stack { display: flex; flex-direction: column; border: 1px solid var(--ink-300); border-radius: 16px; overflow: hidden; }
+.fw-card { display: grid; grid-template-columns: 300px 1fr; border-bottom: 1px solid var(--ink-300); }
+.fw-card:last-child { border-bottom: none; }
+.fw-card__left {
+  padding: 36px 32px; border-right: 1px solid var(--ink-300);
+  background: radial-gradient(ellipse at top left, var(--blue-50) 0%, var(--ink-100) 70%);
+}
+.fw-card__right { padding: 36px 40px; display: flex; flex-direction: column; justify-content: center; }
+.fw-icon { width: 36px; height: 36px; background: var(--blue-50); border-radius: 9px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+.fw-eyebrow { font-size: 11px; font-weight: 600; color: var(--violet-600); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+.fw-card__left h3 { font-size: 17px; font-weight: 600; color: var(--ink-900); letter-spacing: -.3px; line-height: 1.35; }
+.fw-card__right p { font-size: 15px; color: var(--ink-700); line-height: 1.65; margin-bottom: 20px; }
+.fw-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--violet-600); transition: gap .15s; }
+.fw-link:hover { gap: 9px; }
+@media (max-width:860px) {
+  .fw-card { grid-template-columns: 1fr; }
+  .fw-card__left { border-right: none; border-bottom: 1px solid var(--ink-300); padding: 28px 24px; }
+  .fw-card__right { padding: 28px 24px; }
+}
+
+/* WHY CONVERT */
+.why-convert { background: var(--cream); padding: 96px 0; }
+.why-rows { display: flex; flex-direction: column; gap: 80px; }
+.why-row { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.why-row--flip .why-row__card { order: -1; }
+.why-eyebrow { font-size: 11px; font-weight: 600; color: var(--violet-600); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+.why-row__copy h3 { font-size: 22px; font-weight: 700; color: var(--ink-900); letter-spacing: -.3px; line-height: 1.25; margin-bottom: 14px; }
+.why-lead { font-size: 15px; color: var(--ink-700); line-height: 1.65; margin-bottom: 20px; }
+@media (max-width:860px) {
+  .why-row { grid-template-columns: 1fr; }
+  .why-row--flip .why-row__card { order: 0; }
+}
+
+/* API BANNER */
+.api-banner {
+  background: linear-gradient(120deg, var(--violet-900) 0%, var(--violet-700) 50%, var(--blue-600) 100%);
+  padding: 72px 0; border-top: 1px solid var(--ink-300);
+}
+.api-banner__inner { display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.api-banner__eyebrow { font-size: 11px; font-weight: 600; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+.api-banner h2 { font-size: clamp(24px,2.8vw,34px); font-weight: 700; color: #fff; letter-spacing: -.5px; margin-bottom: 8px; }
+.api-banner__sub { font-size: 15px; color: rgba(255,255,255,.7); margin-bottom: 18px; }
+.api-code-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px; padding: 8px 16px;
+  font-family: 'Fira Code', monospace; font-size: 13px; color: var(--green-400);
+}
+.btn-outline-white {
+  padding: 13px 28px; font-size: 15px; font-weight: 600; color: #fff;
+  background: transparent; border: 2px solid rgba(255,255,255,.5);
+  border-radius: 9px; cursor: pointer; white-space: nowrap;
+  transition: border-color .15s, background .15s;
+}
+.btn-outline-white:hover { border-color: #fff; background: rgba(255,255,255,.08); }
+
+/* FEATURES TABLE */
+.features-section { background: var(--ink-100); padding: 96px 0; }
+.features-wrap { border-radius: 14px; overflow-x: auto; border: 1px solid var(--ink-300); }
+.features-table { width: 100%; border-collapse: collapse; min-width: 700px; }
+.features-table thead tr { background: var(--ink-900); }
+.features-table th { color: rgba(255,255,255,.6); font-size: 11px; font-weight: 600; padding: 14px 20px; text-align: left; letter-spacing: .05em; text-transform: uppercase; }
+.features-table tbody tr:nth-child(odd) { background: var(--ink-100); }
+.features-table tbody tr:nth-child(even) { background: var(--cream); }
+.features-table td { padding: 18px 20px; line-height: 1.6; vertical-align: top; border-bottom: 1px solid var(--ink-300); font-size: 14px; color: var(--ink-800); }
+.features-table tbody tr:last-child td { border-bottom: none; }
+.features-table td:first-child { font-weight: 600; color: var(--ink-900); white-space: nowrap; min-width: 180px; }
+.features-table td:nth-child(2) { border-left: 3px solid var(--orange-400); color: var(--ink-700); }
+.features-table td:nth-child(3) { border-left: 3px solid var(--green-500); color: var(--ink-700); }
+.features-closing { text-align: center; margin-top: 28px; font-size: 15px; color: var(--ink-700); max-width: 720px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+.features-closing strong { color: var(--ink-900); }
+
+/* USE CASES */
+.use-cases { background: var(--cream); padding: 96px 0; }
+.uc-rows { display: flex; flex-direction: column; gap: 72px; }
+.uc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.uc-row--flip .uc-row__card { order: -1; }
+.uc-eyebrow { font-size: 11px; font-weight: 600; color: var(--violet-600); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+.uc-row__copy h3 { font-size: 22px; font-weight: 700; color: var(--ink-900); letter-spacing: -.3px; line-height: 1.25; margin-bottom: 14px; }
+.uc-desc { font-size: 15px; color: var(--ink-700); line-height: 1.65; }
+@media (max-width:860px) {
+  .uc-row { grid-template-columns: 1fr; }
+  .uc-row--flip .uc-row__card { order: 0; }
+}
+
+/* RELATED ARTICLES */
+.related-articles { background: var(--cream); padding: 80px 0; border-top: 1px solid var(--ink-300); }
+.ra-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-top: 36px; }
+.ra-card {
+  display: flex; flex-direction: column; background: var(--ink-100);
+  border: 1px solid var(--ink-300); border-radius: 12px; padding: 22px;
+  text-decoration: none; transition: box-shadow .2s, transform .2s;
+  position: relative; overflow: hidden;
+}
+.ra-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at top left, var(--blue-50) 0%, transparent 55%);
+  opacity: 0; transition: opacity .2s; pointer-events: none;
+}
+.ra-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.08); transform: translateY(-2px); }
+.ra-card:hover::before { opacity: 1; }
+.ra-card:hover .ra-title { color: var(--blue-600); }
+.ra-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; margin-bottom: 12px; width: fit-content; }
+.tag--amber { background: #FFF7ED; color: #C2410C; }
+.tag--blue { background: var(--blue-50); color: var(--blue-600); }
+.tag--violet { background: var(--violet-50); color: var(--violet-600); }
+.tag--green { background: var(--green-50); color: var(--green-600); }
+.ra-title { font-size: 14.5px; font-weight: 600; color: var(--ink-900); line-height: 1.45; flex: 1; margin-bottom: 16px; transition: color .15s; }
+.ra-meta { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--ink-500); }
+.ra-read { font-size: 12px; font-weight: 600; color: var(--violet-600); }
+@media (max-width:860px) { .ra-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width:540px) { .ra-grid { grid-template-columns: 1fr; } }
+
+/* FAQ */
+.faq-section { background: var(--ink-100); padding: 96px 0; }
+.faq-wrap { max-width: 860px; margin: 0 auto; }
+.faq-list { border: 1px solid var(--ink-300); border-radius: 14px; overflow: hidden; }
+.faq-item { border-bottom: 1px solid var(--ink-300); }
+.faq-item:last-child { border-bottom: none; }
+.faq-q { display: flex; align-items: center; gap: 16px; padding: 20px 24px; cursor: pointer; user-select: none; transition: background .15s; }
+.faq-q:hover { background: var(--ink-200); }
+.faq-item.open .faq-q { background: var(--blue-50); }
+.faq-num { font-size: 12px; font-weight: 700; color: var(--ink-500); min-width: 24px; transition: color .15s; }
+.faq-item.open .faq-num { color: var(--blue-600); }
+.faq-question { font-size: 15px; font-weight: 600; color: var(--ink-900); flex: 1; line-height: 1.4; }
+.faq-chevron { width: 18px; height: 18px; flex-shrink: 0; color: var(--ink-500); transition: transform .25s, color .15s; }
+.faq-item.open .faq-chevron { transform: rotate(180deg); color: var(--blue-600); }
+.faq-a { display: none; padding: 0 24px 20px 64px; font-size: 15px; color: var(--ink-700); line-height: 1.7; }
+.faq-a p + p { margin-top: 10px; }
+.faq-item.open .faq-a { display: block; }
+
+/* FOOTER */
+.footer { background: var(--cream-hover); border-top: 1px solid var(--ink-300); padding: 24px 0; }
+.footer__inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.footer__links { display: flex; gap: 20px; list-style: none; }
+.footer__links a { font-size: 13px; color: var(--ink-600); transition: color .15s; }
+.footer__links a:hover { color: var(--ink-900); }
+.footer__copy { font-size: 11.5px; color: var(--ink-500); }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav class="nav">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo">
+      <div class="nav__logo-mark">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M9 3.5C6 3.5 3.5 6 3.5 9C3.5 12 6 14.5 9 14.5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 6.5C13.5 7.5 14.5 8.5 14.5 9C14.5 11 12 13 9 13.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 1.5"/>
+        </svg>
+      </div>
+      <span class="nav__wordmark">Convert</span>
+    </a>
+    <ul class="nav__links">
+      <li><a href="#">Features</a></li>
+      <li><a href="#">Use cases</a></li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Docs</a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+    <div class="nav__actions">
+      <button class="btn-ghost">Log in</button>
+      <button class="btn-primary">Start free trial</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero__glow-1"></div>
+  <div class="hero__glow-2"></div>
+  <div class="container">
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <div class="hero__eyebrow">
+          <span class="hero__eyebrow-dot"></span>
+          Angular A/B testing
+        </div>
+        <h1>A/B testing for Angular apps that <em>doesn't fight your framework</em></h1>
+        <p class="hero__sub">Convert Experiences uses MutationObserver to track DOM changes natively in Angular's rendering cycle, so your tests run cleanly without flicker, without hacks, and without slowing down your app. Marketers get reliable experiment data. Developers get a platform that respects how Angular actually works.</p>
+        <div class="hero__ctas">
+          <button class="hero__cta-primary">Start a 15-day free trial</button>
+          <button class="hero__cta-secondary">Book a demo</button>
+        </div>
+      </div>
+      <div class="hero__form-card">
+        <div class="hero__form-title">Run your first Angular experiment in days, not sprints</div>
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label for="email">Work email</label>
+            <input type="email" id="email" placeholder="you@company.com">
+          </div>
+          <div class="form-group">
+            <label for="company-url">Company URL</label>
+            <input type="url" id="company-url" placeholder="https://yourcompany.com">
+          </div>
+          <div class="form-group">
+            <label for="visitors">Monthly visitors</label>
+            <input type="text" id="visitors" placeholder="e.g. 250,000">
+          </div>
+          <button type="submit" class="form-submit">Get started free</button>
+        </form>
+        <p class="form-trust">No credit card required. 15-day free trial.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="container">
+    <div class="trust-strip__inner">
+      <span class="trust-label">Trusted by</span>
+      <div class="trust-divider"></div>
+      <div class="trust-items">
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          400,000+ experiences served
+        </div>
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          40,000+ sites installed
+        </div>
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          16 years in business
+        </div>
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          SOC-2, HIPAA, GDPR compliant
+        </div>
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          7-min avg support response
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOR WHOM -->
+<section class="for-whom">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Who it's for</span>
+      <h2 class="section-h2">Built for every team running Angular experiments</h2>
+      <p class="section-sub">Whether you're shipping product pages, onboarding flows, or managing experiments across multiple clients, Convert handles the hard parts of Angular testing.</p>
+    </div>
+    <div class="for-whom__stack">
+
+      <div class="fw-card">
+        <div class="fw-card__left">
+          <div class="fw-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 3h2l2.4 9h7.2L16 7H7M8 16a1 1 0 1 0 2 0 1 1 0 0 0-2 0M13 16a1 1 0 1 0 2 0 1 1 0 0 0-2 0" stroke="#0066FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="fw-eyebrow">Ecommerce</div>
+          <h3>Test Angular-rendered product pages without sacrificing conversion data</h3>
+        </div>
+        <div class="fw-card__right">
+          <p>Angular SPAs update the DOM dynamically, and most A/B tools miss those changes entirely, producing flawed variant renders and unreliable results. Convert uses MutationObserver to track DOM changes in real time, so your product page, cart, and checkout tests run cleanly on Angular without flicker, without sampling, and without patching your implementation every time a component updates.</p>
+          <ul class="bullet-list">
+            <li>Eliminate flicker on Angular-rendered product and cart pages</li>
+            <li>Capture every conversion event, no sampling, no gaps</li>
+            <li>Run funnel tests across multi-step Angular checkout flows</li>
+          </ul>
+          <a href="#" class="fw-link">Explore for Ecommerce &#8594;</a>
+        </div>
+      </div>
+
+      <div class="fw-card">
+        <div class="fw-card__left">
+          <div class="fw-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="5" width="14" height="10" rx="2" stroke="#0066FF" stroke-width="1.5"/><path d="M7 9h6M7 12h4" stroke="#0066FF" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="fw-eyebrow">SaaS</div>
+          <h3>Run statistically rigorous tests inside Angular-built onboarding flows</h3>
+        </div>
+        <div class="fw-card__right">
+          <p>SaaS activation hinges on what happens inside the app, and Angular apps present real instrumentation challenges for most testing tools. Convert's full SPA support means you can test onboarding sequences, feature prompts, and trial-to-paid conversion flows at the component level, with Frequentist or Bayesian stats engines and sequential testing to monitor results without inflating false positive rates.</p>
+          <ul class="bullet-list">
+            <li>Test in-app flows without breaking Angular's component lifecycle</li>
+            <li>Choose Frequentist or Bayesian stats, both included, no upgrade required</li>
+            <li>Sequential testing lets you call winners earlier without bad data</li>
+          </ul>
+          <a href="#" class="fw-link">Explore for SaaS &#8594;</a>
+        </div>
+      </div>
+
+      <div class="fw-card">
+        <div class="fw-card__left">
+          <div class="fw-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="#0066FF" stroke-width="1.5"/><circle cx="5" cy="13" r="2" stroke="#0066FF" stroke-width="1.3"/><circle cx="15" cy="13" r="2" stroke="#0066FF" stroke-width="1.3"/><path d="M8 12c-.7.4-1.6.7-3 1M12 12c.7.4 1.6.7 3 1" stroke="#0066FF" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+          <div class="fw-eyebrow">Agencies</div>
+          <h3>Manage Angular A/B testing across every client without rebuilding your workflow</h3>
+        </div>
+        <div class="fw-card__right">
+          <p>Angular clients introduce implementation complexity that slows down test velocity and creates credibility risk with stakeholders. Convert's project architecture lets you run isolated experiments per client domain, with centralized billing and scoped collaborator access. The REST API and MCP server let your team instrument Angular apps, manage tests, and pull reporting data without leaving your existing development pipeline.</p>
+          <ul class="bullet-list">
+            <li>Isolate each client's experiments, data, and access in one account</li>
+            <li>Automate test setup and reporting via REST API or MCP server</li>
+            <li>Deliver unsampled results clients can trust, no data gaps to explain</li>
+          </ul>
+          <a href="#" class="fw-link">Explore for Agencies &#8594;</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY CONVERT -->
+<section class="why-convert">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Why Convert</span>
+      <h2 class="section-h2">Three reasons Angular teams choose Convert</h2>
+      <p class="section-sub">Delivery, developer workflow, and support. These are the three places where most A/B tools fall short on Angular, and where Convert is built differently.</p>
+    </div>
+    <div class="why-rows">
+
+      <!-- Row 1: copy left, card right -->
+      <div class="why-row">
+        <div class="why-row__copy">
+          <div class="why-eyebrow">01 &middot; Delivery</div>
+          <h3>Your Angular SPA tests render correctly, without the flicker that corrupts variant data</h3>
+          <p class="why-lead">Angular's client-side routing breaks most A/B tools before a test even runs. Convert loads synchronously via Akamai CDN, so your visitors never see a flash of the original variant before the test renders. MutationObserver support handles Angular's route changes natively.</p>
+          <ul class="bullet-list">
+            <li>Synchronous CDN load, variant renders before Angular bootstraps the first paint</li>
+            <li>MutationObserver catches every route change without requiring a full page reload</li>
+            <li>Experiment data reflects what visitors actually saw, not an artifact of a slow script</li>
+          </ul>
+        </div>
+        <div class="why-row__card">
+          <div class="card">
+            <div class="card-head">
+              <span class="card-dot" style="background:#EF4444"></span>
+              <span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+              <span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+              <span class="card-title">Angular SPA delivery</span>
+            </div>
+            <div class="card-body">
+              <div class="timeline-row">
+                <div class="timeline-icon timeline-icon--bad">&#9889;</div>
+                <div>
+                  <div class="timeline-label">Standard async load</div>
+                  <div class="timeline-desc">Script fires after Angular bootstrap, variant flickers in post-render, test data is contaminated</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-icon timeline-icon--bad">&#9889;</div>
+                <div>
+                  <div class="timeline-label">SPA route change, no MutationObserver</div>
+                  <div class="timeline-desc">Route changes go undetected, experiments miss exposures, impressions are undercounted</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-icon timeline-icon--good">&#10003;</div>
+                <div>
+                  <div class="timeline-label">Convert on Angular</div>
+                  <div class="timeline-desc">Sync CDN load + MutationObserver: clean render, every route change tracked, accurate data</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-stat">
+              <strong>Synchronous, flicker-free loading on Angular SPAs</strong><span>, flawless since 2016.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: card left, copy right (--flip) -->
+      <div class="why-row why-row--flip">
+        <div class="why-row__copy">
+          <div class="why-eyebrow">02 &middot; Developer workflow</div>
+          <h3>Your dev team runs Angular experiments from inside the pipeline, not around it</h3>
+          <p class="why-lead">Angular teams build and ship in code, not in marketing dashboards. Convert's REST API V2 lets your team create, update, and report on experiments entirely inside your CI/CD pipeline. JS Conditions let you write arbitrary JavaScript as a targeting trigger.</p>
+          <ul class="bullet-list">
+            <li>REST API V2 integrates into your Angular CI/CD pipeline directly</li>
+            <li>JS Conditions target on Angular router events, component state, or service values</li>
+            <li>Both features ship on standard plans, not behind an enterprise contract</li>
+          </ul>
+        </div>
+        <div class="why-row__card">
+          <div class="card card--dark">
+            <div class="card-head">
+              <span class="card-dot"></span>
+              <span class="card-dot" style="margin-left:4px"></span>
+              <span class="card-dot" style="margin-left:4px"></span>
+              <span class="card-title">angular-experiment.ts</span>
+            </div>
+            <div class="card-body">
+<pre class="code-block"><span class="tok-comment">// Create experiment via REST API V2</span>
+<span class="tok-keyword">import</span> { <span class="tok-type">ConvertClient</span> } <span class="tok-keyword">from</span> <span class="tok-string">'@convertcom/js-sdk'</span>;
+<span class="tok-keyword">import</span> { <span class="tok-type">Router</span>, <span class="tok-type">RouterEvent</span> } <span class="tok-keyword">from</span> <span class="tok-string">'@angular/router'</span>;
+
+<span class="tok-keyword">const</span> <span class="tok-var">client</span> = <span class="tok-keyword">new</span> <span class="tok-type">ConvertClient</span>({
+  <span class="tok-fn">sdkKey</span>: <span class="tok-var">process</span>.env.<span class="tok-var">CONVERT_SDK_KEY</span>,
+});
+
+<span class="tok-comment">// JS Condition targeting Angular router events</span>
+<span class="tok-keyword">const</span> <span class="tok-var">jsCondition</span> = <span class="tok-string">`
+  router.events.pipe(
+    filter(e =&gt; e instanceof RouterEvent),
+    map(e =&gt; e.url)
+  ).includes('/onboarding/step-2')
+`</span>;
+
+<span class="tok-comment">// Create experiment with JS condition</span>
+<span class="tok-keyword">await</span> <span class="tok-var">client</span>.<span class="tok-fn">experiments</span>.<span class="tok-fn">create</span>({
+  <span class="tok-fn">name</span>: <span class="tok-string">'onboarding-step2-cta'</span>,
+  <span class="tok-fn">targeting</span>: { <span class="tok-fn">js_condition</span>: <span class="tok-var">jsCondition</span> },
+  <span class="tok-fn">variants</span>: [
+    { <span class="tok-fn">name</span>: <span class="tok-string">'control'</span> },
+    { <span class="tok-fn">name</span>: <span class="tok-string">'variant-a'</span> }
+  ],
+});</pre>
+            </div>
+            <div class="card-stat" style="background:#0D1535;border-top-color:rgba(255,255,255,.08);">
+              <strong style="color:#93C5FD;">JS Conditions enterprise-only on VWO and Optimizely</strong><span style="color:#475569;">, standard on Convert.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3: copy left, card right -->
+      <div class="why-row">
+        <div class="why-row__copy">
+          <div class="why-eyebrow">03 &middot; Support</div>
+          <h3>When a live Angular test breaks, you reach a human in 7 minutes</h3>
+          <p class="why-lead">When a test misfires on a live Angular application, your team needs answers in minutes, not hours. Convert's average support response is 7 minutes, reached by a human, not a bot.</p>
+          <ul class="bullet-list">
+            <li>7-minute average response, engineers, not a ticket queue</li>
+            <li>Unsampled data means the fix is based on complete visitor counts, not statistical estimates</li>
+            <li>Accurate numbers and a real person to help you act on them</li>
+          </ul>
+        </div>
+        <div class="why-row__card">
+          <div class="card">
+            <div class="card-head">
+              <span class="card-dot" style="background:#EF4444"></span>
+              <span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+              <span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+              <span class="card-title">Support response times</span>
+            </div>
+            <div class="card-body">
+              <div class="support-row">
+                <span class="support-name">Convert Experiences</span>
+                <span class="support-badge badge--green">7 min avg</span>
+              </div>
+              <div class="support-row">
+                <span class="support-name">Industry average</span>
+                <span class="support-badge badge--amber">28+ min</span>
+              </div>
+              <div class="support-row">
+                <span class="support-name">VWO</span>
+                <span class="support-badge badge--red">Ticket-based</span>
+              </div>
+              <div class="support-row">
+                <span class="support-name">Optimizely</span>
+                <span class="support-badge badge--amber">Enterprise SLA only</span>
+              </div>
+              <div class="support-note">Human engineers. Not a chatbot.</div>
+            </div>
+            <div class="card-stat">
+              <strong>Average support response: 7 minutes</strong><span>, not a chatbot.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- API BANNER -->
+<section class="api-banner">
+  <div class="container">
+    <div class="api-banner__inner">
+      <div>
+        <div class="api-banner__eyebrow">Documentation</div>
+        <h2>Read the API docs</h2>
+        <p class="api-banner__sub">REST &middot; GraphQL &middot; SDK quickstart</p>
+        <div class="api-code-pill">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" stroke="#6EE7B7" stroke-width="1.2"/><path d="M5 5l2 2-2 2M8 9h1" stroke="#6EE7B7" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          npm install @convertcom/js-sdk
+        </div>
+      </div>
+      <button class="btn-outline-white">View docs &#8594;</button>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES TABLE -->
+<section class="features-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Features</span>
+      <h2 class="section-h2">Every feature Angular teams need, in every plan</h2>
+      <p class="section-sub">No enterprise tier required. No feature gating. Every capability below ships on every Convert plan.</p>
+    </div>
+    <div class="features-wrap">
+      <table class="features-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>The Angular-specific problem it solves</th>
+            <th>How your team benefits</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>JS Conditions</td>
+            <td>Standard visual selectors can't target Angular component state, route, or lifecycle moments</td>
+            <td>Write targeting logic in real JavaScript, hook into Angular's router events, component state, or service values directly</td>
+          </tr>
+          <tr>
+            <td>No-flicker loading</td>
+            <td>Variant content applied after Angular bootstraps, creating a flash of control before the test renders</td>
+            <td>SmartInsert&#8482; ensures experiment modifications apply at the correct moment in Angular's rendering cycle, zero flash, zero FOUC</td>
+          </tr>
+          <tr>
+            <td>Full-stack / server-side testing</td>
+            <td>Angular apps rely on APIs and pricing engines that client-side tools can't reach</td>
+            <td>Test pricing tiers, recommendation algorithms, and API response variations server-side, surfaced in the same unified dashboard</td>
+          </tr>
+          <tr>
+            <td>Feature flags</td>
+            <td>Angular teams build custom toggle services or route guards just to control feature visibility, adding maintenance overhead</td>
+            <td>Replace homegrown toggle logic with built-in flags: segment by user attributes, roll out progressively, kill instantly</td>
+          </tr>
+          <tr>
+            <td>Sequential testing</td>
+            <td>Angular product teams ship fast. Waiting for a fixed sample size leads to premature calls or stale experiments</td>
+            <td>Check results at any point during a live test without inflating false positives, make decisions on your own cadence, not a statistician's schedule</td>
+          </tr>
+          <tr>
+            <td>Multi-arm bandits</td>
+            <td>Standard 50/50 splits during high-traffic events mean sending half your users to a losing variant for the entire test duration</td>
+            <td>Convert automatically shifts traffic toward the winning variant in real time, maximizing conversions while the test is still running</td>
+          </tr>
+          <tr>
+            <td>Frequentist + Bayesian stats</td>
+            <td>Angular engineering and growth teams speak different statistical languages. Most tools force one model</td>
+            <td>Run the same experiment under both frameworks: engineers get p-values; growth teams get probability-to-beat</td>
+          </tr>
+          <tr>
+            <td>DMP / audience targeting</td>
+            <td>Angular apps serving B2B audiences need to test against real business attributes, account tier, pipeline value, plan type, not just browser cookies</td>
+            <td>Pipe in CRM or data warehouse attributes and target segments like "enterprise accounts on trial" or "pipeline over $50K"</td>
+          </tr>
+          <tr>
+            <td>Unsampled reporting</td>
+            <td>Sampled analytics are unreliable for Angular SPAs with complex flows where conversion events fire across multiple virtual page views</td>
+            <td>Every visitor, session, and conversion event counted in full, no sampling gaps, no discrepancies between analytics and experiment results</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="features-closing"><strong>All features are included in every Convert plan.</strong> No enterprise tier required, no feature gating, no "contact sales" to unlock server-side testing or advanced stats models.</p>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section class="use-cases">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Use cases</span>
+      <h2 class="section-h2">How Angular teams use Convert in production</h2>
+      <p class="section-sub">From flicker-free SPA testing to CI/CD-integrated experiment pipelines, here's what it looks like in practice.</p>
+    </div>
+    <div class="uc-rows">
+
+      <!-- Row 1: text left, card right -->
+      <div class="uc-row">
+        <div class="uc-row__copy">
+          <div class="uc-eyebrow">01 &middot; Delivery</div>
+          <h3>Flicker-free testing on Angular SPAs</h3>
+          <p class="uc-desc">Eliminate the variant flash that undermines test integrity by deploying Convert's synchronous loading via Akamai CDN, which intercepts Angular route changes through MutationObserver before the DOM renders to users.</p>
+        </div>
+        <div class="uc-row__card">
+          <div class="card">
+            <div class="card-head">
+              <span class="card-dot" style="background:#EF4444"></span>
+              <span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+              <span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+              <span class="card-title">Angular SPA test delivery</span>
+            </div>
+            <div class="card-body">
+              <div class="timeline-row">
+                <div class="timeline-icon timeline-icon--bad">&#9889;</div>
+                <div>
+                  <div class="timeline-label">Async load on Angular</div>
+                  <div class="timeline-desc">DOM renders first, script fires after bootstrap, visitors see the control before variant applies</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-icon timeline-icon--good">&#10003;</div>
+                <div>
+                  <div class="timeline-label">Convert sync load</div>
+                  <div class="timeline-desc">Script blocks paint, variant applies before Angular renders, clean test data from session start</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-icon timeline-icon--good">&#8635;</div>
+                <div>
+                  <div class="timeline-label">Route change detected</div>
+                  <div class="timeline-desc">MutationObserver fires on Angular router events, experiment re-evaluates, no missed impressions</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: card left, text right (--flip) -->
+      <div class="uc-row uc-row--flip">
+        <div class="uc-row__copy">
+          <div class="uc-eyebrow">02 &middot; Full-stack</div>
+          <h3>Full-stack feature flag rollouts</h3>
+          <p class="uc-desc">Ship new Angular features to 10%, 25%, or 100% of users safely by coupling Convert's server-side SDK with feature flags, keeping untested logic out of the client bundle entirely until you're confident in the outcome.</p>
+        </div>
+        <div class="uc-row__card">
+          <div class="card card--dark">
+            <div class="card-head">
+              <span class="card-dot"></span>
+              <span class="card-dot" style="margin-left:4px"></span>
+              <span class="card-dot" style="margin-left:4px"></span>
+              <span class="card-title">feature-flags.ts</span>
+            </div>
+            <div class="card-body">
+<pre class="code-block"><span class="tok-keyword">import</span> { <span class="tok-type">ConvertSDK</span> } <span class="tok-keyword">from</span> <span class="tok-string">'@convertcom/js-sdk'</span>;
+
+<span class="tok-keyword">const</span> <span class="tok-var">sdk</span> = <span class="tok-keyword">new</span> <span class="tok-type">ConvertSDK</span>({ <span class="tok-fn">sdkKey</span>: <span class="tok-var">SDK_KEY</span> });
+<span class="tok-keyword">await</span> <span class="tok-var">sdk</span>.<span class="tok-fn">onReady</span>();
+
+<span class="tok-comment">// Phase 1: 10% rollout</span>
+<span class="tok-keyword">const</span> <span class="tok-var">ctx</span> = <span class="tok-var">sdk</span>.<span class="tok-fn">createContext</span>(<span class="tok-string">'user-123'</span>);
+<span class="tok-keyword">const</span> <span class="tok-var">newDashboard</span> = <span class="tok-var">ctx</span>.<span class="tok-fn">isFeatureEnabled</span>(
+  <span class="tok-string">'new-angular-dashboard'</span>
+);
+
+<span class="tok-keyword">if</span> (<span class="tok-var">newDashboard</span>) {
+  <span class="tok-comment">// Load new component, keep old out of bundle</span>
+  <span class="tok-keyword">const</span> { <span class="tok-type">NewDashboard</span> } = <span class="tok-keyword">await</span> <span class="tok-fn">import</span>(
+    <span class="tok-string">'./new-dashboard.component'</span>
+  );
+}
+
+<span class="tok-comment">// Phase 2: expand to 100% on confidence</span>
+<span class="tok-comment">// Update flag in Convert, no code deploy</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3: text left, card right -->
+      <div class="uc-row">
+        <div class="uc-row__copy">
+          <div class="uc-eyebrow">03 &middot; Agencies</div>
+          <h3>CRO agency multi-client test management</h3>
+          <p class="uc-desc">Manage simultaneous Angular A/B experiments across multiple client projects from a single Convert account, with centralized billing, per-project goal tracking, and unsampled reporting that holds up in client review meetings.</p>
+        </div>
+        <div class="uc-row__card">
+          <div class="card">
+            <div class="card-head">
+              <span class="card-dot" style="background:#EF4444"></span>
+              <span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+              <span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+              <span class="card-title">Agency client projects</span>
+            </div>
+            <div class="card-body">
+              <div class="client-row">
+                <div class="client-dot" style="background:#0066FF"></div>
+                <div class="client-info">
+                  <div class="client-name">Angular Commerce Co.</div>
+                  <div class="client-desc">BigCommerce SPA &middot; checkout test running</div>
+                </div>
+                <span class="client-role role--owner">Owner</span>
+              </div>
+              <div class="client-row">
+                <div class="client-dot" style="background:#7C3AED"></div>
+                <div class="client-info">
+                  <div class="client-name">Orbit B2B SaaS</div>
+                  <div class="client-desc">Angular onboarding &middot; 3 active tests</div>
+                </div>
+                <span class="client-role role--editor">Editor</span>
+              </div>
+              <div class="client-row">
+                <div class="client-dot" style="background:#10B981"></div>
+                <div class="client-info">
+                  <div class="client-name">Health Platform</div>
+                  <div class="client-desc">Angular app &middot; HIPAA-compliant</div>
+                </div>
+                <span class="client-role role--viewer">Viewer</span>
+              </div>
+            </div>
+            <div class="client-footer">Centralized billing &middot; Per-project isolation</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 4: card left, text right (--flip) -->
+      <div class="uc-row uc-row--flip">
+        <div class="uc-row__copy">
+          <div class="uc-eyebrow">04 &middot; CI/CD</div>
+          <h3>Automated experiment pipelines via API</h3>
+          <p class="uc-desc">Integrate Convert's REST API directly into your Angular CI/CD pipeline to create, update, and archive experiments programmatically, removing UI dependency and keeping your experimentation workflow version-controlled alongside your application code.</p>
+        </div>
+        <div class="uc-row__card">
+          <div class="card">
+            <div class="card-head">
+              <span class="card-dot" style="background:#EF4444"></span>
+              <span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+              <span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+              <span class="card-title">Angular experiment pipeline</span>
+            </div>
+            <div class="card-body">
+              <div class="pipeline-step">
+                <div class="pipeline-num step--done">&#10003;</div>
+                <div>
+                  <div class="pipeline-label">Experiment defined in code</div>
+                  <div class="pipeline-desc">Created via REST API V2 in CI/CD pipeline</div>
+                  <span class="pipeline-badge">REST API V2</span>
+                </div>
+              </div>
+              <div class="pipeline-step">
+                <div class="pipeline-num step--done">&#10003;</div>
+                <div>
+                  <div class="pipeline-label">QA in staging</div>
+                  <div class="pipeline-desc">Variant previewed against Angular dev build</div>
+                  <span class="pipeline-badge">MCP Server</span>
+                </div>
+              </div>
+              <div class="pipeline-step">
+                <div class="pipeline-num step--active">&#9679;</div>
+                <div>
+                  <div class="pipeline-label">Promoted to production</div>
+                  <div class="pipeline-desc">Monitored in Cursor via MCP co-pilot</div>
+                  <span class="pipeline-badge">Cursor</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- RELATED ARTICLES -->
+<section class="related-articles">
+  <div class="container">
+    <span class="section-label">From the blog</span>
+    <h2 class="section-h2">Further reading on Angular testing</h2>
+    <div class="ra-grid">
+
+      <a href="#" class="ra-card">
+        <span class="ra-tag tag--amber">Pain point</span>
+        <div class="ra-title">Why A/B testing tools break on Angular SPAs, and what to do about it</div>
+        <div class="ra-meta">
+          <span>6 min read</span>
+          <span class="ra-read">Read &#8594;</span>
+        </div>
+      </a>
+
+      <a href="#" class="ra-card">
+        <span class="ra-tag tag--blue">Technical guide</span>
+        <div class="ra-title">MutationObserver-based SPA testing: how Convert handles Angular route changes</div>
+        <div class="ra-meta">
+          <span>7 min read</span>
+          <span class="ra-read">Read &#8594;</span>
+        </div>
+      </a>
+
+      <a href="#" class="ra-card">
+        <span class="ra-tag tag--green">Developer guide</span>
+        <div class="ra-title">Code-first A/B testing for Angular teams: a practical setup guide</div>
+        <div class="ra-meta">
+          <span>5 min read</span>
+          <span class="ra-read">Read &#8594;</span>
+        </div>
+      </a>
+
+      <a href="#" class="ra-card">
+        <span class="ra-tag tag--violet">Full-stack</span>
+        <div class="ra-title">The full-stack experimentation architecture for Angular and Node.js apps</div>
+        <div class="ra-meta">
+          <span>9 min read</span>
+          <span class="ra-read">Read &#8594;</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="container">
+    <div class="faq-wrap">
+      <div class="section-header" style="text-align:center;">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-h2">Common questions about Convert and Angular</h2>
+      </div>
+      <div class="faq-list">
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-num">01</span>
+            <span class="faq-question">Does Convert support Angular SPAs out of the box, or does it need custom configuration?</span>
+            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="faq-a">
+            <p>Convert supports Angular SPAs natively. The platform uses MutationObserver to detect DOM changes triggered by Angular's rendering cycle and client-side router, so there's no custom configuration required to handle route transitions. You install the Convert snippet, and it tracks Angular page changes the same way it would track a traditional full-page reload, without needing to hook into Angular's lifecycle events manually.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-num">02</span>
+            <span class="faq-question">How does Convert prevent the flicker effect on Angular applications?</span>
+            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="faq-a">
+            <p>Convert loads synchronously via Akamai CDN, which means the snippet executes before Angular bootstraps and before the initial paint. This prevents the flicker-on-load problem where visitors briefly see the control variant before the test variant applies. For route changes within the Angular app, MutationObserver detects the DOM update and applies the experiment modification before the user sees the new view. The result is clean variant delivery with no flash of original content at any point in the session.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-num">03</span>
+            <span class="faq-question">Can I use JS Conditions to target Angular component state or router events?</span>
+            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="faq-a">
+            <p>Yes. Convert's JS Conditions accept arbitrary JavaScript, so you can write targeting logic that references Angular's router, component state, or injected service values. You're not limited to URL matching or cookie values. A JS Condition can evaluate Angular router events, check a value exposed on the window object by your application, or run any other synchronous JavaScript check before deciding whether to include a visitor in an experiment. This feature is included on standard Convert plans and is not gated behind an enterprise tier.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-num">04</span>
+            <span class="faq-question">Does the Convert JS SDK work with Angular's module system and tree-shaking?</span>
+            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="faq-a">
+            <p>Yes. The @convertcom/js-sdk package is distributed as an ES module and is compatible with Angular's build system and tree-shaking. For client-side use, you can import only the functions you need. For server-side or Node.js use within an Angular Universal (SSR) setup, the SDK exports a separate entry point designed for Node environments. Bundle size impact is minimal because unused SDK features are excluded from the production build automatically.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-num">05</span>
+            <span class="faq-question">Can Convert run server-side experiments on the APIs powering an Angular app?</span>
+            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="faq-a">
+            <p>Yes. Convert supports full-stack and server-side experimentation. You can run experiments at the API layer, on recommendation logic, pricing calculations, or any backend service that Angular's frontend consumes. The server-side SDK integrates with Node.js backends and works alongside Angular Universal for SSR use cases. Experiment results from server-side and client-side tests appear in the same unified dashboard, so you're not managing separate reporting streams.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-num">06</span>
+            <span class="faq-question">How does Convert handle experiment assignment for users navigating across multiple Angular routes?</span>
+            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="faq-a">
+            <p>Variant assignment is persistent across route changes within the same session. Convert sets a first-party cookie on the visitor's first exposure, and that assignment is honored for subsequent route changes within the Angular app. MutationObserver re-evaluates targeting conditions on each route change, but the variant assignment for a visitor already in an experiment remains stable. This prevents users from seeing different variants as they navigate between views in the app.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-num">07</span>
+            <span class="faq-question">What stats models does Convert support, and do I need to upgrade to access Bayesian testing?</span>
+            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="faq-a">
+            <p>Convert includes Frequentist, Bayesian, and Sequential testing models on every plan. There is no upgrade required to access Bayesian or Sequential testing. Frequentist testing gives you p-values and confidence intervals, which most engineering teams prefer. Bayesian testing gives you probability-to-beat, which is more intuitive for business stakeholders. Sequential testing lets you evaluate results at any point during a running experiment without inflating false positive rates, which is useful for teams that can't wait for a fixed sample size before making decisions.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-num">08</span>
+            <span class="faq-question">Can Convert integrate with the CI/CD pipeline we already use to ship our Angular app?</span>
+            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="faq-a">
+            <p>Yes. Convert's REST API V2 is designed for programmatic access from CI/CD environments. You can create experiments, update variants, manage goals, and pull reporting data entirely through the API without touching the Convert dashboard. The MCP server adds a layer of integration for AI-assisted development workflows, letting your team manage experiments directly from tools like Cursor or other MCP-compatible editors. Both the REST API and the MCP server are available on standard plans.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-num">09</span>
+            <span class="faq-question">How does Convert handle data privacy for Angular apps in regulated industries?</span>
+            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="faq-a">
+            <p>Convert is ISO 27001 certified, SOC-2 compliant, HIPAA compliant, GDPR compliant, and CCPA compliant. It has had zero security breaches in its 16-year history. For regulated industries like healthcare, insurance, and mental health, Convert supports data processing agreements and offers configuration options to minimize PII collection. You can use Convert in HIPAA-covered environments. Experiment data is unsampled and stored without sharing with third-party advertising networks.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-num">10</span>
+            <span class="faq-question">What does the onboarding process look like for an Angular team that's never used Convert before?</span>
+            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="faq-a">
+            <p>The 15-day free trial gives you full access to every feature from day one, including server-side testing, JS Conditions, and both stats engines. There's no feature gating during the trial. Most Angular teams have their first experiment running within a few days of signing up. Convert's support team is available throughout onboarding with an average first response time of 7 minutes, reached by a human engineer who can help with Angular-specific implementation questions. You can also access the SDK quickstart documentation, REST API reference, and MCP server setup guide without a sales call.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="nav__logo-mark" style="width:26px;height:26px;border-radius:6px;">
+          <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
+            <path d="M9 3.5C6 3.5 3.5 6 3.5 9C3.5 12 6 14.5 9 14.5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <path d="M12 6.5C13.5 7.5 14.5 8.5 14.5 9C14.5 11 12 13 9 13.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 1.5"/>
+          </svg>
+        </div>
+        <span style="font-size:14px;font-weight:600;color:var(--ink-900);">Convert</span>
+      </div>
+      <ul class="footer__links">
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Security</a></li>
+        <li><a href="#">Docs</a></li>
+        <li><a href="#">Status</a></li>
+      </ul>
+      <span class="footer__copy">&copy; 2025 Convert.com. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleFaq(btn) {
+  var item = btn.parentElement;
+  var isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(el) {
+    el.classList.remove('open');
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+  }
+}
+</script>
+
+</body>
+</html>

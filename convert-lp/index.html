@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convert Landing Pages</title>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Geist',system-ui,sans-serif;background:#FAFAF7;color:#2A3442;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+    .header{background:rgba(250,250,247,.94);backdrop-filter:blur(14px);border-bottom:1px solid #E7EBF1;padding:0 32px;height:60px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
+    .logo-mark{width:26px;height:26px;border-radius:7px;background:#0066FF;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .logo-mark svg{display:block}
+    .logo-text{font-size:16px;font-weight:700;color:#2A3442}
+    .logo-sep{font-size:14px;color:#D0D7E1;margin:0 6px}
+    .logo-sub{font-size:14px;font-weight:500;color:#7E8AA0}
+    .main{flex:1;padding:64px 32px;max-width:880px;margin:0 auto;width:100%}
+    .eyebrow{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#7E8AA0;margin-bottom:10px}
+    h1{font-size:clamp(26px,3vw,36px);font-weight:700;letter-spacing:-.5px;color:#2A3442;margin-bottom:12px;line-height:1.15}
+    .sub{font-size:15px;color:#586478;line-height:1.7;margin-bottom:48px;max-width:560px}
+    .pages{display:flex;flex-direction:column;gap:16px}
+    .page-card{background:radial-gradient(ellipse at top left,#EEF4FF 0%,#fff 55%);border:1px solid #E7EBF1;border-radius:14px;padding:0;overflow:hidden;display:grid;grid-template-columns:1fr auto;align-items:stretch;text-decoration:none;transition:box-shadow .2s,transform .2s}
+    .page-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.08);transform:translateY(-2px)}
+    .page-card__body{padding:24px 28px}
+    .page-card__tag{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:4px;display:inline-flex;margin-bottom:12px}
+    .tag--feature{background:#EEF4FF;color:#0066FF;border:1px solid #DBEAFE}
+    .tag--bandit{background:#EDE9FE;color:#7C3AED;border:1px solid #C4B5FD}
+    .tag--framework{background:#EDFAF5;color:#059669;border:1px solid #6EE7B7}
+    .page-card__title{font-size:18px;font-weight:700;color:#2A3442;margin-bottom:8px;line-height:1.3}
+    .page-card__desc{font-size:14px;color:#586478;line-height:1.6}
+    .page-card__cta{padding:24px 28px;display:flex;align-items:center;border-left:1px solid #E7EBF1;background:#F4F6F9}
+    .page-card__link{font-size:13px;font-weight:700;color:#0066FF;white-space:nowrap}
+    .footer{border-top:1px solid #E7EBF1;padding:28px 32px;text-align:center;font-size:12px;color:#A6B1C2;background:#F5F4EE}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8a5 5 0 1 0 10 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><path d="M8 3v5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+    <span class="logo-text">Convert</span>
+    <span class="logo-sep">/</span>
+    <span class="logo-sub">Landing pages</span>
+  </header>
+  <main class="main">
+    <div class="eyebrow">Convert.com — AUQ project</div>
+    <h1>Landing page designs</h1>
+    <p class="sub">Three landing pages built from approved copy. Each follows the Convert design system — Geist Sans, cream surfaces, Z-pattern sections, and the full brand token set.</p>
+    <div class="pages">
+      <a href="ab-testing-software.html" class="page-card">
+        <div class="page-card__body">
+          <div class="page-card__tag tag--feature">Core product</div>
+          <div class="page-card__title">A/B testing software</div>
+          <div class="page-card__desc">Full-platform landing page covering all nine power features, statistical models, and team use cases. Targets teams evaluating Convert as their primary A/B testing tool.</div>
+        </div>
+        <div class="page-card__cta"><span class="page-card__link">View page →</span></div>
+      </a>
+      <a href="multi-arm-bandit-cro-tools.html" class="page-card">
+        <div class="page-card__body">
+          <div class="page-card__tag tag--bandit">Feature page</div>
+          <div class="page-card__title">Multi-arm bandit CRO tools</div>
+          <div class="page-card__desc">Feature-specific landing page focused on adaptive traffic allocation. Targets teams evaluating MAB capability and comparing Convert against enterprise-only alternatives.</div>
+        </div>
+        <div class="page-card__cta"><span class="page-card__link">View page →</span></div>
+      </a>
+      <a href="angular-ab-testing-tools.html" class="page-card">
+        <div class="page-card__body">
+          <div class="page-card__tag tag--framework">Framework page</div>
+          <div class="page-card__title">Angular A/B testing tools</div>
+          <div class="page-card__desc">Framework-specific landing page for Angular teams. Covers MutationObserver SPA support, CI/CD integration, and the full Convert feature set framed around Angular's specific challenges.</div>
+        </div>
+        <div class="page-card__cta"><span class="page-card__link">View page →</span></div>
+      </a>
+    </div>
+  </main>
+  <footer class="footer">Convert.com landing pages — built by AUQ Analytics &amp; Growth Consulting</footer>
+</body>
+</html>
