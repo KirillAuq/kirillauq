@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABM Website Personalization — Convert Experiences</title>
+  <meta name="description" content="Convert Experiences lets B2B teams run ABM website personalization for named accounts using IP targeting, CRM data, and integrations with 6Sense and Demandbase. No extra tools required.">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue-600:#0066FF; --blue-700:#0052CC;
+      --blue-50:#EEF4FF;  --blue-100:#DBEAFE; --blue-200:#E0E7FF;
+      --violet-50:#EDE9FE; --violet-100:#F5F0FF; --violet-200:#C4B5FD;
+      --violet-600:#7C3AED; --violet-700:#6D28D9; --violet-800:#5B21B6; --violet-900:#4C1D95;
+      --green-50:#EDFAF5; --green-400:#6EE7B7; --green-500:#10B981; --green-600:#059669;
+      --orange-50:#FFF7ED; --orange-400:#FB923C; --orange-500:#F97316;
+      --ink-900:#2A3442; --ink-800:#3C4659; --ink-700:#586478; --ink-600:#7E8AA0;
+      --ink-500:#A6B1C2; --ink-400:#D0D7E1; --ink-300:#E7EBF1; --ink-200:#F4F6F9; --ink-100:#FFFFFF;
+      --cream:#FAFAF7; --cream-hover:#F5F4EE;
+      --action:var(--blue-600); --action-hover:var(--blue-700);
+      --link:var(--violet-600);
+      --text:var(--ink-900); --text-secondary:var(--ink-700); --text-muted:var(--ink-600);
+      --border:var(--ink-400); --border-subtle:var(--ink-300);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Geist', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--cream);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+    section { border-top: 1px solid var(--ink-300); }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,250,247,0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--ink-300);
+    }
+    .nav__inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; max-width: 1200px; margin: 0 auto; height: 60px;
+    }
+    .nav__logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav__logo-mark {
+      width: 32px; height: 32px; background: var(--blue-600);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    }
+    .nav__wordmark { font-size: 15px; font-weight: 600; color: var(--ink-900); }
+    .nav__links { display: flex; align-items: center; gap: 28px; }
+    .nav__links a {
+      font-size: 14px; font-weight: 500; color: var(--ink-800);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .nav__links a:hover { color: var(--blue-600); }
+    .nav__actions { display: flex; align-items: center; gap: 12px; }
+    .btn-ghost {
+      font-size: 14px; font-weight: 500; color: var(--ink-800);
+      background: none; border: 1px solid var(--ink-400);
+      border-radius: 8px; padding: 8px 18px; cursor: pointer;
+      text-decoration: none; transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-ghost:hover { border-color: var(--blue-600); color: var(--blue-600); }
+    .btn-primary {
+      font-size: 14px; font-weight: 500; color: #fff;
+      background: var(--blue-600); border: none;
+      border-radius: 8px; padding: 8px 18px; cursor: pointer;
+      text-decoration: none; transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--blue-700); }
+    @media (max-width: 900px) { .nav__links { display: none; } }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(160deg, #0B1220 0%, #0D1535 55%, #150D2E 100%);
+      padding: 100px 0 96px;
+      position: relative; overflow: hidden;
+      border-top: none;
+    }
+    .hero__glow-blue {
+      position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse, rgba(0,102,255,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero__glow-violet {
+      position: absolute; bottom: -100px; right: -80px;
+      width: 500px; height: 400px;
+      background: radial-gradient(ellipse, rgba(124,58,237,0.16) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero__inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 40px;
+      display: grid; grid-template-columns: 1fr 400px; gap: 64px; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .hero__eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(196,181,253,0.12); border: 1px solid rgba(196,181,253,0.25);
+      border-radius: 100px; padding: 5px 14px 5px 10px;
+      font-size: 12px; font-weight: 600; color: var(--violet-200);
+      letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 22px;
+    }
+    .hero__dot {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--violet-600);
+      box-shadow: 0 0 8px var(--violet-600);
+    }
+    .hero__h1 {
+      font-size: clamp(30px, 3.8vw, 52px); font-weight: 600;
+      color: #fff; letter-spacing: -1px; line-height: 1.1; margin-bottom: 24px;
+    }
+    .hero__h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--blue-600), var(--violet-600));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero__sub {
+      font-size: 18px; color: rgba(255,255,255,0.65); line-height: 1.65;
+      margin-bottom: 36px; max-width: 560px;
+    }
+    .hero__ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-hero-primary {
+      background: var(--blue-600); color: #fff; font-size: 15px; font-weight: 600;
+      border: none; border-radius: 10px; padding: 14px 28px; cursor: pointer;
+      text-decoration: none; transition: background 0.15s;
+    }
+    .btn-hero-primary:hover { background: var(--blue-700); }
+    .btn-hero-secondary {
+      background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.88);
+      font-size: 15px; font-weight: 500; border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 10px; padding: 14px 28px; cursor: pointer;
+      text-decoration: none; transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-hero-secondary:hover { background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.3); }
+    .hero__form-card {
+      background: var(--cream); border: 1px solid var(--ink-300);
+      border-radius: 16px; padding: 32px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.22), 0 2px 8px rgba(0,0,0,.1);
+    }
+    .hero__form-title {
+      font-size: 16px; font-weight: 600; color: var(--ink-900);
+      margin-bottom: 22px; line-height: 1.4;
+    }
+    .form-group { margin-bottom: 14px; }
+    .form-label { font-size: 13px; font-weight: 500; color: var(--ink-700); display: block; margin-bottom: 6px; }
+    .form-input {
+      width: 100%; background: var(--ink-100); border: 1px solid var(--ink-300);
+      border-radius: 8px; padding: 10px 14px; font-size: 14px;
+      font-family: inherit; color: var(--ink-900);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .form-input:focus {
+      outline: none; border-color: var(--blue-600);
+      box-shadow: 0 0 0 3px rgba(0,102,255,.12);
+    }
+    .form-input::placeholder { color: var(--ink-500); }
+    .form-submit {
+      width: 100%; background: var(--blue-600); color: #fff;
+      border: none; border-radius: 8px; padding: 12px 20px;
+      font-size: 14px; font-weight: 600; font-family: inherit;
+      cursor: pointer; margin-top: 6px; transition: background 0.15s;
+    }
+    .form-submit:hover { background: var(--blue-700); }
+    .form-footer {
+      text-align: center; font-size: 11.5px; color: var(--ink-600);
+      margin-top: 14px; line-height: 1.5;
+    }
+    @media (max-width: 860px) {
+      .hero__inner { grid-template-columns: 1fr; }
+      .hero__form-card { max-width: 480px; }
+    }
+
+    /* TRUST STRIP */
+    .trust-strip { background: var(--ink-100); padding: 15px 0; }
+    .trust-strip__inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 40px;
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    .trust-strip__label {
+      font-size: 11px; font-weight: 600; color: var(--ink-600);
+      text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap;
+    }
+    .trust-divider { width: 1px; height: 18px; background: var(--ink-300); flex-shrink: 0; }
+    .trust-items { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .trust-item { display: flex; align-items: center; gap: 7px; }
+    .trust-item span { font-size: 13px; font-weight: 500; color: var(--ink-700); }
+
+    /* FOR WHOM */
+    .for-whom { background: var(--ink-100); padding: 96px 0; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-eyebrow {
+      font-size: 11px; font-weight: 600; color: var(--violet-600);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+    }
+    .section-h2 {
+      font-size: clamp(26px, 3vw, 36px); font-weight: 700;
+      color: var(--ink-900); letter-spacing: -0.5px; line-height: 1.15;
+    }
+    .for-whom__stack {
+      display: flex; flex-direction: column;
+      border: 1px solid var(--ink-300); border-radius: 16px; overflow: hidden;
+    }
+    .fw-card { display: grid; grid-template-columns: 300px 1fr; }
+    .fw-card:not(:last-child) { border-bottom: 1px solid var(--ink-300); }
+    .fw-card__left {
+      padding: 36px 32px; border-right: 1px solid var(--ink-300);
+      background: radial-gradient(ellipse at top left, var(--blue-50) 0%, var(--ink-100) 70%);
+    }
+    .fw-card__right {
+      padding: 36px 40px; display: flex; flex-direction: column; justify-content: center;
+      background: var(--ink-100);
+    }
+    .fw-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: var(--blue-50); display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .fw-eyebrow {
+      font-size: 11px; font-weight: 600; color: var(--violet-600);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;
+    }
+    .fw-h3 {
+      font-size: 19px; font-weight: 700; color: var(--ink-900);
+      letter-spacing: -0.3px; line-height: 1.25;
+    }
+    .fw-body { font-size: 15px; color: var(--ink-700); line-height: 1.65; margin-bottom: 18px; }
+    .bullet-list {
+      list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 22px;
+    }
+    .bullet-list li {
+      display: flex; align-items: flex-start; gap: 9px;
+      font-size: 15px; color: var(--ink-700); line-height: 1.5;
+    }
+    .bullet-list li::before {
+      content: ''; flex-shrink: 0; width: 16px; height: 16px; margin-top: 1px;
+      background: var(--blue-50); border-radius: 50%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3 8.5l3 3 7-7' stroke='%230066FF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-size: contain;
+    }
+    .fw-link {
+      font-size: 14px; font-weight: 600; color: var(--violet-600);
+      text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
+      transition: gap 0.15s;
+    }
+    .fw-link:hover { gap: 8px; }
+    @media (max-width: 860px) {
+      .fw-card { grid-template-columns: 1fr; }
+      .fw-card__left { border-right: none; border-bottom: 1px solid var(--ink-300); }
+    }
+
+    /* WHY CONVERT */
+    .why-convert { background: var(--cream); padding: 96px 0; }
+    .why-rows { display: flex; flex-direction: column; gap: 80px; margin-top: 64px; }
+    .why-row { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    .why-row--flip .why-row__card { order: -1; }
+    .why-eyebrow {
+      font-size: 11px; font-weight: 600; color: var(--violet-600);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;
+    }
+    .why-h3 {
+      font-size: 26px; font-weight: 700; color: var(--ink-900);
+      letter-spacing: -0.3px; line-height: 1.2; margin-bottom: 16px;
+    }
+    .why-lead { font-size: 15px; color: var(--ink-700); line-height: 1.65; margin-bottom: 22px; }
+    .why-row__card {
+      background: radial-gradient(ellipse at top left, var(--blue-50) 0%, var(--ink-100) 55%);
+      border: 1px solid var(--ink-300); border-radius: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05); overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .why-row__card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); transform: translateY(-2px); }
+    .card-head {
+      display: flex; align-items: center;
+      padding: 12px 16px; border-bottom: 1px solid var(--ink-300);
+    }
+    .card-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .card-dot + .card-dot { margin-left: 5px; }
+    .card-title { font-size: 12px; font-weight: 500; color: var(--ink-600); margin-left: 10px; }
+    .card-body { padding: 20px; }
+    .stat-panel { background: var(--ink-200); padding: 14px 22px; border-top: 1px solid var(--ink-300); }
+    .stat-panel p { font-size: 13px; color: var(--ink-700); line-height: 1.5; }
+    .stat-panel strong { color: var(--blue-600); }
+    @media (max-width: 860px) {
+      .why-row { grid-template-columns: 1fr; }
+      .why-row--flip .why-row__card { order: 0; }
+    }
+
+    /* Compare table card */
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .compare-table thead tr { background: var(--ink-900); }
+    .compare-table thead th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); }
+    .compare-table tbody tr:nth-child(odd) { background: rgba(255,255,255,0.5); }
+    .compare-table tbody tr:nth-child(even) { background: rgba(238,244,255,0.4); }
+    .compare-table td { padding: 10px 14px; color: var(--ink-800); vertical-align: middle; }
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 100px; font-size: 11.5px; font-weight: 600; }
+    .badge-yes { background: var(--green-50); color: var(--green-600); }
+    .badge-gate { background: #FFFBEB; color: #92400E; }
+    .badge-no { background: #FEF2F2; color: #991B1B; }
+
+    /* Timeline card */
+    .timeline-row { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--ink-300); }
+    .timeline-row:last-child { border-bottom: none; }
+    .tl-icon { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+    .tl-icon--bad { background: #FEF2F2; color: #DC2626; }
+    .tl-icon--good { background: var(--green-50); color: var(--green-600); }
+    .tl-label { font-size: 13px; font-weight: 600; color: var(--ink-800); margin-bottom: 3px; }
+    .tl-desc { font-size: 11.5px; color: var(--ink-600); line-height: 1.5; }
+
+    /* Dark code card */
+    .dark-code-card {
+      background: #0B1220; border: 1px solid transparent;
+      border-radius: 14px; overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .dark-code-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.2); transform: translateY(-2px); }
+    .dark-code-card .card-head { background: #0B1220; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .dark-code-card .card-dot { background: #334155; }
+    .dark-code-card .card-title { color: #475569; }
+    pre { font-family: 'Fira Code', 'Courier New', monospace; font-size: 12px; line-height: 1.7; padding: 20px; overflow-x: auto; color: #E2E8F0; }
+    .tok-comment { color: #64748B; }
+    .tok-kw { color: #93C5FD; }
+    .tok-str { color: #86EFAC; }
+    .tok-fn { color: #FCD34D; }
+    .tok-var { color: #F0ABFC; }
+    .tok-num { color: #FCA5A5; }
+
+    /* API BANNER */
+    .api-banner {
+      background: linear-gradient(120deg, var(--violet-900) 0%, var(--violet-700) 50%, var(--blue-600) 100%);
+      padding: 72px 0; border-top: none;
+    }
+    .api-banner__inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 40px;
+      display: flex; align-items: center; justify-content: space-between; gap: 40px;
+    }
+    .api-banner__eyebrow { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+    .api-banner__h2 { font-size: clamp(26px, 3vw, 36px); font-weight: 700; color: #fff; letter-spacing: -0.5px; line-height: 1.15; margin-bottom: 10px; }
+    .api-banner__sub { font-size: 15px; color: rgba(255,255,255,0.65); margin-bottom: 18px; }
+    .api-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px; padding: 8px 14px;
+      font-family: 'Fira Code', monospace; font-size: 13px; color: var(--green-400);
+    }
+    .btn-outline-white {
+      background: transparent; color: #fff; font-size: 14px; font-weight: 600;
+      border: 2px solid rgba(255,255,255,0.55); border-radius: 10px;
+      padding: 12px 26px; cursor: pointer; text-decoration: none; white-space: nowrap;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .btn-outline-white:hover { border-color: #fff; background: rgba(255,255,255,0.08); }
+    @media (max-width: 700px) { .api-banner__inner { flex-direction: column; } }
+
+    /* FEATURES TABLE */
+    .features-table-section { background: var(--ink-100); padding: 96px 0; }
+    .table-wrapper { border-radius: 14px; overflow-x: auto; border: 1px solid var(--ink-300); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .features-tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .features-tbl thead tr { background: var(--ink-900); }
+    .features-tbl thead th { color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600; padding: 14px 20px; text-align: left; white-space: nowrap; }
+    .features-tbl tbody tr:nth-child(odd) { background: var(--ink-100); }
+    .features-tbl tbody tr:nth-child(even) { background: var(--cream); }
+    .features-tbl td { padding: 18px 20px; line-height: 1.6; vertical-align: top; border-bottom: 1px solid var(--ink-300); }
+    .features-tbl tbody tr:last-child td { border-bottom: none; }
+    .col-feature { font-weight: 600; color: var(--ink-900); font-size: 14px; }
+    .col-what { border-left: 3px solid var(--orange-400); }
+    .col-why { border-left: 3px solid var(--blue-600); }
+    .col-risk { border-left: 3px solid var(--green-500); }
+    .features-closing { max-width: 760px; margin: 40px auto 0; text-align: center; font-size: 15px; color: var(--ink-700); line-height: 1.7; }
+    .features-closing strong { color: var(--ink-900); }
+
+    /* USE CASES — 2x2 grid */
+    .use-cases { background: var(--cream); padding: 96px 0; }
+    .uc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 56px; }
+    .uc-card {
+      background: var(--ink-100); border: 1px solid var(--ink-300);
+      border-radius: 14px; padding: 32px;
+      transition: box-shadow 0.2s, transform 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .uc-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at top left, var(--blue-50) 0%, transparent 55%);
+      opacity: 0; transition: opacity 0.2s; pointer-events: none;
+    }
+    .uc-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); transform: translateY(-2px); }
+    .uc-card:hover::before { opacity: 1; }
+    .uc-card__num {
+      font-size: 11px; font-weight: 700; color: var(--ink-500);
+      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .uc-card__h3 {
+      font-size: 18px; font-weight: 700; color: var(--ink-900);
+      letter-spacing: -0.3px; line-height: 1.25; margin-bottom: 12px;
+    }
+    .uc-card__desc { font-size: 15px; color: var(--ink-700); line-height: 1.65; }
+    @media (max-width: 700px) { .uc-grid { grid-template-columns: 1fr; } }
+
+    /* FAQ */
+    .faq { background: var(--ink-100); padding: 96px 0; }
+    .faq__inner { max-width: 860px; margin: 0 auto; }
+    .faq__header { text-align: center; margin-bottom: 48px; }
+    .faq__stack { border: 1px solid var(--ink-300); border-radius: 14px; overflow: hidden; }
+    .faq__item { border-bottom: 1px solid var(--ink-300); }
+    .faq__item:last-child { border-bottom: none; }
+    .faq__question {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px; cursor: pointer; transition: background 0.15s;
+      background: none; border: none; width: 100%; text-align: left; gap: 16px;
+    }
+    .faq__question:hover { background: var(--cream); }
+    .faq__question.open { background: var(--blue-50); }
+    .faq__q-left { display: flex; align-items: center; gap: 14px; }
+    .faq__num { font-size: 12px; font-weight: 700; color: var(--ink-500); width: 24px; flex-shrink: 0; transition: color 0.15s; }
+    .faq__question.open .faq__num { color: var(--blue-600); }
+    .faq__q-text { font-size: 15px; font-weight: 600; color: var(--ink-900); line-height: 1.4; text-align: left; }
+    .faq__chevron { flex-shrink: 0; width: 18px; height: 18px; color: var(--ink-500); transition: transform 0.25s, color 0.15s; }
+    .faq__question.open .faq__chevron { transform: rotate(180deg); color: var(--blue-600); }
+    .faq__answer { display: none; padding: 0 24px 22px 62px; font-size: 15px; color: var(--ink-700); line-height: 1.7; }
+    .faq__answer.open { display: block; }
+    .faq__answer p + p { margin-top: 10px; }
+
+    /* FOOTER */
+    .footer { background: var(--cream-hover); padding: 28px 0; border-top: 1px solid var(--ink-300); }
+    .footer__inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer__logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .footer__logo-mark { width: 26px; height: 26px; background: var(--blue-600); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+    .footer__wordmark { font-size: 14px; font-weight: 600; color: var(--ink-800); }
+    .footer__links { display: flex; gap: 22px; flex-wrap: wrap; }
+    .footer__links a { font-size: 13px; color: var(--ink-600); text-decoration: none; transition: color 0.15s; }
+    .footer__links a:hover { color: var(--ink-900); }
+    .footer__copy { font-size: 11.5px; color: var(--ink-500); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo">
+      <div class="nav__logo-mark">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M14 4C12.5 2.5 10.4 1.6 8 1.6C4.4 1.6 1.4 4 .5 7.2" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M4 14C5.5 15.5 7.6 16.4 10 16.4C13.6 16.4 16.6 14 17.5 10.8" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="9" cy="9" r="2.5" fill="white"/>
+        </svg>
+      </div>
+      <span class="nav__wordmark">Convert</span>
+    </a>
+    <div class="nav__links">
+      <a href="#">Features</a>
+      <a href="#">Pricing</a>
+      <a href="#">For agencies</a>
+      <a href="#">Docs</a>
+      <a href="#">Blog</a>
+    </div>
+    <div class="nav__actions">
+      <a href="#" class="btn-ghost">Log in</a>
+      <a href="#" class="btn-primary">Start free trial</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero__glow-blue"></div>
+  <div class="hero__glow-violet"></div>
+  <div class="hero__inner">
+    <div class="hero__copy">
+      <div class="hero__eyebrow">
+        <span class="hero__dot"></span>
+        ABM website personalization in Convert Experiences
+      </div>
+      <h1 class="hero__h1">ABM website personalization <em>without rebuilding your site</em></h1>
+      <p class="hero__sub">Convert lets your team personalize headlines, offers, logos, and CTAs for named accounts or firmographic segments, using IP-based targeting or direct integration with 6Sense, Demandbase, or Clearbit Reveal. No separate personalization tool required. No dev ticket for every change. Deploys push live instantly, and your developers get a clean REST API and full programmatic control when they need it.</p>
+      <div class="hero__ctas">
+        <a href="#" class="btn-hero-primary">Start your free 15-day trial</a>
+        <a href="#" class="btn-hero-secondary">Book a demo</a>
+      </div>
+    </div>
+    <div class="hero__form-card">
+      <div class="hero__form-title">See ABM personalization in action, free for 15 days</div>
+      <form>
+        <div class="form-group">
+          <label class="form-label" for="work-email">Work email</label>
+          <input class="form-input" type="email" id="work-email" placeholder="you@company.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="company-url">Company URL</label>
+          <input class="form-input" type="url" id="company-url" placeholder="company.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="monthly-visitors">Monthly visitors</label>
+          <input class="form-input" type="text" id="monthly-visitors" placeholder="e.g. 200,000">
+        </div>
+        <button type="submit" class="form-submit">Start free trial</button>
+      </form>
+      <p class="form-footer">No credit card required. Cancel any time. Onboarding included.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<section class="trust-strip">
+  <div class="trust-strip__inner">
+    <span class="trust-strip__label">Trusted by</span>
+    <div class="trust-divider"></div>
+    <div class="trust-items">
+      <div class="trust-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>40,000+ sites running Convert</span>
+      </div>
+      <div class="trust-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>400,000+ experiences served</span>
+      </div>
+      <div class="trust-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>SOC 2 &middot; ISO 27001 &middot; HIPAA &middot; GDPR</span>
+      </div>
+      <div class="trust-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>7-minute average support response</span>
+      </div>
+      <div class="trust-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>16 years building experimentation infrastructure</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section class="for-whom">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Who it's built for</div>
+      <h2 class="section-h2">ABM personalization works differently depending on your context</h2>
+    </div>
+    <div class="for-whom__stack">
+
+      <!-- Ecommerce -->
+      <div class="fw-card">
+        <div class="fw-card__left">
+          <div class="fw-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#0066FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1.5 1.5h2l2 9h9l1.5-6H5"/>
+              <circle cx="7.5" cy="15" r="1.2" fill="#0066FF" stroke="none"/>
+              <circle cx="12.5" cy="15" r="1.2" fill="#0066FF" stroke="none"/>
+            </svg>
+          </div>
+          <div class="fw-eyebrow">Ecommerce</div>
+          <h3 class="fw-h3">Show high-value accounts the experience that closes them</h3>
+        </div>
+        <div class="fw-card__right">
+          <p class="fw-body">When a target account lands on your site, generic messaging costs you the deal. Convert's ABM personalization lets you swap headlines, hero copy, logos, and CTAs based on IP range or CRM data without a dev ticket. Deploy changes in minutes and measure revenue impact against a clean control group.</p>
+          <ul class="bullet-list">
+            <li>Serve account-specific copy without touching your CMS</li>
+            <li>Target by IP range, firmographic data, or CRM segment</li>
+            <li>Measure lift in revenue per visitor, not just clicks</li>
+          </ul>
+          <a href="#" class="fw-link">Explore for ecommerce <span>&#8594;</span></a>
+        </div>
+      </div>
+
+      <!-- SaaS -->
+      <div class="fw-card">
+        <div class="fw-card__left">
+          <div class="fw-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#0066FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="14" height="10" rx="2"/>
+              <path d="M6 16h6M9 13v3"/>
+            </svg>
+          </div>
+          <div class="fw-eyebrow">SaaS</div>
+          <h3 class="fw-h3">Personalize the trial experience for every account worth winning</h3>
+        </div>
+        <div class="fw-card__right">
+          <p class="fw-body">ABM works harder when the landing page reflects the account's industry, use case, or funnel stage. Convert lets SaaS growth teams target named accounts with tailored onboarding copy, feature emphasis, and social proof, without fragmenting your test data. Unsampled reporting surfaces true trial-to-paid lift.</p>
+          <ul class="bullet-list">
+            <li>Align landing page messaging to each account's use case</li>
+            <li>Run controlled tests alongside personalization with no data compromise</li>
+            <li>Unsampled reporting surfaces true trial-to-paid lift</li>
+          </ul>
+          <a href="#" class="fw-link">Explore for SaaS <span>&#8594;</span></a>
+        </div>
+      </div>
+
+      <!-- Agencies -->
+      <div class="fw-card">
+        <div class="fw-card__left">
+          <div class="fw-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#0066FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="5" r="2.5"/>
+              <path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+              <circle cx="14.5" cy="7" r="1.8"/>
+              <circle cx="3.5" cy="7" r="1.8"/>
+            </svg>
+          </div>
+          <div class="fw-eyebrow">Agencies</div>
+          <h3 class="fw-h3">Run ABM personalization across every client account from one platform</h3>
+        </div>
+        <div class="fw-card__right">
+          <p class="fw-body">Managing ABM personalization across multiple clients means maintaining targeting logic, creative variants, and reporting lanes without cross-contamination. Convert's project structure keeps each client isolated, while Deploys let you push account-specific experiences without waiting on client dev teams. Centralized billing and 7-minute support mean fewer blockers between your team and client results.</p>
+          <ul class="bullet-list">
+            <li>Isolate each client's targeting logic within separate projects</li>
+            <li>Deploy account-specific experiences without client dev dependency</li>
+            <li>Report clean, unsampled results to stakeholders</li>
+          </ul>
+          <a href="#" class="fw-link">Explore for agencies <span>&#8594;</span></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY CONVERT -->
+<section class="why-convert">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Why Convert</div>
+      <h2 class="section-h2">What sets Convert's ABM personalization implementation apart</h2>
+    </div>
+    <div class="why-rows">
+
+      <!-- Row 1: text left / card right -->
+      <div class="why-row">
+        <div class="why-row__copy">
+          <div class="why-eyebrow">01 &middot; Deployment speed</div>
+          <h3 class="why-h3">Run named-account personalization without a developer or an enterprise contract</h3>
+          <p class="why-lead">When an account enters your pipeline, your site should reflect what you already know about them. Convert's Deploys let your team change copy, logos, and messaging based on IP range without filing a dev ticket. Nexus goes further, generating unique personalized URLs per account from a CSV or CRM connection.</p>
+          <ul class="bullet-list">
+            <li>Change copy, logos, and CTAs by IP range without touching your CMS</li>
+            <li>Nexus generates unique account URLs from a CSV or CRM connection</li>
+            <li>Deploys available on Growth and Pro plans, no enterprise contract</li>
+          </ul>
+        </div>
+        <div class="why-row__card">
+          <div class="card-head">
+            <span class="card-dot" style="background:#EF4444"></span>
+            <span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+            <span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+            <span class="card-title">Account personalization deployment</span>
+          </div>
+          <div class="card-body">
+            <div class="timeline-row">
+              <div class="tl-icon tl-icon--bad">&#9889;</div>
+              <div>
+                <div class="tl-label">Generic site, same headline for every account.</div>
+                <div class="tl-desc">Every named account sees the same messaging regardless of industry, deal stage, or pipeline value.</div>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="tl-icon tl-icon--good">&#10003;</div>
+              <div>
+                <div class="tl-label">Deploy pushes account-specific copy, logo, and CTA.</div>
+                <div class="tl-desc">Marketing team changes headline, hero, and CTA for a named-account segment without opening a dev ticket.</div>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="tl-icon tl-icon--good">&#10003;</div>
+              <div>
+                <div class="tl-label">Account sees a page built for them, from the first pixel.</div>
+                <div class="tl-desc">Personalization renders instantly via synchronous Akamai CDN load. No flicker, no fallback flash.</div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-panel">
+            <p><strong>Deploys push live</strong> without a developer or a dev cycle.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: card left / text right (flipped) -->
+      <div class="why-row why-row--flip">
+        <div class="why-row__copy">
+          <div class="why-eyebrow">02 &middot; ABM integrations</div>
+          <h3 class="why-h3">Turn your 6Sense or Demandbase data into live site personalization</h3>
+          <p class="why-lead">Most ABM teams collect account intelligence in one tool and personalize in another, losing signal at every handoff. Convert integrates with 6Sense, Demandbase, Triblio, Clearbit Reveal, and Oracle BlueKai, so your account segments become targeting conditions directly inside the platform. On competing platforms, using your own DMP data requires an enterprise contract. Here, it does not.</p>
+          <ul class="bullet-list">
+            <li>Native integrations with 6Sense, Demandbase, Triblio, Clearbit Reveal, and BlueKai</li>
+            <li>Account segments become live targeting conditions inside Convert</li>
+            <li>DMP integrations included on Pro, no enterprise contract required</li>
+          </ul>
+        </div>
+        <div class="why-row__card">
+          <div class="card-head">
+            <span class="card-dot" style="background:#EF4444"></span>
+            <span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+            <span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+            <span class="card-title">ABM integration availability</span>
+          </div>
+          <div class="card-body">
+            <table class="compare-table">
+              <thead>
+                <tr><th>Capability</th><th>Convert</th><th>Enterprise tools</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>6Sense / Demandbase integration</td>
+                  <td><span class="badge badge-yes">&#10003; Pro</span></td>
+                  <td><span class="badge badge-gate">Enterprise</span></td>
+                </tr>
+                <tr>
+                  <td>IP-range targeting</td>
+                  <td><span class="badge badge-yes">&#10003; Pro</span></td>
+                  <td><span class="badge badge-gate">Enterprise</span></td>
+                </tr>
+                <tr>
+                  <td>CRM/DMP audience segments</td>
+                  <td><span class="badge badge-yes">&#10003; Pro</span></td>
+                  <td><span class="badge badge-gate">Enterprise</span></td>
+                </tr>
+                <tr>
+                  <td>No enterprise contract to access</td>
+                  <td><span class="badge badge-yes">&#10003; Pro</span></td>
+                  <td><span class="badge badge-gate">Enterprise</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="stat-panel">
+            <p><strong>ABM integrations on Pro.</strong> No sales negotiation required.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3: text left / card right -->
+      <div class="why-row">
+        <div class="why-row__copy">
+          <div class="why-eyebrow">03 &middot; Data integrity</div>
+          <h3 class="why-h3">Trust your account-level results and satisfy your legal team at the same time</h3>
+          <p class="why-lead">ABM audiences are small by design. When a reporting tool samples your data, it introduces errors that distort which accounts converted and which did not. Convert counts every visitor and every conversion event without sampling. Zero-breach compliance across GDPR, HIPAA, and SOC 2 means your legal team approves the deployment.</p>
+          <ul class="bullet-list">
+            <li>Every visitor and conversion counted in full, no sampling</li>
+            <li>Zero data breaches, GDPR, HIPAA, ISO 27001, SOC 2 Type 2 compliant</li>
+            <li>EU-based infrastructure in Frankfurt</li>
+          </ul>
+        </div>
+        <div class="dark-code-card">
+          <div class="card-head">
+            <span class="card-dot"></span>
+            <span class="card-dot"></span>
+            <span class="card-dot"></span>
+            <span class="card-title">abm-personalization.ts</span>
+          </div>
+          <pre><span class="tok-comment">// Personalize for a named account using Convert SDK</span>
+<span class="tok-kw">import</span> <span class="tok-var">ConvertSDK</span> <span class="tok-kw">from</span> <span class="tok-str">'@convertcom/js-sdk'</span>;
+
+<span class="tok-kw">const</span> <span class="tok-var">convertSDK</span> = <span class="tok-kw">new</span> <span class="tok-fn">ConvertSDK</span>({ sdkKey: <span class="tok-str">'YOUR_SDK_KEY'</span> });
+
+<span class="tok-comment">// Build context with firmographic account attributes</span>
+<span class="tok-kw">const</span> <span class="tok-var">userContext</span> = <span class="tok-var">convertSDK</span>.<span class="tok-fn">createContext</span>(<span class="tok-str">'visitor-456'</span>, {
+  accountTier:   <span class="tok-str">'tier-1'</span>,
+  industry:      <span class="tok-str">'financial-services'</span>,
+  pipelineStage: <span class="tok-str">'evaluation'</span>,
+});
+
+<span class="tok-comment">// Serve the account-specific homepage variant</span>
+<span class="tok-kw">const</span> <span class="tok-var">variation</span> = <span class="tok-var">userContext</span>.<span class="tok-fn">runExperience</span>(<span class="tok-str">'homepage-abm-variant'</span>);
+
+<span class="tok-comment">// Track the conversion event</span>
+<span class="tok-var">userContext</span>.<span class="tok-fn">trackConversion</span>(<span class="tok-str">'demo_request'</span>);</pre>
+          <div class="stat-panel" style="background:rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.07);">
+            <p style="color:#94A3B8;">Unsampled reporting. Zero breaches. <strong style="color:#93C5FD;">Compliant by default.</strong></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- API BANNER -->
+<section class="api-banner">
+  <div class="api-banner__inner">
+    <div>
+      <div class="api-banner__eyebrow">Developer tools</div>
+      <h2 class="api-banner__h2">Read the API docs</h2>
+      <p class="api-banner__sub">REST API &middot; server-side SDK &middot; quickstart</p>
+      <div class="api-pill">npm install @convertcom/js-sdk</div>
+    </div>
+    <a href="#" class="btn-outline-white">View docs &#8594;</a>
+  </div>
+</section>
+
+<!-- FEATURES TABLE -->
+<section class="features-table-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Platform capabilities</div>
+      <h2 class="section-h2">Everything ABM website personalization actually requires</h2>
+      <p style="font-size:16px;color:var(--ink-700);line-height:1.6;max-width:680px;margin:14px auto 0;">How each Convert feature directly supports account-based personalization, from audience targeting to statistical confidence.</p>
+    </div>
+    <div class="table-wrapper">
+      <table class="features-tbl">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>ABM challenge it solves</th>
+            <th>How Convert delivers it</th>
+            <th>Team benefit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-feature">DMP / Audience Targeting</td>
+            <td class="col-what">Most tools only target returning visitors or mobile users, not the firmographic segments ABM is built around</td>
+            <td class="col-why">Build audiences using CRM and intent data signals: pipeline value, industry, account tier, sales cycle stage</td>
+            <td class="col-risk">Marketing and sales serve genuinely differentiated experiences to top-tier accounts</td>
+          </tr>
+          <tr>
+            <td class="col-feature">JS Conditions <span style="font-size:11px;font-weight:600;color:var(--violet-600);margin-left:4px;">(Pro+)</span></td>
+            <td class="col-what">ABM logic is rarely simple. Multi-signal conditions like "Tier 1 account + LinkedIn campaign + pricing page visit" can't be expressed in dropdown menus</td>
+            <td class="col-why">Write any targeting condition in real JavaScript: UTM params, CRM data via data layer, IP-enrichment attributes</td>
+            <td class="col-risk">Developers implement precise multi-signal audience logic without predefined menu constraints</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Full-Stack / Server-Side Testing <span style="font-size:11px;font-weight:600;color:var(--violet-600);margin-left:4px;">(Pro+)</span></td>
+            <td class="col-what">ABM needs to go beyond copy swaps. Teams need to test pricing pages, gated content logic, and API-driven recommendations for specific accounts</td>
+            <td class="col-why">Run experiments server-side: test pricing tiers for account segments, personalize recommendation engines, A/B test page architecture without client-side flicker</td>
+            <td class="col-risk">Product, engineering, and marketing teams collaborate on deep personalization, not just headline tests</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Feature Flags <span style="font-size:11px;font-weight:600;color:var(--violet-600);margin-left:4px;">(Pro+)</span></td>
+            <td class="col-what">Rolling out account-specific experiences requires controlled, reversible deployment without a full engineering release cycle</td>
+            <td class="col-why">Enable or disable personalized experiences for specific account segments on the fly. Kill a flag instantly if needed</td>
+            <td class="col-risk">GTM and product teams run account-specific rollouts without waiting on engineering sprints</td>
+          </tr>
+          <tr>
+            <td class="col-feature">No-Flicker Loading</td>
+            <td class="col-what">Personalized experiences that flicker briefly showing the default page destroy the credibility of the experience for high-value accounts</td>
+            <td class="col-why">Variants and personalized content render instantly via synchronous Akamai CDN load, zero visible flash</td>
+            <td class="col-risk">High-value account visitors never see behind the curtain, protecting brand trust and the personalized journey</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Sequential Testing <span style="font-size:11px;font-weight:600;color:var(--violet-600);margin-left:4px;">(Pro+)</span></td>
+            <td class="col-what">ABM audiences are small. Waiting for statistical significance is impractical when running experiments on 200 target accounts. Peeking early on standard tests inflates false positives</td>
+            <td class="col-why">Monitor results continuously without corrupting statistical validity. No more choosing between "wait forever" and "trust bad data"</td>
+            <td class="col-risk">ABM teams make faster, confident decisions on personalization experiments even with small traffic volumes</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Multi-Arm Bandits</td>
+            <td class="col-what">During high-stakes campaign moments, a static 50/50 split wastes impressions on an underperforming experience</td>
+            <td class="col-why">Bandit algorithms automatically shift traffic toward the winning variant as data accumulates</td>
+            <td class="col-risk">Revenue teams maximize impact of time-sensitive ABM campaigns. When a personalized hero is winning, the algorithm doubles down</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Frequentist + Bayesian Statistics</td>
+            <td class="col-what">ABM teams and their data counterparts often trust different statistical frameworks. Forcing one model creates friction and misaligned conclusions</td>
+            <td class="col-why">Both Frequentist (p-value) and Bayesian (probability to beat) models are available. Teams choose the framework matching their reporting standards</td>
+            <td class="col-risk">Marketing, data analysts, and C-suite stakeholders all interpret results in the statistical language they trust</td>
+          </tr>
+          <tr>
+            <td class="col-feature">Unsampled Reporting</td>
+            <td class="col-what">Sampled analytics data is dangerous in ABM. When your audience is 300 named accounts, a 10% sample can make a winning variant look flat</td>
+            <td class="col-why">Every visitor, every session, every conversion is captured. 100% of data is reported, no sampling, no extrapolation</td>
+            <td class="col-risk">ABM teams trust the numbers. Complete data for six- and seven-figure pipeline decisions, not a statistical approximation</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="features-closing">
+      <p>DMP targeting, unsampled reporting, and multi-arm bandits are available from the Growth plan. <strong>Sequential Testing, Full-Stack Testing, JS Conditions, and Feature Flags require Pro.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section class="use-cases">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Use cases</div>
+      <h2 class="section-h2">How teams put ABM personalization to work</h2>
+    </div>
+    <div class="uc-grid">
+
+      <div class="uc-card">
+        <div class="uc-card__num">01 &middot; IP targeting</div>
+        <h3 class="uc-card__h3">Personalize Pages by Target Account IP</h3>
+        <p class="uc-card__desc">Replace generic hero copy, logos, and CTAs with account-specific messaging the moment a prospect from a named account lands on your site, using Convert's IP-range targeting inside Deploys. No developer required.</p>
+      </div>
+
+      <div class="uc-card">
+        <div class="uc-card__num">02 &middot; CRM sync</div>
+        <h3 class="uc-card__h3">Sync CRM Segments to Landing Page Variants</h3>
+        <p class="uc-card__desc">Connect HubSpot, Salesforce, or Marketo audience segments directly to Convert's targeting engine so each inbound account sees a page variant built around their industry, deal stage, or firmographic profile.</p>
+      </div>
+
+      <div class="uc-card">
+        <div class="uc-card__num">03 &middot; Outbound ABM</div>
+        <h3 class="uc-card__h3">Deliver 1:1 URLs for Outbound ABM Campaigns</h3>
+        <p class="uc-card__desc">Upload your target account list to Nexus, generate hashed unique landing page URLs per account, and send personalized experiences through email or paid ads without writing a line of code.</p>
+      </div>
+
+      <div class="uc-card">
+        <div class="uc-card__num">04 &middot; Controlled testing</div>
+        <h3 class="uc-card__h3">A/B Test Account-Specific Messaging at Scale</h3>
+        <p class="uc-card__desc">Run controlled experiments on personalized page variants for high-value account segments using unsampled reporting and SRM checks, so you prove which ABM message drives pipeline before committing it as a permanent Deploy.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="container">
+    <div class="faq__inner">
+      <div class="faq__header">
+        <div class="section-eyebrow">FAQ</div>
+        <h2 class="section-h2">Common questions about ABM website personalization</h2>
+      </div>
+      <div class="faq__stack">
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <div class="faq__q-left">
+              <span class="faq__num">01</span>
+              <span class="faq__q-text">Can I run ABM website personalization in Convert without building a separate landing page for every target account?</span>
+            </div>
+            <svg class="faq__chevron" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l5 5 5-5"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p>Yes. Convert includes Deploys, which let you change headlines, logos, messaging, or CTAs for defined audiences using targeting rules instead of separate page builds. If your use case requires unique URLs per lead or account, Convert also offers Nexus for secure 1:1 personalized landing pages.</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <div class="faq__q-left">
+              <span class="faq__num">02</span>
+              <span class="faq__q-text">How does Convert identify ABM audiences if I already use tools like 6Sense, Demandbase, Clearbit, or my CRM?</span>
+            </div>
+            <svg class="faq__chevron" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l5 5 5-5"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p>Convert supports ABM targeting through integrations with 6Sense, Demandbase, Triblio, and Clearbit Reveal. You can also use your own CRM or DMP data as targeting conditions. For Nexus, you can upload a CSV or connect a CRM to generate personalized experiences based on account fields.</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <div class="faq__q-left">
+              <span class="faq__num">03</span>
+              <span class="faq__q-text">Can I personalize content for named accounts using IP targeting, and what if account identification is imperfect?</span>
+            </div>
+            <svg class="faq__chevron" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l5 5 5-5"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p>Yes. Convert supports IP-range targeting, which is a common way to tailor onsite messaging for known companies. Because IP-based identification is not perfect, most teams use it for higher-level account experiences like industry copy or relevant offers. Convert's 40+ targeting filters let you combine IP logic with other conditions for more precision.</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <div class="faq__q-left">
+              <span class="faq__num">04</span>
+              <span class="faq__q-text">Can I A/B test ABM personalized experiences, or are they just static content changes?</span>
+            </div>
+            <svg class="faq__chevron" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l5 5 5-5"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p>You can do both. Convert includes full testing capabilities, so you can compare personalized messaging or page elements against a control group and measure lift with unsampled reporting. If you only want to push a targeted experience live, use Deploys without a control.</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <div class="faq__q-left">
+              <span class="faq__num">05</span>
+              <span class="faq__q-text">How does Convert help me avoid flicker when personalizing pages for target accounts?</span>
+            </div>
+            <svg class="faq__chevron" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l5 5 5-5"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p>Convert uses synchronous loading, which avoids the flash of default content before personalization is applied. Convert has supported no-flicker sync load since 2016, delivered through an Akamai CDN. For teams where first impressions are critical, that implementation detail matters.</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <div class="faq__q-left">
+              <span class="faq__num">06</span>
+              <span class="faq__q-text">Will ABM website personalization in Convert work on a single-page app or custom B2B website stack?</span>
+            </div>
+            <svg class="faq__chevron" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l5 5 5-5"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p>Yes. Convert supports modern front-end stacks including React and Angular SPAs. Convert handles SPA behavior so targeted changes render correctly as content updates without full page reloads. For deeper control, developers can also use the Code Editor or move logic server-side with the SDK.</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <div class="faq__q-left">
+              <span class="faq__num">07</span>
+              <span class="faq__q-text">How accurate is reporting for ABM personalization campaigns compared to analytics tools that sample data?</span>
+            </div>
+            <svg class="faq__chevron" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l5 5 5-5"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p>Convert reports results using unsampled data, meaning every visitor and conversion event is counted in full. For decision-making on targeted account experiences with small audience sizes, Convert gives you a cleaner source of truth than sampling-based analytics platforms.</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <div class="faq__q-left">
+              <span class="faq__num">08</span>
+              <span class="faq__q-text">How does Convert handle privacy and compliance for enterprise or regulated accounts?</span>
+            </div>
+            <svg class="faq__chevron" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l5 5 5-5"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p>Convert is designed for privacy-conscious personalization and does not collect personally identifiable information in its testing and reporting layer. The platform supports GDPR, CCPA, HIPAA, ISO 27001:2022, and SOC 2 Type 2, with EU-based servers in Frankfurt and a zero-breach track record.</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <div class="faq__q-left">
+              <span class="faq__num">09</span>
+              <span class="faq__q-text">Can my marketing team launch ABM personalization in Convert without waiting on developers for every change?</span>
+            </div>
+            <svg class="faq__chevron" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l5 5 5-5"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p>Yes. Convert includes a Visual Editor for no-code changes and Deploys for targeted rollouts, covering common use cases like account-specific headlines, logos, or promotional messages. Developers can step in when you need custom JavaScript, shared project logic, or server-side control.</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <div class="faq__q-left">
+              <span class="faq__num">10</span>
+              <span class="faq__q-text">What does implementation look like if I want to start with a few ABM segments and expand later?</span>
+            </div>
+            <svg class="faq__chevron" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l5 5 5-5"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p>Start by defining a few high-value account segments and applying targeted Deploys or tests on key pages. Begin with audience rules from IP ranges, CRM or DMP data, or ABM platform integrations, then expand into more granular personalization once the workflow is proven. Convert supports multiple projects, domains, goals, and active experiences depending on plan.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer__inner">
+    <a href="/" class="footer__logo">
+      <div class="footer__logo-mark">
+        <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
+          <path d="M14 4C12.5 2.5 10.4 1.6 8 1.6C4.4 1.6 1.4 4 .5 7.2" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M4 14C5.5 15.5 7.6 16.4 10 16.4C13.6 16.4 16.6 14 17.5 10.8" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="9" cy="9" r="2.5" fill="white"/>
+        </svg>
+      </div>
+      <span class="footer__wordmark">Convert</span>
+    </a>
+    <div class="footer__links">
+      <a href="#">Privacy policy</a>
+      <a href="#">Terms</a>
+      <a href="#">Security</a>
+      <a href="#">Status</a>
+      <a href="#">Docs</a>
+    </div>
+    <p class="footer__copy">Convert.com landing pages, built by AUQ Analytics &amp; Growth Consulting</p>
+  </div>
+</footer>
+
+<!-- FAQ ACCORDION JS -->
+<script>
+  (function () {
+    var questions = document.querySelectorAll('.faq__question');
+    questions.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var isOpen = btn.classList.contains('open');
+        questions.forEach(function (q) {
+          q.classList.remove('open');
+          q.setAttribute('aria-expanded', 'false');
+          var ans = q.parentElement.querySelector('.faq__answer');
+          if (ans) { ans.classList.remove('open'); }
+        });
+        if (!isOpen) {
+          btn.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+          var answer = btn.parentElement.querySelector('.faq__answer');
+          if (answer) { answer.classList.add('open'); }
+        }
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
