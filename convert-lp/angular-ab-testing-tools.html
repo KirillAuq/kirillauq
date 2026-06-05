@@ -582,10 +582,11 @@ pre.code-block {
         <div class="why-row__copy">
           <div class="why-eyebrow">01 &middot; Delivery</div>
           <h3>Your Angular SPA tests render correctly, without the flicker that corrupts variant data</h3>
-          <p class="why-lead">Angular's client-side routing breaks most A/B tools before a test even runs. Convert loads synchronously via Akamai CDN, so your visitors never see a flash of the original variant before the test renders. MutationObserver support handles Angular's route changes natively.</p>
+          <p class="why-lead">Angular's client-side routing breaks most A/B tools before a test even runs. Convert's SmartInsert&#8482; technology loads synchronously via Akamai CDN, so your visitors never see a flash of the original variant before the test renders. Hydration Detection and Continuous Activation handle Angular's route changes natively, reapplying variant changes whenever the DOM mutates.</p>
           <ul class="bullet-list">
-            <li>Synchronous CDN load, variant renders before Angular bootstraps the first paint</li>
-            <li>MutationObserver catches every route change without requiring a full page reload</li>
+            <li>Synchronous SmartInsert&#8482; load, variant renders before Angular bootstraps the first paint</li>
+            <li>Hydration Detection and Continuous Activation reapply changes on every Angular route change, no full page reload required</li>
+            <li>Variation switching in 200 to 300ms on first load and 10 to 50ms on repeat loads, with no impact on Core Web Vitals</li>
             <li>Experiment data reflects what visitors actually saw, not an artifact of a slow script</li>
           </ul>
         </div>
@@ -616,12 +617,12 @@ pre.code-block {
                 <div class="timeline-icon timeline-icon--good">&#10003;</div>
                 <div>
                   <div class="timeline-label">Convert on Angular</div>
-                  <div class="timeline-desc">Sync CDN load + MutationObserver: clean render, every route change tracked, accurate data</div>
+                  <div class="timeline-desc">SmartInsert&#8482; sync load + Continuous Activation: clean render, every route change tracked, accurate data</div>
                 </div>
               </div>
             </div>
             <div class="card-stat">
-              <strong>Synchronous, flicker-free loading on Angular SPAs</strong><span>, flawless since 2016.</span>
+              <strong>SmartInsert&#8482; flicker-free loading, 200 to 300ms first load</strong><span>, flawless since 2016.</span>
             </div>
           </div>
         </div>
@@ -775,7 +776,7 @@ pre.code-block {
           <tr>
             <td>No-flicker loading</td>
             <td>Variant content applied after Angular bootstraps, creating a flash of control before the test renders</td>
-            <td>SmartInsert&#8482; ensures experiment modifications apply at the correct moment in Angular's rendering cycle, zero flash, zero FOUC</td>
+            <td>SmartInsert&#8482; applies modifications at the correct moment in Angular's rendering cycle, and Hydration Detection plus Continuous Activation reapply them on every DOM update, zero flash, zero FOUC</td>
           </tr>
           <tr>
             <td>Full-stack / server-side testing</td>
@@ -1171,6 +1172,17 @@ pre.code-block {
           </div>
           <div class="faq-a">
             <p>The 15-day free trial gives you full access to every feature from day one, including server-side testing, JS Conditions, and both stats engines. There's no feature gating during the trial. Most Angular teams have their first experiment running within a few days of signing up. Convert's support team is available throughout onboarding with an average first response time of 7 minutes, reached by a human engineer who can help with Angular-specific implementation questions. You can also access the SDK quickstart documentation, REST API reference, and MCP server setup guide without a sales call.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-num">11</span>
+            <span class="faq-question">Can I build Angular variations visually, or do I have to write code?</span>
+            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="faq-a">
+            <p>Both. The Convert Visual Editor includes an SPA mode for Angular apps, so you can point and click to build variations on dynamically rendered views without writing code. Because Angular components can take a moment to render, the editor exposes a configurable load-wait so it pauses for the DOM to settle before loading elements, set to 8 seconds by default and adjustable to match your app. Developers who prefer code can skip the editor entirely and define variations through JS Conditions and the SDK.</p>
           </div>
         </div>
 
