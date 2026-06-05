@@ -33,13 +33,36 @@
     .page-card__cta{padding:24px 28px;display:flex;align-items:center;border-left:1px solid #E7EBF1;background:#F4F6F9}
     .page-card__link{font-size:13px;font-weight:700;color:#0066FF;white-space:nowrap}
     .footer{border-top:1px solid #E7EBF1;padding:28px 32px;text-align:center;font-size:12px;color:#A6B1C2;background:#F5F4EE}
-    .kw-banner{background:#EEF4FF;border:1px solid #DBEAFE;border-radius:12px;padding:16px 24px;margin-bottom:40px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-    .kw-banner__icon{width:36px;height:36px;border-radius:8px;background:#0066FF;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .kw-banner__text{flex:1;min-width:200px}
-    .kw-banner__label{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#0066FF;margin-bottom:3px}
-    .kw-banner__desc{font-size:13px;color:#586478;line-height:1.5}
-    .kw-banner__btn{background:#0066FF;color:#fff;font-size:13px;font-weight:700;padding:9px 18px;border-radius:8px;text-decoration:none;white-space:nowrap;transition:background .15s}
-    .kw-banner__btn:hover{background:#0052CC}
+    .kw-section{margin-bottom:64px}
+    .kw-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+    .kw-section-title{font-size:20px;font-weight:700;color:#2A3442;letter-spacing:-.3px}
+    .kw-dl{background:#0066FF;color:#fff;font-size:12px;font-weight:700;padding:8px 16px;border-radius:8px;text-decoration:none;white-space:nowrap;transition:background .15s;flex-shrink:0}
+    .kw-dl:hover{background:#0052CC}
+    .kw-clusters{display:flex;flex-direction:column;gap:12px}
+    .kw-cluster{border:1px solid #E7EBF1;border-radius:12px;overflow:hidden;background:#fff}
+    .kw-cluster-head{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;user-select:none;border-bottom:1px solid #E7EBF1}
+    .kw-cluster-head:hover{background:#FAFAF7}
+    .kw-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+    .kw-cluster-name{font-size:13px;font-weight:700;color:#2A3442;flex:1}
+    .kw-cluster-meta{font-size:12px;color:#7E8AA0}
+    .kw-chevron{margin-left:8px;color:#A6B1C2;transition:transform .2s;font-size:13px}
+    .kw-cluster.open .kw-chevron{transform:rotate(180deg)}
+    .kw-table-wrap{display:none}
+    .kw-cluster.open .kw-table-wrap{display:block}
+    .kw-table{width:100%;border-collapse:collapse;font-size:13px}
+    .kw-table thead tr{background:#F4F6F9}
+    .kw-table th{padding:8px 14px;text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#7E8AA0;border-bottom:1px solid #E7EBF1;white-space:nowrap}
+    .kw-table th:not(:first-child){text-align:center}
+    .kw-table td{padding:9px 14px;border-bottom:1px solid #F0F3F7;color:#2A3442;vertical-align:middle}
+    .kw-table td:not(:first-child){text-align:center;color:#586478}
+    .kw-table tr:last-child td{border-bottom:none}
+    .kw-table tr:hover td{background:#FAFAF7}
+    .kw-kw{font-weight:500;color:#2A3442}
+    .kw-vol{font-weight:600;color:#2A3442}
+    .intent{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:4px;text-transform:uppercase}
+    .intent--commercial{background:#E8F5E9;color:#1B5E20}
+    .intent--informational{background:#E3F2FD;color:#0D47A1}
+    .intent--navigational{background:#FFF3E0;color:#E65100}
   </style>
 </head>
 <body>
@@ -53,13 +76,144 @@
     <div class="eyebrow">Convert.com — AUQ project</div>
     <h1>Landing page designs</h1>
     <p class="sub">Six landing pages built from approved copy. Each follows the Convert design system — Geist Sans, cream surfaces, Z-pattern sections, and the full brand token set.</p>
-    <div class="kw-banner">
-      <div class="kw-banner__icon"><svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 10h14M10 3v14" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
-      <div class="kw-banner__text">
-        <div class="kw-banner__label">Target keywords</div>
-        <div class="kw-banner__desc">DataForSEO-sourced keyword targets for all six clusters — volume, difficulty, and intent.</div>
+    <div class="kw-section">
+      <div class="kw-section-head">
+        <div class="kw-section-title">Target keywords</div>
+        <a href="convert-target-keywords.xlsx" download class="kw-dl">Download .xlsx ↓</a>
       </div>
-      <a href="convert-target-keywords.xlsx" download class="kw-banner__btn">Download spreadsheet ↓</a>
+      <div class="kw-clusters">
+
+        <div class="kw-cluster open">
+          <div class="kw-cluster-head" onclick="this.parentElement.classList.toggle('open')">
+            <span class="kw-dot" style="background:#7C3AED"></span>
+            <span class="kw-cluster-name">Multi-arm bandit CRO</span>
+            <span class="kw-cluster-meta">6 keywords</span>
+            <span class="kw-chevron">▾</span>
+          </div>
+          <div class="kw-table-wrap">
+            <table class="kw-table">
+              <thead><tr><th>Keyword</th><th>Vol</th><th>KD</th><th>Intent</th></tr></thead>
+              <tbody>
+                <tr><td class="kw-kw">multi-armed bandit</td><td class="kw-vol">2,900</td><td>21</td><td><span class="intent intent--informational">Informational</span></td></tr>
+                <tr><td class="kw-kw">multi armed bandit testing</td><td class="kw-vol">260</td><td>13</td><td><span class="intent intent--informational">Informational</span></td></tr>
+                <tr><td class="kw-kw">contextual multi-armed bandit</td><td class="kw-vol">90</td><td>6</td><td><span class="intent intent--informational">Informational</span></td></tr>
+                <tr><td class="kw-kw">website experimentation</td><td class="kw-vol">70</td><td>14</td><td><span class="intent intent--informational">Informational</span></td></tr>
+                <tr><td class="kw-kw">multi armed bandit experimentation</td><td class="kw-vol">30</td><td>14</td><td><span class="intent intent--informational">Informational</span></td></tr>
+                <tr><td class="kw-kw">multi armed bandit vs a/b testing</td><td class="kw-vol">20</td><td>—</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="kw-cluster open">
+          <div class="kw-cluster-head" onclick="this.parentElement.classList.toggle('open')">
+            <span class="kw-dot" style="background:#0066FF"></span>
+            <span class="kw-cluster-name">A/B testing software</span>
+            <span class="kw-cluster-meta">6 keywords</span>
+            <span class="kw-chevron">▾</span>
+          </div>
+          <div class="kw-table-wrap">
+            <table class="kw-table">
+              <thead><tr><th>Keyword</th><th>Vol</th><th>KD</th><th>Intent</th></tr></thead>
+              <tbody>
+                <tr><td class="kw-kw">ab testing software</td><td class="kw-vol">390</td><td>35</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">ab split testing software</td><td class="kw-vol">390</td><td>35</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">ab testing platform</td><td class="kw-vol">210</td><td>27</td><td><span class="intent intent--informational">Informational</span></td></tr>
+                <tr><td class="kw-kw">ab testing tool</td><td class="kw-vol">90</td><td>38</td><td><span class="intent intent--informational">Informational</span></td></tr>
+                <tr><td class="kw-kw">best ab testing software</td><td class="kw-vol">20</td><td>16</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">free ab testing software</td><td class="kw-vol">20</td><td>8</td><td><span class="intent intent--informational">Informational</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="kw-cluster open">
+          <div class="kw-cluster-head" onclick="this.parentElement.classList.toggle('open')">
+            <span class="kw-dot" style="background:#059669"></span>
+            <span class="kw-cluster-name">Angular A/B testing software</span>
+            <span class="kw-cluster-meta">4 keywords</span>
+            <span class="kw-chevron">▾</span>
+          </div>
+          <div class="kw-table-wrap">
+            <table class="kw-table">
+              <thead><tr><th>Keyword</th><th>Vol</th><th>KD</th><th>Intent</th></tr></thead>
+              <tbody>
+                <tr><td class="kw-kw">angular ab testing</td><td class="kw-vol">10</td><td>18</td><td><span class="intent intent--informational">Informational</span></td></tr>
+                <tr><td class="kw-kw">ab testing angular</td><td class="kw-vol">10</td><td>—</td><td><span class="intent intent--informational">Informational</span></td></tr>
+                <tr><td class="kw-kw">ab testing software</td><td class="kw-vol">390</td><td>35</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">ab testing platform</td><td class="kw-vol">210</td><td>27</td><td><span class="intent intent--informational">Informational</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="kw-cluster open">
+          <div class="kw-cluster-head" onclick="this.parentElement.classList.toggle('open')">
+            <span class="kw-dot" style="background:#C2410C"></span>
+            <span class="kw-cluster-name">ABM landing pages</span>
+            <span class="kw-cluster-meta">6 keywords</span>
+            <span class="kw-chevron">▾</span>
+          </div>
+          <div class="kw-table-wrap">
+            <table class="kw-table">
+              <thead><tr><th>Keyword</th><th>Vol</th><th>KD</th><th>Intent</th></tr></thead>
+              <tbody>
+                <tr><td class="kw-kw">website personalization</td><td class="kw-vol">590</td><td>8</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">website personalization tools</td><td class="kw-vol">320</td><td>1</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">personalized landing page</td><td class="kw-vol">170</td><td>7</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">landing page personalization</td><td class="kw-vol">170</td><td>—</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">b2b website personalization</td><td class="kw-vol">70</td><td>7</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">abm landing page</td><td class="kw-vol">70</td><td>—</td><td><span class="intent intent--navigational">Navigational</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="kw-cluster open">
+          <div class="kw-cluster-head" onclick="this.parentElement.classList.toggle('open')">
+            <span class="kw-dot" style="background:#D97706"></span>
+            <span class="kw-cluster-name">ABM website personalization</span>
+            <span class="kw-cluster-meta">6 keywords</span>
+            <span class="kw-chevron">▾</span>
+          </div>
+          <div class="kw-table-wrap">
+            <table class="kw-table">
+              <thead><tr><th>Keyword</th><th>Vol</th><th>KD</th><th>Intent</th></tr></thead>
+              <tbody>
+                <tr><td class="kw-kw">website personalization</td><td class="kw-vol">590</td><td>8</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">website personalization tools</td><td class="kw-vol">320</td><td>1</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">website personalization software</td><td class="kw-vol">140</td><td>28</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">b2b website personalization</td><td class="kw-vol">70</td><td>7</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">account-based marketing personalization</td><td class="kw-vol">50</td><td>3</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">dynamic website personalization</td><td class="kw-vol">30</td><td>1</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="kw-cluster open">
+          <div class="kw-cluster-head" onclick="this.parentElement.classList.toggle('open')">
+            <span class="kw-dot" style="background:#166534"></span>
+            <span class="kw-cluster-name">Server-side A/B testing software</span>
+            <span class="kw-cluster-meta">6 keywords</span>
+            <span class="kw-chevron">▾</span>
+          </div>
+          <div class="kw-table-wrap">
+            <table class="kw-table">
+              <thead><tr><th>Keyword</th><th>Vol</th><th>KD</th><th>Intent</th></tr></thead>
+              <tbody>
+                <tr><td class="kw-kw">server-side ab testing</td><td class="kw-vol">40</td><td>—</td><td><span class="intent intent--informational">Informational</span></td></tr>
+                <tr><td class="kw-kw">feature flags tools</td><td class="kw-vol">320</td><td>24</td><td><span class="intent intent--navigational">Navigational</span></td></tr>
+                <tr><td class="kw-kw">feature flags as a service</td><td class="kw-vol">260</td><td>25</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">feature flags software</td><td class="kw-vol">170</td><td>24</td><td><span class="intent intent--commercial">Commercial</span></td></tr>
+                <tr><td class="kw-kw">feature flags best practices</td><td class="kw-vol">170</td><td>20</td><td><span class="intent intent--informational">Informational</span></td></tr>
+                <tr><td class="kw-kw">server side ab testing tools</td><td class="kw-vol">10</td><td>—</td><td><span class="intent intent--informational">Informational</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
     </div>
     <div class="pages">
       <a href="ab-testing-software.html" class="page-card">
