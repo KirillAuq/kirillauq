@@ -649,34 +649,25 @@ pre.code-block {
               <span class="card-title">angular-experiment.ts</span>
             </div>
             <div class="card-body">
-<pre class="code-block"><span class="tok-comment">// Create experiment via REST API V2</span>
-<span class="tok-keyword">import</span> { <span class="tok-type">ConvertClient</span> } <span class="tok-keyword">from</span> <span class="tok-string">'@convertcom/js-sdk'</span>;
-<span class="tok-keyword">import</span> { <span class="tok-type">Router</span>, <span class="tok-type">RouterEvent</span> } <span class="tok-keyword">from</span> <span class="tok-string">'@angular/router'</span>;
+<pre class="code-block"><span class="tok-comment">// Bucket Angular visitors with the Convert SDK</span>
+<span class="tok-keyword">import</span> <span class="tok-type">ConvertSDK</span> <span class="tok-keyword">from</span> <span class="tok-string">'@convertcom/js-sdk'</span>;
+<span class="tok-keyword">import</span> { <span class="tok-type">Router</span> } <span class="tok-keyword">from</span> <span class="tok-string">'@angular/router'</span>;
 
-<span class="tok-keyword">const</span> <span class="tok-var">client</span> = <span class="tok-keyword">new</span> <span class="tok-type">ConvertClient</span>({
+<span class="tok-keyword">const</span> <span class="tok-var">convertSDK</span> = <span class="tok-keyword">new</span> <span class="tok-type">ConvertSDK</span>({
   <span class="tok-fn">sdkKey</span>: <span class="tok-var">process</span>.env.<span class="tok-var">CONVERT_SDK_KEY</span>,
 });
 
-<span class="tok-comment">// JS Condition targeting Angular router events</span>
-<span class="tok-keyword">const</span> <span class="tok-var">jsCondition</span> = <span class="tok-string">`
-  router.events.pipe(
-    filter(e =&gt; e instanceof RouterEvent),
-    map(e =&gt; e.url)
-  ).includes('/onboarding/step-2')
-`</span>;
+<span class="tok-comment">// Pass Angular router state as targeting context</span>
+<span class="tok-keyword">const</span> <span class="tok-var">userContext</span> = <span class="tok-var">convertSDK</span>.<span class="tok-fn">createContext</span>(<span class="tok-string">'visitor-123'</span>, {
+  <span class="tok-fn">route</span>: <span class="tok-var">router</span>.url,
+});
 
-<span class="tok-comment">// Create experiment with JS condition</span>
-<span class="tok-keyword">await</span> <span class="tok-var">client</span>.<span class="tok-fn">experiments</span>.<span class="tok-fn">create</span>({
-  <span class="tok-fn">name</span>: <span class="tok-string">'onboarding-step2-cta'</span>,
-  <span class="tok-fn">targeting</span>: { <span class="tok-fn">js_condition</span>: <span class="tok-var">jsCondition</span> },
-  <span class="tok-fn">variants</span>: [
-    { <span class="tok-fn">name</span>: <span class="tok-string">'control'</span> },
-    { <span class="tok-fn">name</span>: <span class="tok-string">'variant-a'</span> }
-  ],
-});</pre>
+<span class="tok-comment">// JS Conditions (configured in Convert) can target</span>
+<span class="tok-comment">// router events, component state, or service values</span>
+<span class="tok-keyword">const</span> <span class="tok-var">variation</span> = <span class="tok-var">userContext</span>.<span class="tok-fn">runExperience</span>(<span class="tok-string">'onboarding-step2-cta'</span>);</pre>
             </div>
             <div class="card-stat" style="background:#0D1535;border-top-color:rgba(255,255,255,.08);">
-              <strong style="color:#93C5FD;">JS Conditions enterprise-only on VWO and Optimizely</strong><span style="color:#475569;">, standard on Convert.</span>
+              <strong style="color:#93C5FD;">JS Conditions enterprise-only on VWO and Optimizely</strong><span style="color:#475569;">, included on Convert Pro.</span>
             </div>
           </div>
         </div>
@@ -739,7 +730,7 @@ pre.code-block {
       <div>
         <div class="api-banner__eyebrow">Documentation</div>
         <h2>Read the API docs</h2>
-        <p class="api-banner__sub">REST &middot; GraphQL &middot; SDK quickstart</p>
+        <p class="api-banner__sub">REST API &middot; server-side SDK &middot; quickstart</p>
         <div class="api-code-pill">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" stroke="#6EE7B7" stroke-width="1.2"/><path d="M5 5l2 2-2 2M8 9h1" stroke="#6EE7B7" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
           npm install @convertcom/js-sdk
@@ -1094,7 +1085,7 @@ pre.code-block {
             <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <div class="faq-a">
-            <p>Yes. Convert's JS Conditions accept arbitrary JavaScript, so you can write targeting logic that references Angular's router, component state, or injected service values. You're not limited to URL matching or cookie values. A JS Condition can evaluate Angular router events, check a value exposed on the window object by your application, or run any other synchronous JavaScript check before deciding whether to include a visitor in an experiment. This feature is included on standard Convert plans and is not gated behind an enterprise tier.</p>
+            <p>Yes. Convert's JS Conditions accept arbitrary JavaScript, so you can write targeting logic that references Angular's router, component state, or injected service values. You're not limited to URL matching or cookie values. A JS Condition can evaluate Angular router events, check a value exposed on the window object by your application, or run any other synchronous JavaScript check before deciding whether to include a visitor in an experiment. This feature is included on Convert Pro and is not gated behind an enterprise tier.</p>
           </div>
         </div>
 
@@ -1138,7 +1129,7 @@ pre.code-block {
             <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <div class="faq-a">
-            <p>Convert includes Frequentist, Bayesian, and Sequential testing models on every plan. There is no upgrade required to access Bayesian or Sequential testing. Frequentist testing gives you p-values and confidence intervals, which most engineering teams prefer. Bayesian testing gives you probability-to-beat, which is more intuitive for business stakeholders. Sequential testing lets you evaluate results at any point during a running experiment without inflating false positive rates, which is useful for teams that can't wait for a fixed sample size before making decisions.</p>
+            <p>Convert includes Frequentist and Bayesian models on every plan, with Sequential testing available on Pro and above. There is no upgrade required to access Bayesian testing. Frequentist testing gives you p-values and confidence intervals, which most engineering teams prefer. Bayesian testing gives you probability-to-beat, which is more intuitive for business stakeholders. Sequential testing lets you evaluate results at any point during a running experiment without inflating false positive rates, which is useful for teams that can't wait for a fixed sample size before making decisions.</p>
           </div>
         </div>
 
