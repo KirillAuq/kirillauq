@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Server-Side A/B Testing Software — Convert Experiences</title>
-<meta name="description" content="Convert Experiences is server-side A/B testing software built for engineering and growth teams. Test pricing logic, recommendation algorithms, and feature rollouts with a REST API, SDK, and CI/CD compatibility.">
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta content="Convert Experiences is server-side A/B testing software built for engineering and growth teams. Test pricing logic, recommendation algorithms, and feature rollouts with a REST API, SDK, and CI/CD compatibility." name="description"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
 /* ============================================================
    DESIGN TOKENS
@@ -413,608 +414,568 @@ ul, ol { list-style: none; }
   </style>
 </head>
 <body>
-
 <!-- NAVIGATION -->
 <nav class="nav">
-  <div class="nav__inner">
-    <a href="https://www.convert.com/" class="nav__logo">
-      <div class="nav__logomark">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4C7 4 4.5 6 4 9C5 8 6.5 7.5 8 8C9 8.5 9.5 9.5 10.5 10C12 11 14 10.5 15 8.5C14 6 12.2 4 10 4Z" fill="white" opacity="0.9"/><path d="M4 11C4.5 14 7 16 10 16C12.2 16 14 14.5 15 12.5C14 13.5 12.5 14 11 13.5C10 13 9.5 12 8.5 11.5C7 10.5 5 10.5 4 11Z" fill="white" opacity="0.7"/></svg>
-      </div>
-      <span class="nav__wordmark">Convert</span>
-    </a>
-    <div class="nav__links">
-      <a href="#" class="nav__link">Features</a>
-      <a href="#" class="nav__link">Pricing</a>
-      <a href="#" class="nav__link">Integrations</a>
-      <a href="#" class="nav__link">Resources</a>
-      <a href="#" class="nav__link">Customers</a>
-    </div>
-    <div class="nav__actions">
-      <button class="btn-ghost">Log in</button>
-      <button class="btn-primary">Start free trial</button>
-    </div>
-  </div>
+<div class="nav__inner">
+<a class="nav__logo" href="https://www.convert.com/">
+<div class="nav__logomark">
+<svg fill="none" height="20" viewbox="0 0 20 20" width="20"><path d="M10 4C7 4 4.5 6 4 9C5 8 6.5 7.5 8 8C9 8.5 9.5 9.5 10.5 10C12 11 14 10.5 15 8.5C14 6 12.2 4 10 4Z" fill="white" opacity="0.9"></path><path d="M4 11C4.5 14 7 16 10 16C12.2 16 14 14.5 15 12.5C14 13.5 12.5 14 11 13.5C10 13 9.5 12 8.5 11.5C7 10.5 5 10.5 4 11Z" fill="white" opacity="0.7"></path></svg>
+</div>
+<span class="nav__wordmark">Convert</span>
+</a>
+<div class="nav__links">
+<a class="nav__link" href="#">Features</a>
+<a class="nav__link" href="#">Pricing</a>
+<a class="nav__link" href="#">Integrations</a>
+<a class="nav__link" href="#">Resources</a>
+<a class="nav__link" href="#">Customers</a>
+</div>
+<div class="nav__actions">
+<button class="btn-ghost">Log in</button>
+<button class="btn-primary">Start free trial</button>
+</div>
+</div>
 </nav>
-
 <!-- HERO -->
 <section class="hero">
-  <div class="hero__glow-blue"></div>
-  <div class="hero__glow-violet"></div>
-  <div class="hero__inner">
-    <div class="hero__copy">
-      <div class="hero__eyebrow">
-        <span class="hero__eyebrow-dot"></span>
-        <span class="hero__eyebrow-text">Convert Experiences</span>
-      </div>
-      <h1>Server-side A/B testing software that <em>runs where decisions happen</em></h1>
-      <p class="hero__sub">Convert's full-stack testing runs at the server layer, so your pricing logic, recommendation algorithms, and feature rollouts are tested where the decisions actually happen. No flicker, no client-side fingerprinting, no compromises on data quality. Marketers get cleaner results. Developers get SDK access, a REST API, and full CI/CD compatibility without leaving their workflow.</p>
-      <div class="hero__ctas">
-        <button class="btn-hero-primary">Start your free 15-day trial</button>
-        <button class="btn-hero-secondary">Book a demo</button>
-      </div>
-    </div>
-    <div class="hero__form-card">
-      <div class="hero__form-title">See Convert in your environment</div>
-      <form onsubmit="return false;">
-        <div class="form-group">
-          <label for="work-email">Work email</label>
-          <input type="email" id="work-email" placeholder="you@company.com">
-        </div>
-        <div class="form-group">
-          <label for="company-url">Company URL</label>
-          <input type="url" id="company-url" placeholder="https://yoursite.com">
-        </div>
-        <div class="form-group">
-          <label for="monthly-visitors">Monthly visitors</label>
-          <input type="text" id="monthly-visitors" placeholder="e.g. 250,000">
-        </div>
-        <button type="submit" class="btn-form-submit">Get trial access</button>
-      </form>
-      <p class="form-trust">No credit card required. 15-day full access, no strings.</p>
-    </div>
-  </div>
+<div class="hero__glow-blue"></div>
+<div class="hero__glow-violet"></div>
+<div class="hero__inner">
+<div class="hero__copy">
+<div class="hero__eyebrow">
+<span class="hero__eyebrow-dot"></span>
+<span class="hero__eyebrow-text">Convert Experiences</span>
+</div>
+<h1>Server-side A/B testing software that <em>runs where decisions happen</em></h1>
+<p class="hero__sub">Convert's full-stack testing runs at the server layer, so your pricing logic, recommendation algorithms, and feature rollouts are tested where the decisions actually happen. No flicker, no client-side fingerprinting, no compromises on data quality. Marketers get cleaner results. Developers get SDK access, a REST API, and full CI/CD compatibility without leaving their workflow.</p>
+<div class="hero__ctas">
+<button class="btn-hero-primary">Start your free 15-day trial</button>
+<button class="btn-hero-secondary">Book a demo</button>
+</div>
+</div>
+<div class="hero__form-card">
+<div class="hero__form-title">See Convert in your environment</div>
+<form onsubmit="return false;">
+<div class="form-group">
+<label for="work-email">Work email</label>
+<input id="work-email" placeholder="you@company.com" type="email"/>
+</div>
+<div class="form-group">
+<label for="company-url">Company URL</label>
+<input id="company-url" placeholder="https://yoursite.com" type="url"/>
+</div>
+<div class="form-group">
+<label for="monthly-visitors">Monthly visitors</label>
+<input id="monthly-visitors" placeholder="e.g. 250,000" type="text"/>
+</div>
+<button class="btn-form-submit" type="submit">Get trial access</button>
+</form>
+<p class="form-trust">No credit card required. 15-day full access, no strings.</p>
+</div>
+</div>
 </section>
-
 <!-- TRUST STRIP -->
 <div class="trust-strip">
-  <div class="trust-strip__inner">
-    <span class="trust-strip__label">Trusted infrastructure</span>
-    <div class="trust-divider"></div>
-    <div class="trust-items">
-      <div class="trust-item">
-        <svg class="trust-check" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div class="trust-strip__inner">
+<span class="trust-strip__label">Trusted infrastructure</span>
+<div class="trust-divider"></div>
+<div class="trust-items">
+<div class="trust-item">
+<svg class="trust-check" fill="none" viewbox="0 0 14 14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
         400,000+ experiences served
       </div>
-      <div class="trust-item">
-        <svg class="trust-check" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div class="trust-item">
+<svg class="trust-check" fill="none" viewbox="0 0 14 14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
         40,000+ sites running Convert
       </div>
-      <div class="trust-item">
-        <svg class="trust-check" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        SOC 2 &middot; ISO 27001 &middot; HIPAA &middot; GDPR
+<div class="trust-item">
+<svg class="trust-check" fill="none" viewbox="0 0 14 14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+        SOC 2 · ISO 27001 · HIPAA · GDPR
       </div>
-      <div class="trust-item">
-        <svg class="trust-check" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div class="trust-item">
+<svg class="trust-check" fill="none" viewbox="0 0 14 14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
         7-minute average support response
       </div>
-      <div class="trust-item">
-        <svg class="trust-check" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div class="trust-item">
+<svg class="trust-check" fill="none" viewbox="0 0 14 14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
         16 years building experimentation infrastructure
       </div>
-    </div>
-  </div>
 </div>
-
+</div>
+</div>
 <!-- FOR WHOM -->
 <section class="for-whom">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-label">Who Convert is built for</span>
-      <h2>Server-side testing built for the teams doing real work at the application layer</h2>
-      <p>Whether you're testing back-end pricing models, shipping code with feature flags, or delivering server-side programs for clients, Convert has the infrastructure to match.</p>
-    </div>
-    <div class="for-whom__stack">
-
-      <!-- Ecommerce -->
-      <div class="fw-card">
-        <div class="fw-card__left">
-          <div class="fw-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-          </div>
-          <span class="fw-eyebrow">Ecommerce</span>
-          <h3>Test pricing logic and checkout flows without touching the front end</h3>
-        </div>
-        <div class="fw-card__right">
-          <p>Client-side testing has a ceiling. When your most consequential experiments live in back-end pricing rules, recommendation algorithms, or cart logic, the browser is the wrong place to run them. Convert's server-side SDK lets ecommerce teams test the decisions that drive revenue per visitor, without flicker and without waiting on a dev sprint.</p>
-          <ul class="bullet-list">
-            <li>Run back-end pricing tests without exposing variant logic to the browser</li>
-            <li>Eliminate flicker on high-stakes product and checkout pages</li>
-            <li>Unsampled reporting counts every visitor and conversion event in full</li>
-          </ul>
-          <a href="#" class="fw-link">Explore for Ecommerce &#8594;</a>
-        </div>
-      </div>
-
-      <!-- SaaS -->
-      <div class="fw-card">
-        <div class="fw-card__left">
-          <div class="fw-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-          </div>
-          <span class="fw-eyebrow">SaaS</span>
-          <h3>Experiment on onboarding logic and feature rollouts at the code level</h3>
-        </div>
-        <div class="fw-card__right">
-          <p>Activation rate tests rarely live in the UI. The decisions that move trial-to-paid conversion, such as feature sequencing, paywall logic, and API response behavior, happen in your application layer. Convert's server-side testing lets SaaS teams run statistically rigorous experiments directly in code, with Frequentist, Bayesian, and Sequential testing models available.</p>
-          <ul class="bullet-list">
-            <li>Test feature flag rollouts across 10%, 25%, or 100% of users safely</li>
-            <li>Sequential testing monitors results without inflating false positive rates (Pro+)</li>
-            <li>Integrate natively with Amplitude, Mixpanel, or Heap with no data silos</li>
-          </ul>
-          <a href="#" class="fw-link">Explore for SaaS &#8594;</a>
-        </div>
-      </div>
-
-      <!-- Agencies -->
-      <div class="fw-card">
-        <div class="fw-card__left">
-          <div class="fw-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-          </div>
-          <span class="fw-eyebrow">Agencies</span>
-          <h3>Deliver server-side programs across every client account from one platform</h3>
-        </div>
-        <div class="fw-card__right">
-          <p>Running server-side experimentation for multiple clients means managing SDKs, test logic, and reporting across entirely different tech stacks without letting one client's configuration bleed into another. Convert's multi-project architecture gives CRO agencies centralized billing, isolated client environments, and a REST API that plugs directly into CI/CD pipelines.</p>
-          <ul class="bullet-list">
-            <li>Manage unlimited client projects with isolated environments and centralized billing</li>
-            <li>Deploy and update experiments via REST API inside client pipelines</li>
-            <li>Deliver unsampled reports clients can trust without caveats</li>
-          </ul>
-          <a href="#" class="fw-link">Explore for Agencies &#8594;</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<span class="section-label">Who Convert is built for</span>
+<h2>Server-side testing built for the teams doing real work at the application layer</h2>
+<p>Whether you're testing back-end pricing models, shipping code with feature flags, or delivering server-side programs for clients, Convert has the infrastructure to match.</p>
+</div>
+<div class="for-whom__stack">
+<!-- Ecommerce -->
+<div class="fw-card">
+<div class="fw-card__left">
+<div class="fw-icon">
+<svg fill="none" height="22" stroke="#0066FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path><line x1="3" x2="21" y1="6" y2="6"></line><path d="M16 10a4 4 0 01-8 0"></path></svg>
+</div>
+<span class="fw-eyebrow">Ecommerce</span>
+<h3>Test pricing logic and checkout flows without touching the front end</h3>
+</div>
+<div class="fw-card__right">
+<p>Client-side testing has a ceiling. When your most consequential experiments live in back-end pricing rules, recommendation algorithms, or cart logic, the browser is the wrong place to run them. Convert's server-side SDK lets ecommerce teams test the decisions that drive revenue per visitor, without flicker and without waiting on a dev sprint.</p>
+<ul class="bullet-list">
+<li>Run back-end pricing tests without exposing variant logic to the browser</li>
+<li>Eliminate flicker on high-stakes product and checkout pages</li>
+<li>Unsampled reporting counts every visitor and conversion event in full</li>
+</ul>
+<a class="fw-link" href="#">Explore for Ecommerce →</a>
+</div>
+</div>
+<!-- SaaS -->
+<div class="fw-card">
+<div class="fw-card__left">
+<div class="fw-icon">
+<svg fill="none" height="22" stroke="#0066FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><rect height="14" rx="2" width="20" x="2" y="3"></rect><path d="M8 21h8M12 17v4"></path></svg>
+</div>
+<span class="fw-eyebrow">SaaS</span>
+<h3>Experiment on onboarding logic and feature rollouts at the code level</h3>
+</div>
+<div class="fw-card__right">
+<p>Activation rate tests rarely live in the UI. The decisions that move trial-to-paid conversion, such as feature sequencing, paywall logic, and API response behavior, happen in your application layer. Convert's server-side testing lets SaaS teams run statistically rigorous experiments directly in code, with Frequentist, Bayesian, and Sequential testing models available.</p>
+<ul class="bullet-list">
+<li>Test feature flag rollouts across 10%, 25%, or 100% of users safely</li>
+<li>Sequential testing monitors results without inflating false positive rates (Pro+)</li>
+<li>Integrate natively with Amplitude, Mixpanel, or Heap with no data silos</li>
+</ul>
+<a class="fw-link" href="#">Explore for SaaS →</a>
+</div>
+</div>
+<!-- Agencies -->
+<div class="fw-card">
+<div class="fw-card__left">
+<div class="fw-icon">
+<svg fill="none" height="22" stroke="#0066FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 00-3-3.87"></path><path d="M16 3.13a4 4 0 010 7.75"></path></svg>
+</div>
+<span class="fw-eyebrow">Agencies</span>
+<h3>Deliver server-side programs across every client account from one platform</h3>
+</div>
+<div class="fw-card__right">
+<p>Running server-side experimentation for multiple clients means managing SDKs, test logic, and reporting across entirely different tech stacks without letting one client's configuration bleed into another. Convert's multi-project architecture gives CRO agencies centralized billing, isolated client environments, and a REST API that plugs directly into CI/CD pipelines.</p>
+<ul class="bullet-list">
+<li>Manage unlimited client projects with isolated environments and centralized billing</li>
+<li>Deploy and update experiments via REST API inside client pipelines</li>
+<li>Deliver unsampled reports clients can trust without caveats</li>
+</ul>
+<a class="fw-link" href="#">Explore for Agencies →</a>
+</div>
+</div>
+</div>
+</div>
 </section>
-
 <!-- WHY CONVERT -->
 <section class="why-convert">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-label">Why Convert</span>
-      <h2>Three reasons engineering and growth teams choose Convert for server-side testing</h2>
-      <p>Transparent pricing, data quality that reflects reality, and a developer workflow that doesn't fight your existing pipeline.</p>
-    </div>
-    <div class="why-rows">
-
-      <!-- Row 1: text left / card right -->
-      <div class="why-row">
-        <div class="why-row__copy">
-          <div class="why-eyebrow">01 &middot; Pricing</div>
-          <h3>Run server-side tests at Pro pricing, not enterprise pricing</h3>
-          <p class="lead">On Optimizely, full-stack testing is a separate product. On VWO, it requires an enterprise contract. Convert includes server-side testing in the Pro plan at $420 per month, alongside feature flags, sequential testing, and both Frequentist and Bayesian stats engines. No new contract tier required.</p>
-          <ul class="bullet-list">
-            <li>Server-side testing and feature flags included in Convert Pro at $420/mo annual</li>
-            <li>Sequential Testing, Frequentist, and Bayesian stats all in Pro</li>
-            <li>No enterprise procurement, no separate product purchase</li>
-          </ul>
-        </div>
-        <div class="why-row__card">
-          <div class="card-chrome">
-            <div class="card-head">
-              <span class="card-dot" style="background:#EF4444"></span>
-              <span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
-              <span class="card-dot" style="background:#10B981;margin-left:4px"></span>
-              <span class="card-title">Feature availability</span>
-            </div>
-            <div class="card-body">
-              <table class="compare-table">
-                <thead><tr><th>Feature</th><th>Convert</th><th>Optimizely</th><th>VWO</th></tr></thead>
-                <tbody>
-                  <tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Full-Stack Testing</td><td><span class="badge-yes">Pro</span></td><td><span class="badge-gate">Separate product</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
-                  <tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Sequential Testing</td><td><span class="badge-yes">Pro</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
-                  <tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Feature Flags</td><td><span class="badge-yes">Pro</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
-                  <tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Bayesian + Frequentist Stats</td><td><span class="badge-yes">Pro</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="stat-panel"><strong>Pro plan from $420/mo.</strong><p>Full-stack testing and feature flags included.</p></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Row 2: card left / text right (flip) -->
-      <div class="why-row why-row--flip">
-        <div class="why-row__copy">
-          <div class="why-eyebrow">02 &middot; Data quality</div>
-          <h3>Your server-side test results reflect reality, not sampling artifacts</h3>
-          <p class="lead">Server-side testing eliminates flicker by design because the assignment decision happens before the browser renders anything. Convert has loaded synchronously since 2016, and every report counts every visitor and conversion event in full, with no sampling errors inherited from GA4 or Adobe. When iOS ITP or ad blockers cut off cookies, experiment assignment happening at the server level keeps your test data intact.</p>
-          <ul class="bullet-list">
-            <li>Assignment happens server-side, before the browser renders, zero flicker by design</li>
-            <li>Unsampled reporting, no data loss from GA4-style sampling</li>
-            <li>Cookie blocking and ITP don't affect server-side assignment</li>
-          </ul>
-        </div>
-        <div class="why-row__card">
-          <div class="card-chrome">
-            <div class="card-head">
-              <span class="card-dot" style="background:#EF4444"></span>
-              <span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
-              <span class="card-dot" style="background:#10B981;margin-left:4px"></span>
-              <span class="card-title">Assignment comparison</span>
-            </div>
-            <div class="card-body" style="padding-bottom:0;">
-              <div class="timeline-row">
-                <div class="tl-icon tl-icon--bad">&#9889;</div>
-                <div><div class="tl-label">Client-side test</div><div class="tl-desc">Browser renders first, flicker occurs, cookie blockers interfere with assignment</div></div>
-              </div>
-              <div class="timeline-row">
-                <div class="tl-icon tl-icon--good">&#10003;</div>
-                <div><div class="tl-label">Server-side assignment</div><div class="tl-desc">Variant decided before first byte reaches the browser, flicker eliminated by design</div></div>
-              </div>
-              <div class="timeline-row">
-                <div class="tl-icon tl-icon--good">&#8635;</div>
-                <div><div class="tl-label">Unsampled reporting</div><div class="tl-desc">Every session and conversion counted in full, no projections or reconciliation gaps</div></div>
-              </div>
-            </div>
-            <div class="stat-panel">
-              <strong>Flicker eliminated by design.</strong>
-              <p>Unsampled reporting on all plans.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Row 3: text left / card right -->
-      <div class="why-row">
-        <div class="why-row__copy">
-          <div class="why-eyebrow">03 &middot; Developer workflow</div>
-          <h3>Your dev team ships and monitors server-side tests without leaving the pipeline</h3>
-          <p class="lead">Convert's REST API V2 lets your team create, update, and report on every experiment entirely inside your CI/CD pipeline, no UI required. HMAC authentication and separate developer accounts keep access controlled. Feature flags let you roll out code to 10%, 25%, or 100% of users independently of any test. When a live test breaks, Convert's support team responds in an average of 7 minutes.</p>
-          <ul class="bullet-list">
-            <li>REST API V2 covers full experiment lifecycle inside CI/CD</li>
-            <li>HMAC authentication and developer accounts for access control</li>
-            <li>7-minute average support response when a live backend test breaks</li>
-          </ul>
-        </div>
-        <div class="why-row__card">
-          <div class="card-chrome card-dark">
-            <div class="card-head">
-              <span class="card-dot" style="background:#334155"></span>
-              <span class="card-dot" style="background:#334155;margin-left:4px"></span>
-              <span class="card-dot" style="background:#334155;margin-left:4px"></span>
-              <span class="card-title" style="color:#475569;">server-experiment.ts</span>
-            </div>
-            <div class="code-block"><span class="tok-keyword">import</span> <span class="tok-plain">ConvertSDK </span><span class="tok-keyword">from</span> <span class="tok-string">'@convertcom/js-sdk'</span><span class="tok-plain">;</span>
-
+<div class="container">
+<div class="section-header">
+<span class="section-label">Why Convert</span>
+<h2>Three reasons engineering and growth teams choose Convert for server-side testing</h2>
+<p>Transparent pricing, data quality that reflects reality, and a developer workflow that doesn't fight your existing pipeline.</p>
+</div>
+<div class="why-rows">
+<!-- Row 1: text left / card right -->
+<div class="why-row">
+<div class="why-row__copy">
+<div class="why-eyebrow">01 · Pricing</div>
+<h3>Run server-side tests at Pro pricing, not enterprise pricing</h3>
+<p class="lead">On Optimizely, full-stack testing is a separate product. On VWO, it requires an enterprise contract. Convert includes server-side testing in the Pro plan at $420 per month, alongside feature flags, sequential testing, and both Frequentist and Bayesian stats engines. No new contract tier required.</p>
+<ul class="bullet-list">
+<li>Server-side testing and feature flags included in Convert Pro at $420/mo annual</li>
+<li>Sequential Testing, Frequentist, and Bayesian stats all in Pro</li>
+<li>No enterprise procurement, no separate product purchase</li>
+</ul>
+</div>
+<div class="why-row__card">
+<div class="card-chrome">
+<div class="card-head">
+<span class="card-dot" style="background:#EF4444"></span>
+<span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+<span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+<span class="card-title">Feature availability</span>
+</div>
+<div class="card-body">
+<table class="compare-table">
+<thead><tr><th>Feature</th><th>Convert</th><th>Optimizely</th><th>VWO</th></tr></thead>
+<tbody>
+<tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Full-Stack Testing</td><td><span class="badge-yes">Pro</span></td><td><span class="badge-gate">Separate product</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
+<tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Sequential Testing</td><td><span class="badge-yes">Pro</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
+<tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Feature Flags</td><td><span class="badge-yes">Pro</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
+<tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Bayesian + Frequentist Stats</td><td><span class="badge-yes">Pro</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
+</tbody>
+</table>
+</div>
+<div class="stat-panel"><strong>Pro plan from $420/mo.</strong><p>Full-stack testing and feature flags included.</p></div>
+</div>
+</div>
+</div>
+<!-- Row 2: card left / text right (flip) -->
+<div class="why-row why-row--flip">
+<div class="why-row__copy">
+<div class="why-eyebrow">02 · Data quality</div>
+<h3>Your server-side test results reflect reality, not sampling artifacts</h3>
+<p class="lead">Server-side testing eliminates flicker by design because the assignment decision happens before the browser renders anything. Convert has loaded synchronously since 2016, and every report counts every visitor and conversion event in full, with no sampling errors inherited from GA4 or Adobe. When iOS ITP or ad blockers cut off cookies, experiment assignment happening at the server level keeps your test data intact.</p>
+<ul class="bullet-list">
+<li>Assignment happens server-side, before the browser renders, zero flicker by design</li>
+<li>Unsampled reporting, no data loss from GA4-style sampling</li>
+<li>Cookie blocking and ITP don't affect server-side assignment</li>
+</ul>
+</div>
+<div class="why-row__card">
+<div class="card-chrome">
+<div class="card-head">
+<span class="card-dot" style="background:#EF4444"></span>
+<span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+<span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+<span class="card-title">Assignment comparison</span>
+</div>
+<div class="card-body" style="padding-bottom:0;">
+<div class="timeline-row">
+<div class="tl-icon tl-icon--bad">⚡</div>
+<div><div class="tl-label">Client-side test</div><div class="tl-desc">Browser renders first, flicker occurs, cookie blockers interfere with assignment</div></div>
+</div>
+<div class="timeline-row">
+<div class="tl-icon tl-icon--good">✓</div>
+<div><div class="tl-label">Server-side assignment</div><div class="tl-desc">Variant decided before first byte reaches the browser, flicker eliminated by design</div></div>
+</div>
+<div class="timeline-row">
+<div class="tl-icon tl-icon--good">↻</div>
+<div><div class="tl-label">Unsampled reporting</div><div class="tl-desc">Every session and conversion counted in full, no projections or reconciliation gaps</div></div>
+</div>
+</div>
+<div class="stat-panel">
+<strong>Flicker eliminated by design.</strong>
+<p>Unsampled reporting on all plans.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 3: text left / card right -->
+<div class="why-row">
+<div class="why-row__copy">
+<div class="why-eyebrow">03 · Developer workflow</div>
+<h3>Your dev team ships and monitors server-side tests without leaving the pipeline</h3>
+<p class="lead">Convert's REST API V2 lets your team create, update, and report on every experiment entirely inside your CI/CD pipeline, no UI required. HMAC authentication and separate developer accounts keep access controlled. Feature flags let you roll out code to 10%, 25%, or 100% of users independently of any test. When a live test breaks, Convert's support team responds in an average of 7 minutes.</p>
+<ul class="bullet-list">
+<li>REST API V2 covers full experiment lifecycle inside CI/CD</li>
+<li>HMAC authentication and developer accounts for access control</li>
+<li>7-minute average support response when a live backend test breaks</li>
+</ul>
+</div>
+<div class="why-row__card">
+<div class="card-chrome card-dark">
+<div class="card-head">
+<span class="card-dot" style="background:#334155"></span>
+<span class="card-dot" style="background:#334155;margin-left:4px"></span>
+<span class="card-dot" style="background:#334155;margin-left:4px"></span>
+<span class="card-title" style="color:#475569;">server-experiment.ts</span>
+</div>
+<div class="code-block"><span class="tok-keyword">import</span> <span class="tok-plain">ConvertSDK </span><span class="tok-keyword">from</span> <span class="tok-string">'@convertcom/js-sdk'</span><span class="tok-plain">;</span>
 <span class="tok-keyword">const</span> <span class="tok-var">sdk</span> <span class="tok-plain">= </span><span class="tok-keyword">new</span> <span class="tok-fn">ConvertSDK</span><span class="tok-plain">({</span>
-  <span class="tok-var">sdkKey</span><span class="tok-plain">: </span><span class="tok-var">process</span><span class="tok-plain">.</span><span class="tok-var">env</span><span class="tok-plain">.</span><span class="tok-var">CONVERT_SDK_KEY</span>
+<span class="tok-var">sdkKey</span><span class="tok-plain">: </span><span class="tok-var">process</span><span class="tok-plain">.</span><span class="tok-var">env</span><span class="tok-plain">.</span><span class="tok-var">CONVERT_SDK_KEY</span>
 <span class="tok-plain">});</span>
-
 <span class="tok-keyword">const</span> <span class="tok-var">ctx</span> <span class="tok-plain">= </span><span class="tok-var">sdk</span><span class="tok-plain">.</span><span class="tok-fn">createContext</span><span class="tok-plain">(</span><span class="tok-string">'user-123'</span><span class="tok-plain">, {</span>
-  <span class="tok-var">plan</span><span class="tok-plain">: </span><span class="tok-string">'trial'</span><span class="tok-plain">,</span>
-  <span class="tok-var">accountTier</span><span class="tok-plain">: </span><span class="tok-string">'enterprise'</span>
+<span class="tok-var">plan</span><span class="tok-plain">: </span><span class="tok-string">'trial'</span><span class="tok-plain">,</span>
+<span class="tok-var">accountTier</span><span class="tok-plain">: </span><span class="tok-string">'enterprise'</span>
 <span class="tok-plain">});</span>
-
 <span class="tok-comment">// Assignment happens here, before response is sent</span>
 <span class="tok-keyword">const</span> <span class="tok-var">variant</span> <span class="tok-plain">= </span><span class="tok-var">ctx</span><span class="tok-plain">.</span><span class="tok-fn">runExperience</span><span class="tok-plain">(</span>
-  <span class="tok-string">'pricing-logic-test'</span>
+<span class="tok-string">'pricing-logic-test'</span>
 <span class="tok-plain">);</span>
-
 <span class="tok-comment">// Track conversion when the goal fires</span>
 <span class="tok-var">ctx</span><span class="tok-plain">.</span><span class="tok-fn">trackConversion</span><span class="tok-plain">(</span><span class="tok-string">'upgrade_clicked'</span><span class="tok-plain">);</span></div>
-            <div class="stat-panel">
-              <strong>REST API V2 covers the full experiment lifecycle.</strong>
-              <p>Average support response: 7 minutes.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
+<div class="stat-panel">
+<strong>REST API V2 covers the full experiment lifecycle.</strong>
+<p>Average support response: 7 minutes.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
-
 <!-- API BANNER -->
 <section class="api-banner">
-  <div class="api-banner__inner">
-    <div class="api-banner__left">
-      <div class="eyebrow">Developer-first</div>
-      <h2>Read the API docs</h2>
-      <p class="api-banner__sub">REST API &middot; server-side SDK &middot; quickstart</p>
-      <div class="code-pill">npm install @convertcom/js-sdk</div>
-    </div>
-    <a href="#" class="btn-api">View docs &#8594;</a>
-  </div>
+<div class="api-banner__inner">
+<div class="api-banner__left">
+<div class="eyebrow">Developer-first</div>
+<h2>Read the API docs</h2>
+<p class="api-banner__sub">REST API · server-side SDK · quickstart</p>
+<div class="code-pill">npm install @convertcom/js-sdk</div>
+</div>
+<a class="btn-api" href="#">View docs →</a>
+</div>
 </section>
-
 <!-- FEATURES TABLE -->
 <section class="features-table-section">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-label">Platform capabilities</span>
-      <h2>Built for server-side teams, every feature, every plan level</h2>
-      <p>Convert gives engineering, product, and growth teams the infrastructure to run serious server-side experimentation without feature gates or enterprise paywalls where they don't belong.</p>
-    </div>
-    <div class="table-wrapper">
-      <table class="features-tbl">
-        <thead>
-          <tr>
-            <th class="ft-col-feature">Feature</th>
-            <th class="ft-col-what">What it does in a server-side context</th>
-            <th class="ft-col-benefit">Team benefit</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--orange-400)"></span>Full-Stack / Server-Side Testing <span style="font-size:11px;font-weight:600;color:var(--violet-600);background:var(--violet-50);padding:2px 7px;border-radius:20px;margin-left:4px;">Pro+</span></div></td>
-            <td class="ft-col-what">Run experiments on pricing logic, recommendation algorithms, API responses, onboarding flows, and backend services. Variants are determined server-side before content reaches the device.</td>
-            <td class="ft-col-benefit">Product and engineering teams gain the freedom to test any layer of the stack. Client-side tools can only touch look and feel; server-side unlocks the logic underneath.</td>
-          </tr>
-          <tr>
-            <td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:#F59E0B"></span>Feature Flags <span style="font-size:11px;font-weight:600;color:var(--violet-600);background:var(--violet-50);padding:2px 7px;border-radius:20px;margin-left:4px;">Pro+</span></div></td>
-            <td class="ft-col-what">Toggle specific features on or off for defined audience segments without a new deployment. Supports gradual rollouts, kill switches, and production testing with isolated exposure.</td>
-            <td class="ft-col-benefit">Developers test in production safely, catch issues before full release, and roll back instantly without touching the codebase.</td>
-          </tr>
-          <tr>
-            <td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--blue-600)"></span>JS Conditions <span style="font-size:11px;font-weight:600;color:var(--violet-600);background:var(--violet-50);padding:2px 7px;border-radius:20px;margin-left:4px;">Pro+</span></div></td>
-            <td class="ft-col-what">Write real JavaScript targeting conditions: fire experiments based on any custom logic, data attribute, cookie value, or API response your server exposes.</td>
-            <td class="ft-col-benefit">Engineers aren't constrained by dropdown menus. Any condition you can code, you can target, including server-set cookies and session context passed to the client.</td>
-          </tr>
-          <tr>
-            <td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--violet-600)"></span>DMP / Audience Targeting</div></td>
-            <td class="ft-col-what">Segment users using first-party data and custom attributes: account tier, pipeline value, behavioral history, or any attribute your backend surfaces. No reliance on browser-side signals.</td>
-            <td class="ft-col-benefit">Target with the precision your CRM and data warehouse already enable. Move beyond "returning visitor" to "enterprise accounts in trial" or "users who hit the paywall twice."</td>
-          </tr>
-          <tr>
-            <td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:#7C3AED"></span>Sequential Testing <span style="font-size:11px;font-weight:600;color:var(--violet-600);background:var(--violet-50);padding:2px 7px;border-radius:20px;margin-left:4px;">Pro+</span></div></td>
-            <td class="ft-col-what">Monitor live experiment results at any point without inflating false positive rates. No need to pre-commit to a fixed sample size before peeking at the data.</td>
-            <td class="ft-col-benefit">Engineering and product teams make faster, safer decisions on backend changes, especially during high-stakes releases, without waiting for an arbitrary end date.</td>
-          </tr>
-          <tr>
-            <td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--blue-600)"></span>Multi-Arm Bandits <span style="font-size:11px;font-weight:600;color:var(--green-600);background:var(--green-50);padding:2px 7px;border-radius:20px;margin-left:4px;">All plans</span></div></td>
-            <td class="ft-col-what">Automatically shift traffic toward the best-performing server-side variant in real time. Ideal for time-sensitive experiments like pricing tests, promotional logic, or algorithm variants.</td>
-            <td class="ft-col-benefit">Stop leaving revenue on a static 50/50 split during peak periods. The platform adapts traffic allocation dynamically so your best variant earns more exposure while the test runs.</td>
-          </tr>
-          <tr>
-            <td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--green-500)"></span>Frequentist + Bayesian Statistics <span style="font-size:11px;font-weight:600;color:var(--green-600);background:var(--green-50);padding:2px 7px;border-radius:20px;margin-left:4px;">All plans</span></div></td>
-            <td class="ft-col-what">Choose the statistical model that fits your experiment design. Frequentist for controlled, fixed-horizon tests; Bayesian for continuous monitoring and probabilistic decision-making.</td>
-            <td class="ft-col-benefit">Data and analytics teams aren't forced into a single framework. Match the stats model to the experiment type, especially important when testing backend logic with variable traffic patterns.</td>
-          </tr>
-          <tr>
-            <td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--orange-500)"></span>No-Flicker Loading</div></td>
-            <td class="ft-col-what">Variants are assembled and delivered server-side before the page reaches the browser, eliminating the flash of original content that plagues client-side implementations entirely.</td>
-            <td class="ft-col-benefit">Server-side teams get zero flicker by design. No anti-flicker snippets, no async workarounds, no performance penalty. The experience is consistent from the first byte.</td>
-          </tr>
-          <tr>
-            <td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--green-600)"></span>Unsampled Reporting <span style="font-size:11px;font-weight:600;color:var(--green-600);background:var(--green-50);padding:2px 7px;border-radius:20px;margin-left:4px;">All plans</span></div></td>
-            <td class="ft-col-what">Every event, every session, every conversion captured and reported in full. No data sampling, no statistical approximations applied to raw results.</td>
-            <td class="ft-col-benefit">When testing backend logic that affects revenue, attribution, or product behavior, sampled data is a liability. Full fidelity reporting means decisions are made on the complete picture.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<span class="section-label">Platform capabilities</span>
+<h2>Built for server-side teams, every feature, every plan level</h2>
+<p>Convert gives engineering, product, and growth teams the infrastructure to run serious server-side experimentation without feature gates or enterprise paywalls where they don't belong.</p>
+</div>
+<div class="table-wrapper">
+<table class="features-tbl">
+<thead>
+<tr>
+<th class="ft-col-feature">Feature</th>
+<th class="ft-col-what">Problem it solves</th>
+<th class="ft-col-benefit">How your team benefits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--orange-400)"></span>Full-Stack / Server-Side Testing <span style="font-size:11px;font-weight:600;color:var(--violet-600);background:var(--violet-50);padding:2px 7px;border-radius:20px;margin-left:4px;">Pro+</span></div></td>
+<td class="ft-col-what">Run experiments on pricing logic, recommendation algorithms, API responses, onboarding flows, and backend services. Variants are determined server-side before content reaches the device.</td>
+<td class="ft-col-benefit">Product and engineering teams gain the freedom to test any layer of the stack. Client-side tools can only touch look and feel; server-side unlocks the logic underneath.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:#F59E0B"></span>Feature Flags <span style="font-size:11px;font-weight:600;color:var(--violet-600);background:var(--violet-50);padding:2px 7px;border-radius:20px;margin-left:4px;">Pro+</span></div></td>
+<td class="ft-col-what">Toggle specific features on or off for defined audience segments without a new deployment. Supports gradual rollouts, kill switches, and production testing with isolated exposure.</td>
+<td class="ft-col-benefit">Developers test in production safely, catch issues before full release, and roll back instantly without touching the codebase.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--blue-600)"></span>JS Conditions <span style="font-size:11px;font-weight:600;color:var(--violet-600);background:var(--violet-50);padding:2px 7px;border-radius:20px;margin-left:4px;">Pro+</span></div></td>
+<td class="ft-col-what">Write real JavaScript targeting conditions: fire experiments based on any custom logic, data attribute, cookie value, or API response your server exposes.</td>
+<td class="ft-col-benefit">Engineers aren't constrained by dropdown menus. Any condition you can code, you can target, including server-set cookies and session context passed to the client.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--violet-600)"></span>DMP / Audience Targeting</div></td>
+<td class="ft-col-what">Segment users using first-party data and custom attributes: account tier, pipeline value, behavioral history, or any attribute your backend surfaces. No reliance on browser-side signals.</td>
+<td class="ft-col-benefit">Target with the precision your CRM and data warehouse already enable. Move beyond "returning visitor" to "enterprise accounts in trial" or "users who hit the paywall twice."</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:#7C3AED"></span>Sequential Testing <span style="font-size:11px;font-weight:600;color:var(--violet-600);background:var(--violet-50);padding:2px 7px;border-radius:20px;margin-left:4px;">Pro+</span></div></td>
+<td class="ft-col-what">Monitor live experiment results at any point without inflating false positive rates. No need to pre-commit to a fixed sample size before peeking at the data.</td>
+<td class="ft-col-benefit">Engineering and product teams make faster, safer decisions on backend changes, especially during high-stakes releases, without waiting for an arbitrary end date.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--blue-600)"></span>Multi-Arm Bandits <span style="font-size:11px;font-weight:600;color:var(--green-600);background:var(--green-50);padding:2px 7px;border-radius:20px;margin-left:4px;">All plans</span></div></td>
+<td class="ft-col-what">Automatically shift traffic toward the best-performing server-side variant in real time. Ideal for time-sensitive experiments like pricing tests, promotional logic, or algorithm variants.</td>
+<td class="ft-col-benefit">Stop leaving revenue on a static 50/50 split during peak periods. The platform adapts traffic allocation dynamically so your best variant earns more exposure while the test runs.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--green-500)"></span>Frequentist + Bayesian Statistics <span style="font-size:11px;font-weight:600;color:var(--green-600);background:var(--green-50);padding:2px 7px;border-radius:20px;margin-left:4px;">All plans</span></div></td>
+<td class="ft-col-what">Choose the statistical model that fits your experiment design. Frequentist for controlled, fixed-horizon tests; Bayesian for continuous monitoring and probabilistic decision-making.</td>
+<td class="ft-col-benefit">Data and analytics teams aren't forced into a single framework. Match the stats model to the experiment type, especially important when testing backend logic with variable traffic patterns.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--orange-500)"></span>No-Flicker Loading</div></td>
+<td class="ft-col-what">Variants are assembled and delivered server-side before the page reaches the browser, eliminating the flash of original content that plagues client-side implementations entirely.</td>
+<td class="ft-col-benefit">Server-side teams get zero flicker by design. No anti-flicker snippets, no async workarounds, no performance penalty. The experience is consistent from the first byte.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--green-600)"></span>Unsampled Reporting <span style="font-size:11px;font-weight:600;color:var(--green-600);background:var(--green-50);padding:2px 7px;border-radius:20px;margin-left:4px;">All plans</span></div></td>
+<td class="ft-col-what">Every event, every session, every conversion captured and reported in full. No data sampling, no statistical approximations applied to raw results.</td>
+<td class="ft-col-benefit">When testing backend logic that affects revenue, attribution, or product behavior, sampled data is a liability. Full fidelity reporting means decisions are made on the complete picture.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </section>
-
 <!-- USE CASES -->
 <section class="use-cases">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-label">Use cases</span>
-      <h2>What teams actually run on Convert's server-side infrastructure</h2>
-      <p>From pricing logic to regulated-industry compliance, here's what server-side experimentation looks like in production.</p>
-    </div>
-    <div class="uc-grid">
-
-      <div class="uc-card">
-        <div class="uc-card__num">01 &middot; Ecommerce</div>
-        <h3>Test Pricing Logic Without Browser Risk</h3>
-        <p>Validate dynamic versus flat pricing models at the server layer before committing to a change, so revenue-critical logic is never exposed to flicker, ad blockers, or client-side manipulation.</p>
-      </div>
-
-      <div class="uc-card">
-        <div class="uc-card__num">02 &middot; Engineering</div>
-        <h3>Ship Features Safely With Flag-Controlled Rollouts</h3>
-        <p>Release new functionality to 10%, 25%, or 100% of users via feature flags included in Convert's Pro plan, giving engineering teams a controlled rollout path without a separate flagging tool.</p>
-      </div>
-
-      <div class="uc-card">
-        <div class="uc-card__num">03 &middot; Regulated industries</div>
-        <h3>Run Clean Tests on Regulated or Privacy-Sensitive Sites</h3>
-        <p>Eliminate cookie dependency and ITP-driven data loss by assigning variants server-side, making Convert the compliant choice for healthcare, insurance, and mental health platforms where HIPAA and GDPR accuracy are non-negotiable.</p>
-      </div>
-
-      <div class="uc-card">
-        <div class="uc-card__num">04 &middot; SaaS</div>
-        <h3>Optimize Recommendation Algorithms in the Back End</h3>
-        <p>Pit profit-margin sorting against click-through sorting directly at the API response layer, so SaaS and ecommerce teams measure the revenue impact of algorithmic changes without touching a line of front-end code.</p>
-      </div>
-
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<span class="section-label">Use cases</span>
+<h2>What teams actually run on Convert's server-side infrastructure</h2>
+<p>From pricing logic to regulated-industry compliance, here's what server-side experimentation looks like in production.</p>
+</div>
+<div class="uc-grid">
+<div class="uc-card">
+<div class="uc-card__num">01 · Ecommerce</div>
+<h3>Test Pricing Logic Without Browser Risk</h3>
+<p>Validate dynamic versus flat pricing models at the server layer before committing to a change, so revenue-critical logic is never exposed to flicker, ad blockers, or client-side manipulation.</p>
+</div>
+<div class="uc-card">
+<div class="uc-card__num">02 · Engineering</div>
+<h3>Ship Features Safely With Flag-Controlled Rollouts</h3>
+<p>Release new functionality to 10%, 25%, or 100% of users via feature flags included in Convert's Pro plan, giving engineering teams a controlled rollout path without a separate flagging tool.</p>
+</div>
+<div class="uc-card">
+<div class="uc-card__num">03 · Regulated industries</div>
+<h3>Run Clean Tests on Regulated or Privacy-Sensitive Sites</h3>
+<p>Eliminate cookie dependency and ITP-driven data loss by assigning variants server-side, making Convert the compliant choice for healthcare, insurance, and mental health platforms where HIPAA and GDPR accuracy are non-negotiable.</p>
+</div>
+<div class="uc-card">
+<div class="uc-card__num">04 · SaaS</div>
+<h3>Optimize Recommendation Algorithms in the Back End</h3>
+<p>Pit profit-margin sorting against click-through sorting directly at the API response layer, so SaaS and ecommerce teams measure the revenue impact of algorithmic changes without touching a line of front-end code.</p>
+</div>
+</div>
+</div>
 </section>
-
-
 <!-- RELATED ARTICLES -->
 <section class="related-articles">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-label">From the Convert blog</span>
-      <h2>Go deeper on server-side experimentation</h2>
-    </div>
-    <div class="ra-grid">
-      <a href="#" class="ra-card">
-        <span class="ra-tag ra-tag--tech">Technical guide</span>
-        <div class="ra-title">Client-side vs. server-side A/B testing: when each approach is the right choice</div>
-        <div class="ra-meta"><span>8 min read</span><span class="ra-read-more">Read &#8594;</span></div>
-      </a>
-      <a href="#" class="ra-card">
-        <span class="ra-tag ra-tag--pain">Pain point</span>
-        <div class="ra-title">How ITP, ad blockers, and cookie restrictions break client-side experiments and what to do about it</div>
-        <div class="ra-meta"><span>6 min read</span><span class="ra-read-more">Read &#8594;</span></div>
-      </a>
-      <a href="#" class="ra-card">
-        <span class="ra-tag ra-tag--strategy">Strategy</span>
-        <div class="ra-title">Feature flags and A/B tests: how to use both in the same release workflow without conflict</div>
-        <div class="ra-meta"><span>7 min read</span><span class="ra-read-more">Read &#8594;</span></div>
-      </a>
-      <a href="#" class="ra-card">
-        <span class="ra-tag ra-tag--stats">Statistics</span>
-        <div class="ra-title">Sequential testing for engineering teams: how to monitor live experiments without inflating false positives</div>
-        <div class="ra-meta"><span>6 min read</span><span class="ra-read-more">Read &#8594;</span></div>
-      </a>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<span class="section-label">From the Convert blog</span>
+<h2>Go deeper on server-side experimentation</h2>
+</div>
+<div class="ra-grid">
+<a class="ra-card" href="#">
+<span class="ra-tag ra-tag--tech">Technical guide</span>
+<div class="ra-title">Client-side vs. server-side A/B testing: when each approach is the right choice</div>
+<div class="ra-meta"><span>8 min read</span><span class="ra-read-more">Read →</span></div>
+</a>
+<a class="ra-card" href="#">
+<span class="ra-tag ra-tag--pain">Pain point</span>
+<div class="ra-title">How ITP, ad blockers, and cookie restrictions break client-side experiments and what to do about it</div>
+<div class="ra-meta"><span>6 min read</span><span class="ra-read-more">Read →</span></div>
+</a>
+<a class="ra-card" href="#">
+<span class="ra-tag ra-tag--strategy">Strategy</span>
+<div class="ra-title">Feature flags and A/B tests: how to use both in the same release workflow without conflict</div>
+<div class="ra-meta"><span>7 min read</span><span class="ra-read-more">Read →</span></div>
+</a>
+<a class="ra-card" href="#">
+<span class="ra-tag ra-tag--stats">Statistics</span>
+<div class="ra-title">Sequential testing for engineering teams: how to monitor live experiments without inflating false positives</div>
+<div class="ra-meta"><span>6 min read</span><span class="ra-read-more">Read →</span></div>
+</a>
+</div>
+</div>
 </section>
 <!-- FAQ -->
 <section class="faq">
-  <div class="container">
-    <div class="faq__inner">
-      <h2 class="faq__title">Frequently asked questions</h2>
-      <p class="faq__sub">What engineering and growth teams ask before switching their server-side testing to Convert.</p>
-      <div class="faq-accordion" id="faqAccordion">
-
-        <div class="faq-item">
-          <button class="faq-question" data-index="0">
-            <span class="faq-num">01</span>
-            <span class="faq-q-text">Can I use Convert for true server-side A/B testing, or is it mainly a client-side testing tool?</span>
-            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="faq-answer" data-index="0">
-            <p>Convert supports true server-side A/B testing through its full-stack experimentation capabilities and SDK-based setup. Your team can run experiments where the decision happens in your application code, API layer, or backend logic instead of in the browser. This is the right setup when you need to test pricing logic, recommendation algorithms, feature rollouts, or API responses.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" data-index="1">
-            <span class="faq-num">02</span>
-            <span class="faq-q-text">How does Convert handle implementation for server-side experiments if my team already has an existing release workflow?</span>
-            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="faq-answer" data-index="1">
-            <p>Convert is built to fit into developer-led release workflows. You can manage experiments through SDKs, feature flags, and the REST API V2, which makes it possible to create, update, and report on tests inside your CI/CD pipeline. This lets your team keep experiment logic close to the codebase and deployment process you already use.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" data-index="2">
-            <span class="faq-num">03</span>
-            <span class="faq-q-text">Will server-side testing with Convert help me avoid flicker and browser-side rendering issues?</span>
-            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="faq-answer" data-index="2">
-            <p>Yes. Server-side testing removes the browser from the decision point, which eliminates flicker entirely. Because the variant is decided before the experience is rendered, users never see the original version flash before the test version appears. This is especially important for pricing, checkout, and regulated use cases where visual inconsistency affects trust or data quality.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" data-index="3">
-            <span class="faq-num">04</span>
-            <span class="faq-q-text">Can I use Convert to test backend logic like pricing rules, recommendation algorithms, or API responses?</span>
-            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="faq-answer" data-index="3">
-            <p>Yes. Convert is designed for server-side experiments that go beyond page-level changes. Your team can test dynamic pricing models, recommendation logic, onboarding sequences in apps, and API payload behavior where no browser-based visual editor applies. If what you want to test lives in code or infrastructure, Convert supports that use case.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" data-index="4">
-            <span class="faq-num">05</span>
-            <span class="faq-q-text">How accurate is Convert for server-side experimentation when cookies are blocked or browser tracking is limited?</span>
-            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="faq-answer" data-index="4">
-            <p>Server-side experimentation reduces your dependence on client-side cookies affected by ITP, ad blockers, or consent restrictions because assignment happens outside the browser. Convert uses unsampled reporting so every counted visitor and conversion event is included. For teams focused on cleaner data collection, server-side testing gives you a more controlled measurement setup.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" data-index="5">
-            <span class="faq-num">06</span>
-            <span class="faq-q-text">Can I roll out server-side experiments gradually, like a feature flag, instead of exposing 100% of users at once?</span>
-            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="faq-answer" data-index="5">
-            <p>Yes. Convert supports feature-flag style rollouts as part of its full-stack testing capabilities. Your team can release a change to a defined percentage of users first, then expand from 10% to 25% to 100% as confidence grows. This reduces release risk while still measuring user impact and conversion outcomes.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" data-index="6">
-            <span class="faq-num">07</span>
-            <span class="faq-q-text">How does Convert fit with my existing analytics, data warehouse, or CRM stack for server-side testing?</span>
-            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="faq-answer" data-index="6">
-            <p>Convert integrates with GA4, Amplitude, Mixpanel, Segment, mParticle, HubSpot, and Salesforce, among others. That means you can run server-side tests in Convert while sending experiment and conversion data into the systems your team already uses for analysis. Convert is an experimentation platform, not a CDP, so it is designed to work with your existing stack rather than replace it.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" data-index="7">
-            <span class="faq-num">08</span>
-            <span class="faq-q-text">Can my developers and marketers both work in Convert without creating workflow bottlenecks on server-side tests?</span>
-            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="faq-answer" data-index="7">
-            <p>Yes. Developers own code-based experiment logic, while marketers and CRO teams still access reporting, goals, and experiment management. Server-side tests typically require developer implementation, but Convert does not force the rest of the team out of the process. Teams can review results, manage projects, and coordinate experiments without a separate enterprise services layer.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" data-index="8">
-            <span class="faq-num">09</span>
-            <span class="faq-q-text">What happens if I need support during a live server-side experiment or rollout?</span>
-            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="faq-answer" data-index="8">
-            <p>Convert's average support response time is about 7 minutes, handled by humans rather than a chatbot workflow. That is particularly important for server-side testing, where issues can involve implementation details, rollout behavior, or data validation. If support responsiveness is part of your vendor evaluation, Convert is built to be operationally dependable.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" data-index="9">
-            <span class="faq-num">10</span>
-            <span class="faq-q-text">Is Convert a good fit for server-side testing in privacy-sensitive or regulated environments?</span>
-            <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="faq-answer" data-index="9">
-            <p>Yes. Convert combines code-level control with strict compliance standards. The platform is compliant with GDPR, CCPA, HIPAA, ISO 27001:2022, and SOC 2 Type 2, uses EU-based servers in Frankfurt, and has had zero data breaches to date. Convert also does not collect PII in standard experimentation workflows and supports consent-aware deployment options.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
+<div class="container">
+<div class="faq__inner">
+<h2 class="faq__title">Frequently asked questions</h2>
+<p class="faq__sub">What engineering and growth teams ask before switching their server-side testing to Convert.</p>
+<div class="faq-accordion" id="faqAccordion">
+<div class="faq-item">
+<button class="faq-question" data-index="0">
+<span class="faq-num">01</span>
+<span class="faq-q-text">Can I use Convert for true server-side A/B testing, or is it mainly a client-side testing tool?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="0">
+<p>Convert supports true server-side A/B testing through its full-stack experimentation capabilities and SDK-based setup. Your team can run experiments where the decision happens in your application code, API layer, or backend logic instead of in the browser. This is the right setup when you need to test pricing logic, recommendation algorithms, feature rollouts, or API responses.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="1">
+<span class="faq-num">02</span>
+<span class="faq-q-text">How does Convert handle implementation for server-side experiments if my team already has an existing release workflow?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="1">
+<p>Convert is built to fit into developer-led release workflows. You can manage experiments through SDKs, feature flags, and the REST API V2, which makes it possible to create, update, and report on tests inside your CI/CD pipeline. This lets your team keep experiment logic close to the codebase and deployment process you already use.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="2">
+<span class="faq-num">03</span>
+<span class="faq-q-text">Will server-side testing with Convert help me avoid flicker and browser-side rendering issues?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="2">
+<p>Yes. Server-side testing removes the browser from the decision point, which eliminates flicker entirely. Because the variant is decided before the experience is rendered, users never see the original version flash before the test version appears. This is especially important for pricing, checkout, and regulated use cases where visual inconsistency affects trust or data quality.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="3">
+<span class="faq-num">04</span>
+<span class="faq-q-text">Can I use Convert to test backend logic like pricing rules, recommendation algorithms, or API responses?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="3">
+<p>Yes. Convert is designed for server-side experiments that go beyond page-level changes. Your team can test dynamic pricing models, recommendation logic, onboarding sequences in apps, and API payload behavior where no browser-based visual editor applies. If what you want to test lives in code or infrastructure, Convert supports that use case.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="4">
+<span class="faq-num">05</span>
+<span class="faq-q-text">How accurate is Convert for server-side experimentation when cookies are blocked or browser tracking is limited?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="4">
+<p>Server-side experimentation reduces your dependence on client-side cookies affected by ITP, ad blockers, or consent restrictions because assignment happens outside the browser. Convert uses unsampled reporting so every counted visitor and conversion event is included. For teams focused on cleaner data collection, server-side testing gives you a more controlled measurement setup.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="5">
+<span class="faq-num">06</span>
+<span class="faq-q-text">Can I roll out server-side experiments gradually, like a feature flag, instead of exposing 100% of users at once?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="5">
+<p>Yes. Convert supports feature-flag style rollouts as part of its full-stack testing capabilities. Your team can release a change to a defined percentage of users first, then expand from 10% to 25% to 100% as confidence grows. This reduces release risk while still measuring user impact and conversion outcomes.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="6">
+<span class="faq-num">07</span>
+<span class="faq-q-text">How does Convert fit with my existing analytics, data warehouse, or CRM stack for server-side testing?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="6">
+<p>Convert integrates with GA4, Amplitude, Mixpanel, Segment, mParticle, HubSpot, and Salesforce, among others. That means you can run server-side tests in Convert while sending experiment and conversion data into the systems your team already uses for analysis. Convert is an experimentation platform, not a CDP, so it is designed to work with your existing stack rather than replace it.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="7">
+<span class="faq-num">08</span>
+<span class="faq-q-text">Can my developers and marketers both work in Convert without creating workflow bottlenecks on server-side tests?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="7">
+<p>Yes. Developers own code-based experiment logic, while marketers and CRO teams still access reporting, goals, and experiment management. Server-side tests typically require developer implementation, but Convert does not force the rest of the team out of the process. Teams can review results, manage projects, and coordinate experiments without a separate enterprise services layer.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="8">
+<span class="faq-num">09</span>
+<span class="faq-q-text">What happens if I need support during a live server-side experiment or rollout?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="8">
+<p>Convert's average support response time is about 7 minutes, handled by humans rather than a chatbot workflow. That is particularly important for server-side testing, where issues can involve implementation details, rollout behavior, or data validation. If support responsiveness is part of your vendor evaluation, Convert is built to be operationally dependable.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="9">
+<span class="faq-num">10</span>
+<span class="faq-q-text">Is Convert a good fit for server-side testing in privacy-sensitive or regulated environments?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="9">
+<p>Yes. Convert combines code-level control with strict compliance standards. The platform is compliant with GDPR, CCPA, HIPAA, ISO 27001:2022, and SOC 2 Type 2, uses EU-based servers in Frankfurt, and has had zero data breaches to date. Convert also does not collect PII in standard experimentation workflows and supports consent-aware deployment options.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
-
 <!-- FOOTER -->
 <footer class="footer">
-  <div class="footer__inner">
-    <div class="footer__logo">
-      <div class="nav__logomark">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4C7 4 4.5 6 4 9C5 8 6.5 7.5 8 8C9 8.5 9.5 9.5 10.5 10C12 11 14 10.5 15 8.5C14 6 12.2 4 10 4Z" fill="white" opacity="0.9"/><path d="M4 11C4.5 14 7 16 10 16C12.2 16 14 14.5 15 12.5C14 13.5 12.5 14 11 13.5C10 13 9.5 12 8.5 11.5C7 10.5 5 10.5 4 11Z" fill="white" opacity="0.7"/></svg>
-      </div>
-      <span style="font-size:15px;font-weight:700;color:var(--ink-900);letter-spacing:-0.3px;">Convert</span>
-    </div>
-    <nav class="footer__links">
-      <a href="#" class="footer__link">Features</a>
-      <a href="#" class="footer__link">Pricing</a>
-      <a href="#" class="footer__link">Integrations</a>
-      <a href="#" class="footer__link">Blog</a>
-      <a href="#" class="footer__link">Privacy policy</a>
-      <a href="#" class="footer__link">Security</a>
-      <a href="#" class="footer__link">Contact</a>
-    </nav>
-    <span class="footer__copy">Convert.com landing pages, built by AUQ Analytics &amp; Growth Consulting</span>
-  </div>
+<div class="footer__inner">
+<div class="footer__logo">
+<div class="nav__logomark">
+<svg fill="none" height="20" viewbox="0 0 20 20" width="20"><path d="M10 4C7 4 4.5 6 4 9C5 8 6.5 7.5 8 8C9 8.5 9.5 9.5 10.5 10C12 11 14 10.5 15 8.5C14 6 12.2 4 10 4Z" fill="white" opacity="0.9"></path><path d="M4 11C4.5 14 7 16 10 16C12.2 16 14 14.5 15 12.5C14 13.5 12.5 14 11 13.5C10 13 9.5 12 8.5 11.5C7 10.5 5 10.5 4 11Z" fill="white" opacity="0.7"></path></svg>
+</div>
+<span style="font-size:15px;font-weight:700;color:var(--ink-900);letter-spacing:-0.3px;">Convert</span>
+</div>
+<nav class="footer__links">
+<a class="footer__link" href="#">Features</a>
+<a class="footer__link" href="#">Pricing</a>
+<a class="footer__link" href="#">Integrations</a>
+<a class="footer__link" href="#">Blog</a>
+<a class="footer__link" href="#">Privacy policy</a>
+<a class="footer__link" href="#">Security</a>
+<a class="footer__link" href="#">Contact</a>
+</nav>
+<span class="footer__copy">Convert.com landing pages, built by AUQ Analytics &amp; Growth Consulting</span>
+</div>
 </footer>
-
 <script>
 (function () {
   var accordion = document.getElementById('faqAccordion');
