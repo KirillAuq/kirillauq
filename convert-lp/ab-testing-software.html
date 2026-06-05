@@ -458,7 +458,7 @@ ul, ol { list-style: none; }
         <span class="hero__eyebrow-dot"></span>
         <span class="hero__eyebrow-text">Convert Experiences</span>
       </div>
-      <h1>Run A/B tests your data team will <em>actually trust</em></h1>
+      <h1>A/B testing software your data team will <em>actually trust</em></h1>
       <p class="hero__sub">Pick your stats model, Frequentist, Bayesian, or Sequential, with no enterprise procurement in the way. Developers get a full REST API, a server-side SDK, and scoped JavaScript and CSS editors at the global, experience, and variation level that drop straight into your CI/CD workflow. Every plan ships unsampled reporting, flicker-free synchronous delivery, and support that answers in about 7 minutes.</p>
       <div class="hero__ctas">
         <button class="btn-hero-primary">Start your free 15-day trial</button>
@@ -643,8 +643,8 @@ ul, ol { list-style: none; }
       <div class="why-row why-row--flip">
         <div class="why-row__copy">
           <div class="why-eyebrow">02 &middot; Pricing</div>
-          <h3>Advanced A/B testing capabilities come included in every plan, not gated behind a sales call</h3>
-          <p class="lead">Sequential Testing, multi-arm bandits, full-stack server-side testing, and JS Conditions are enterprise-only features on VWO and Optimizely. Convert includes them in its Pro plan, starting at $420 per month on annual billing.</p>
+          <h3>Advanced A/B testing capabilities come included, not gated behind a sales call</h3>
+          <p class="lead">Sequential Testing, full-stack server-side testing, and JS Conditions are enterprise-only features on VWO and Optimizely. Convert includes them in its Pro plan, starting at $420 per month on annual billing, and multi-arm bandits are available from the Growth plan.</p>
           <ul class="bullet-list">
             <li>Sequential Testing and full-stack included in Convert Pro at $420/mo annual</li>
             <li>Choose Frequentist, Bayesian, and Sequential Frequentist models with custom thresholds</li>
@@ -663,10 +663,10 @@ ul, ol { list-style: none; }
               <table class="compare-table">
                 <thead><tr><th>Feature</th><th>Convert</th><th>Optimizely</th><th>VWO</th></tr></thead>
                 <tbody>
-                  <tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Sequential Testing</td><td><span class="badge-yes">All plans</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-no">Not available</span></td></tr>
-                  <tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Full-Stack Testing</td><td><span class="badge-yes">Pro</span></td><td><span class="badge-gate">Separate product</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
-                  <tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">JS Conditions</td><td><span class="badge-yes">All plans</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
-                  <tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Multi-Arm Bandits</td><td><span class="badge-yes">Pro</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-gate">Growth+</span></td></tr>
+                  <tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Sequential Testing</td><td><span class="badge-yes">Pro+</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-no">Not available</span></td></tr>
+                  <tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Full-Stack Testing</td><td><span class="badge-yes">Pro+</span></td><td><span class="badge-gate">Separate product</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
+                  <tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">JS Conditions</td><td><span class="badge-yes">Pro+ (Growth add-on)</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
+                  <tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Multi-Arm Bandits</td><td><span class="badge-yes">All plans</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-gate">Growth+</span></td></tr>
                 </tbody>
               </table>
             </div>
@@ -688,32 +688,30 @@ ul, ol { list-style: none; }
           </ul>
         </div>
         <div class="why-row__card">
-          <div class="card-chrome card-dark">
+          <div class="card-chrome">
             <div class="card-head">
-              <span class="card-dot" style="background:#334155"></span>
-              <span class="card-dot" style="background:#334155;margin-left:4px"></span>
-              <span class="card-dot" style="background:#334155;margin-left:4px"></span>
-              <span class="card-title" style="color:#475569;">support-channel.ts</span>
+              <span class="card-dot" style="background:#EF4444"></span>
+              <span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+              <span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+              <span class="card-title">Support response timeline</span>
             </div>
-            <div class="code-block"><span class="tok-comment">// Connect Convert MCP server for real-time support</span>
-<span class="tok-keyword">import</span> <span class="tok-plain">{ ConvertMCP } </span><span class="tok-keyword">from</span> <span class="tok-string">'@convertcom/mcp-server'</span><span class="tok-plain">;</span>
-
-<span class="tok-keyword">const</span> <span class="tok-var">support</span> <span class="tok-plain">= </span><span class="tok-keyword">new</span> <span class="tok-fn">ConvertMCP</span><span class="tok-plain">({</span>
-  <span class="tok-var">apiKey</span><span class="tok-plain">: process.env.</span><span class="tok-var">CONVERT_API_KEY</span><span class="tok-plain">,</span>
-  <span class="tok-comment">// Avg response: 7 min, real engineer</span>
-  <span class="tok-var">channel</span><span class="tok-plain">: </span><span class="tok-string">'live-chat'</span>
-<span class="tok-plain">});</span>
-
-<span class="tok-comment">// Diagnose a live experiment issue</span>
-<span class="tok-keyword">await</span> <span class="tok-var">support</span><span class="tok-plain">.</span><span class="tok-fn">diagnose</span><span class="tok-plain">({</span>
-  <span class="tok-var">experimentId</span><span class="tok-plain">: </span><span class="tok-string">'exp_checkout_v3'</span><span class="tok-plain">,</span>
-  <span class="tok-var">issue</span><span class="tok-plain">: </span><span class="tok-string">'variant not rendering'</span><span class="tok-plain">,</span>
-  <span class="tok-var">urgency</span><span class="tok-plain">: </span><span class="tok-string">'live-test'</span>
-<span class="tok-plain">});</span>
-<span class="tok-comment">// Response in &lt;7 min. No bots. No queues.</span></div>
-            <div class="stat-panel" style="background:rgba(255,255,255,0.05);border-top:1px solid rgba(255,255,255,0.08);">
-              <strong style="color:#93C5FD;">Average support response: 7 minutes.</strong>
-              <p style="color:#64748B;">4x faster than the industry average.</p>
+            <div class="card-body" style="padding-bottom:0;">
+              <div class="timeline-row">
+                <div class="tl-icon tl-icon--bad">&#9889;</div>
+                <div><div class="tl-label">A live test breaks</div><div class="tl-desc">A variant stops rendering on your highest-traffic page</div></div>
+              </div>
+              <div class="timeline-row">
+                <div class="tl-icon tl-icon--good">&#10003;</div>
+                <div><div class="tl-label">You reach a real engineer</div><div class="tl-desc">7-minute average response, no chatbot, no ticket queue</div></div>
+              </div>
+              <div class="timeline-row">
+                <div class="tl-icon tl-icon--good">&#8635;</div>
+                <div><div class="tl-label">Fixed while the test is still live</div><div class="tl-desc">Resolve the issue before it costs you the campaign</div></div>
+              </div>
+            </div>
+            <div class="stat-panel">
+              <strong>Average support response: 7 minutes.</strong>
+              <p>4x faster than the industry average.</p>
             </div>
           </div>
         </div>
@@ -729,7 +727,7 @@ ul, ol { list-style: none; }
     <div class="api-banner__left">
       <div class="eyebrow">Developer-first</div>
       <h2>Read the API docs</h2>
-      <p class="api-banner__sub">REST &middot; GraphQL &middot; SDK quickstart</p>
+      <p class="api-banner__sub">REST API &middot; server-side SDK &middot; quickstart</p>
       <div class="code-pill">npm install @convertcom/js-sdk</div>
     </div>
     <a href="#" class="btn-api">View docs &#8594;</a>
@@ -1089,7 +1087,7 @@ ul, ol { list-style: none; }
             <svg class="faq-chevron" viewBox="0 0 18 18" fill="none"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div class="faq-answer" data-index="8">
-            <p>Convert offers a full REST API, a GraphQL endpoint, and a JavaScript SDK available via npm. The API covers experiment management, variation assignment, goal tracking, and reporting, so teams can automate the full experimentation workflow inside their existing CI/CD pipelines.</p>
+            <p>Convert offers a full REST API and a JavaScript SDK available via npm. The API covers experiment management, variation assignment, goal tracking, and reporting, so teams can automate the full experimentation workflow inside their existing CI/CD pipelines.</p>
             <p>Convert also operates the most mature MCP server in the A/B testing category. Unlike competitors whose MCP integrations offer read-only data access, Convert's MCP server learns about your site, your experiments, and your conversion goals, enabling genuine automation rather than just data export. The MCP server is built for AI-assisted workflows where the AI agent needs context about your specific testing environment, not just generic API documentation.</p>
           </div>
         </div>

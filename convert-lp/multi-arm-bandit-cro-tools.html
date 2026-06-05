@@ -532,7 +532,7 @@
         <span class="hero__dot"></span>
         Multi-arm bandits in Convert Experiences
       </div>
-      <h1 class="hero__h1">Send traffic to your winner <em>while the test is still live</em></h1>
+      <h1 class="hero__h1">Multi-arm bandit testing software that <em>sends traffic to your winner</em></h1>
       <p class="hero__sub">Convert's multi-arm bandit engine shifts traffic toward your better-performing variants in real time, so you stop losing conversions while a test plays out. Marketers get faster, data-backed calls. Developers get full programmatic control through the REST API, no manual intervention required.</p>
       <div class="hero__ctas">
         <a href="#" class="btn-hero-primary">Start your free 15-day trial</a>
@@ -663,7 +663,7 @@
           <ul class="bullet-list">
             <li>Show clients measurable lift before the test concludes</li>
             <li>Manage unlimited client projects from one centralized account</li>
-            <li>Access multi-arm bandits on Pro, no enterprise gating</li>
+            <li>Access multi-arm bandits from the Growth plan, no enterprise gating</li>
           </ul>
           <a href="#" class="fw-link">Explore for agencies <span>&#8594;</span></a>
         </div>
@@ -688,7 +688,7 @@
           <h3 class="why-h3">Run adaptive traffic allocation without an enterprise contract</h3>
           <p class="why-lead">Most platforms treat multi-arm bandits as a premium feature and reserve access for customers who clear an enterprise threshold. Convert includes it across its self-service plans, starting at $299/month on annual billing.</p>
           <ul class="bullet-list">
-            <li>Multi-arm bandits included in Convert Pro, no enterprise gating</li>
+            <li>Multi-arm bandits included from the Growth plan, no enterprise gating</li>
             <li>Start running adaptive experiments the moment your test is ready</li>
             <li>No procurement cycle, no sales call required</li>
           </ul>
@@ -708,7 +708,7 @@
               <tbody>
                 <tr>
                   <td style="font-weight:600;color:var(--blue-600)">Convert</td>
-                  <td><span class="badge badge-yes">&#10003; Pro plan</span></td>
+                  <td><span class="badge badge-yes">&#10003; All plans</span></td>
                   <td>from $299/mo</td>
                 </tr>
                 <tr>
@@ -802,28 +802,17 @@
             <span class="card-dot"></span>
             <span class="card-title">bandit-config.ts</span>
           </div>
-          <pre><span class="tok-comment">// Configure a multi-arm bandit experiment in Convert</span>
-<span class="tok-kw">import</span> { <span class="tok-var">convert</span> } <span class="tok-kw">from</span> <span class="tok-str">'@convertcom/js-sdk'</span>;
+          <pre><span class="tok-comment">// Bucket a visitor into a multi-arm bandit experience</span>
+<span class="tok-kw">import</span> <span class="tok-var">ConvertSDK</span> <span class="tok-kw">from</span> <span class="tok-str">'@convertcom/js-sdk'</span>;
 
-<span class="tok-kw">const</span> <span class="tok-var">experiment</span> = <span class="tok-kw">await</span> <span class="tok-fn">convert.createExperiment</span>({
-  <span class="tok-comment">// Adaptive allocation, no fixed splits</span>
-  allocation: <span class="tok-str">'bandit'</span>,
+<span class="tok-kw">const</span> <span class="tok-var">convertSDK</span> = <span class="tok-kw">new</span> <span class="tok-fn">ConvertSDK</span>({ sdkKey: <span class="tok-str">'YOUR_SDK_KEY'</span> });
 
-  <span class="tok-comment">// Statistical model: 'bayesian' or 'frequentist'</span>
-  statisticsModel: <span class="tok-str">'bayesian'</span>,
+<span class="tok-comment">// Auto-Allocate distributes traffic to the winning arm</span>
+<span class="tok-kw">const</span> <span class="tok-var">userContext</span> = <span class="tok-var">convertSDK</span>.<span class="tok-fn">createContext</span>(<span class="tok-str">'visitor-123'</span>);
+<span class="tok-kw">const</span> <span class="tok-var">variation</span> = <span class="tok-var">userContext</span>.<span class="tok-fn">runExperience</span>(<span class="tok-str">'checkout-bandit'</span>);
 
-  <span class="tok-comment">// Confidence threshold before declaring a winner</span>
-  winnerThreshold: <span class="tok-num">0.95</span>,
-
-  variants: [
-    { id: <span class="tok-str">'control'</span>,   weight: <span class="tok-num">0.34</span> },
-    { id: <span class="tok-str">'variant-b'</span>, weight: <span class="tok-num">0.33</span> },
-    { id: <span class="tok-str">'variant-c'</span>, weight: <span class="tok-num">0.33</span> },
-  ],
-
-  <span class="tok-comment">// Goal: track primary conversion event</span>
-  goal: <span class="tok-str">'checkout_complete'</span>,
-});</pre>
+<span class="tok-comment">// Track the goal the bandit optimizes toward</span>
+<span class="tok-var">userContext</span>.<span class="tok-fn">trackConversion</span>(<span class="tok-str">'checkout_complete'</span>);</pre>
           <div class="stat-panel" style="background:rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.07);">
             <p style="color:#94A3B8;">Average support response: <strong style="color:#93C5FD;">7 minutes</strong>, not a chatbot.</p>
           </div>
@@ -840,7 +829,7 @@
     <div>
       <div class="api-banner__eyebrow">Developer tools</div>
       <h2 class="api-banner__h2">Read the API docs</h2>
-      <p class="api-banner__sub">REST · GraphQL · SDK quickstart</p>
+      <p class="api-banner__sub">REST API · server-side SDK · quickstart</p>
       <div class="api-pill">npm install @convertcom/js-sdk</div>
     </div>
     <a href="#" class="btn-outline-white">View docs &#8594;</a>
