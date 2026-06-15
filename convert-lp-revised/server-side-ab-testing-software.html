@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Server-Side A/B Testing Software — Convert Experiences</title>
+<meta content="Convert Experiences is server-side A/B testing software built for engineering and growth teams. Test pricing logic, recommendation algorithms, and feature rollouts with the Convert API v2 and JavaScript SDK, which can be integrated into CI/CD workflows for supported use cases." name="description"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --blue-600:#0066FF; --blue-700:#0052CC;
+  --blue-50:#EEF4FF;  --blue-100:#DBEAFE; --blue-200:#E0E7FF;
+  --violet-50:#EDE9FE; --violet-100:#F5F0FF; --violet-200:#C4B5FD;
+  --violet-600:#7C3AED; --violet-700:#6D28D9; --violet-800:#5B21B6; --violet-900:#4C1D95;
+  --green-50:#EDFAF5; --green-400:#6EE7B7; --green-500:#10B981; --green-600:#059669;
+  --orange-50:#FFF7ED; --orange-400:#FB923C; --orange-500:#F97316;
+  --ink-900:#2A3442; --ink-800:#3C4659; --ink-700:#586478; --ink-600:#7E8AA0;
+  --ink-500:#A6B1C2; --ink-400:#D0D7E1; --ink-300:#E7EBF1; --ink-200:#F4F6F9; --ink-100:#FFFFFF;
+  --cream:#FAFAF7; --cream-hover:#F5F4EE;
+  --action:var(--blue-600); --action-hover:var(--blue-700);
+  --link:var(--violet-600);
+  --text:var(--ink-900); --text-secondary:var(--ink-700); --text-muted:var(--ink-600);
+  --border:var(--ink-400); --border-subtle:var(--ink-300);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--cream);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; }
+ul, ol { list-style: none; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+.section-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-600);
+}
+
+/* ============================================================
+   REUSABLE BULLET LIST
+   ============================================================ */
+.bullet-list { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 22px; }
+.bullet-list li { display: flex; align-items: flex-start; gap: 9px; font-size: 15px; color: var(--ink-700); line-height: 1.5; }
+.bullet-list li::before {
+  content: ''; flex-shrink: 0; width: 16px; height: 16px; margin-top: 2px;
+  background: var(--blue-50); border-radius: 50%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3 8.5l3 3 7-7' stroke='%230066FF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-size: contain;
+}
+
+/* ============================================================
+   CARD CHROME
+   ============================================================ */
+.card-chrome {
+  background: radial-gradient(ellipse at top left, var(--blue-50) 0%, var(--ink-100) 55%);
+  border: 1px solid var(--ink-300); border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05); overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.card-chrome:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); transform: translateY(-2px); }
+.card-head {
+  display: flex; align-items: center; padding: 12px 16px;
+  border-bottom: 1px solid var(--ink-300); background: rgba(255,255,255,0.6);
+}
+.card-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.card-title { font-size: 12px; font-weight: 500; color: var(--ink-600); margin-left: 10px; }
+.card-body { padding: 20px 22px; }
+
+/* Dark code card */
+.card-dark { background: #0B1220 !important; border-color: transparent !important; color: #e2e8f0; }
+.card-dark .card-head { background: rgba(255,255,255,0.04) !important; border-bottom-color: rgba(255,255,255,0.08) !important; }
+.card-dark:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+
+/* Code styling */
+.code-block { font-family: 'Fira Code', 'Cascadia Code', monospace; font-size: 12px; line-height: 1.7; padding: 18px 20px; }
+.tok-comment { color: #64748B; }
+.tok-keyword { color: #93C5FD; }
+.tok-string  { color: #86EFAC; }
+.tok-fn      { color: #FCD34D; }
+.tok-var     { color: #F0ABFC; }
+.tok-num     { color: #FB923C; }
+.tok-plain   { color: #CBD5E1; }
+
+/* Stat panel */
+.stat-panel { background: var(--ink-200); padding: 14px 22px; border-top: 1px solid var(--ink-300); }
+.stat-panel strong { color: var(--blue-600); font-size: 13px; font-weight: 700; }
+.stat-panel p { font-size: 12px; color: var(--ink-600); margin-top: 2px; }
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,250,247,0.94);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--ink-300);
+}
+.nav__inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 32px;
+  height: 64px; display: flex; align-items: center; gap: 40px;
+}
+.nav__logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.nav__logomark {
+  width: 34px; height: 34px; background: var(--blue-600);
+  border-radius: 9px; display: flex; align-items: center; justify-content: center;
+}
+.nav__wordmark { font-size: 16px; font-weight: 700; color: var(--ink-900); letter-spacing: -0.3px; }
+.nav__links { display: flex; align-items: center; gap: 28px; flex: 1; }
+.nav__link { font-size: 14px; font-weight: 500; color: var(--ink-800); transition: color 0.15s; }
+.nav__link:hover { color: var(--blue-600); }
+.nav__actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.btn-ghost {
+  font-size: 14px; font-weight: 500; color: var(--ink-800);
+  padding: 8px 16px; border: 1px solid var(--ink-300); border-radius: 8px;
+  transition: background 0.15s, border-color 0.15s; cursor: pointer; background: transparent;
+}
+.btn-ghost:hover { background: var(--ink-200); border-color: var(--ink-400); }
+.btn-primary {
+  font-size: 14px; font-weight: 600; color: #fff; padding: 9px 18px;
+  background: var(--blue-600); border-radius: 8px; border: none;
+  cursor: pointer; transition: background 0.15s;
+}
+.btn-primary:hover { background: var(--blue-700); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  background: linear-gradient(160deg, #0B1220 0%, #0D1535 55%, #150D2E 100%);
+  padding: 96px 0; position: relative; overflow: hidden; border-top: 1px solid transparent;
+}
+.hero__glow-blue {
+  position: absolute; top: -100px; left: 50%; transform: translateX(-30%);
+  width: 700px; height: 500px;
+  background: radial-gradient(ellipse, rgba(0,102,255,0.18) 0%, transparent 65%); pointer-events: none;
+}
+.hero__glow-violet {
+  position: absolute; bottom: -120px; right: -100px; width: 600px; height: 500px;
+  background: radial-gradient(ellipse, rgba(124,58,237,0.16) 0%, transparent 65%); pointer-events: none;
+}
+.hero__inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 32px;
+  display: grid; grid-template-columns: 1fr 400px; gap: 64px;
+  align-items: center; position: relative; z-index: 1;
+}
+.hero__eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(124,58,237,0.15); border: 1px solid rgba(196,181,253,0.25);
+  border-radius: 100px; padding: 5px 14px; margin-bottom: 24px;
+}
+.hero__eyebrow-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--violet-200); box-shadow: 0 0 8px rgba(196,181,253,0.8);
+}
+.hero__eyebrow-text { font-size: 12px; font-weight: 500; color: var(--violet-200); letter-spacing: 0.02em; }
+.hero h1 {
+  font-size: clamp(30px, 3.8vw, 52px); font-weight: 600;
+  letter-spacing: -1px; line-height: 1.13; color: #fff; margin-bottom: 22px;
+}
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--blue-600), var(--violet-600));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero__sub { font-size: 18px; color: rgba(255,255,255,0.65); line-height: 1.65; margin-bottom: 32px; max-width: 560px; }
+.hero__ctas { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.btn-hero-primary {
+  font-size: 15px; font-weight: 600; color: #fff; padding: 13px 24px;
+  background: var(--blue-600); border: none; border-radius: 10px;
+  cursor: pointer; transition: background 0.15s, transform 0.15s;
+}
+.btn-hero-primary:hover { background: var(--blue-700); transform: translateY(-1px); }
+.btn-hero-secondary {
+  font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.85); padding: 12px 22px;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 10px; cursor: pointer; transition: background 0.15s;
+}
+.btn-hero-secondary:hover { background: rgba(255,255,255,0.12); }
+
+/* Form card */
+.hero__form-card {
+  background: var(--cream); border: 1px solid var(--ink-300); border-radius: 16px; padding: 32px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.22), 0 2px 8px rgba(0,0,0,.1);
+}
+.hero__form-title { font-size: 17px; font-weight: 700; color: var(--ink-900); letter-spacing: -0.3px; margin-bottom: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+.form-group label { font-size: 13px; font-weight: 500; color: var(--ink-700); }
+.form-group input {
+  background: var(--ink-100); border: 1px solid var(--ink-300); border-radius: 8px;
+  padding: 10px 14px; font-size: 14px; font-family: inherit; color: var(--ink-900);
+  transition: border-color 0.15s, box-shadow 0.15s; outline: none;
+}
+.form-group input:focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px rgba(0,102,255,.12); }
+.form-group input::placeholder { color: var(--ink-500); }
+.btn-form-submit {
+  width: 100%; font-size: 15px; font-weight: 600; color: #fff; padding: 13px;
+  background: var(--blue-600); border: none; border-radius: 9px; cursor: pointer;
+  margin-top: 6px; transition: background 0.15s;
+}
+.btn-form-submit:hover { background: var(--blue-700); }
+.form-trust { font-size: 11.5px; color: var(--ink-600); text-align: center; margin-top: 12px; }
+
+/* ============================================================
+   TRUST STRIP
+   ============================================================ */
+.trust-strip { background: var(--ink-100); padding: 15px 0; border-top: 1px solid var(--ink-300); }
+.trust-strip__inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+.trust-strip__label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-600); white-space: nowrap; padding-right: 20px; }
+.trust-divider { width: 1px; height: 18px; background: var(--ink-300); margin-right: 20px; flex-shrink: 0; }
+.trust-items { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.trust-item { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--ink-700); white-space: nowrap; }
+.trust-check { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* ============================================================
+   FOR WHOM
+   ============================================================ */
+.for-whom { background: var(--ink-100); padding: 96px 0; border-top: 1px solid var(--ink-300); }
+.section-header { margin-bottom: 48px; }
+.section-header h2 { font-size: clamp(26px, 3vw, 36px); font-weight: 700; letter-spacing: -0.5px; color: var(--ink-900); margin-top: 10px; margin-bottom: 12px; }
+.section-header p { font-size: 16px; color: var(--ink-700); max-width: 600px; }
+
+.for-whom__stack { display: flex; flex-direction: column; border: 1px solid var(--ink-300); border-radius: 16px; overflow: hidden; }
+.fw-card { display: grid; grid-template-columns: 300px 1fr; }
+.fw-card + .fw-card { border-top: 1px solid var(--ink-300); }
+.fw-card__left {
+  padding: 36px 32px; border-right: 1px solid var(--ink-300);
+  background: radial-gradient(ellipse at top left, var(--blue-50) 0%, var(--ink-100) 70%);
+  display: flex; flex-direction: column; gap: 12px;
+}
+.fw-icon { width: 44px; height: 44px; background: var(--blue-50); border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.fw-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--violet-600); }
+.fw-card__left h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.3px; color: var(--ink-900); line-height: 1.3; }
+.fw-card__right { padding: 36px 40px; display: flex; flex-direction: column; justify-content: center; background: var(--ink-100); }
+.fw-card__right p { font-size: 15px; color: var(--ink-700); line-height: 1.65; margin-bottom: 18px; }
+.fw-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--violet-600); transition: gap 0.15s; margin-top: 4px; }
+.fw-link:hover { gap: 10px; }
+
+/* ============================================================
+   WHY CONVERT
+   ============================================================ */
+.why-convert { background: var(--cream); padding: 96px 0; border-top: 1px solid var(--ink-300); }
+.why-rows { display: flex; flex-direction: column; gap: 80px; margin-top: 48px; }
+.why-row { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.why-row--flip .why-row__card { order: -1; }
+.why-row__copy .why-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--violet-600); margin-bottom: 10px; }
+.why-row__copy h3 { font-size: 24px; font-weight: 700; letter-spacing: -0.4px; color: var(--ink-900); line-height: 1.3; margin-bottom: 14px; }
+.why-row__copy .lead { font-size: 15px; color: var(--ink-700); line-height: 1.65; margin-bottom: 20px; }
+
+/* Timeline card */
+.timeline-row { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--ink-300); }
+.timeline-row:last-child { border-bottom: none; }
+.tl-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.tl-icon--bad  { background: #FEF2F2; color: #DC2626; }
+.tl-icon--good { background: var(--green-50); color: var(--green-600); }
+.tl-label { font-size: 13px; font-weight: 600; color: var(--ink-900); line-height: 1.3; }
+.tl-desc { font-size: 11.5px; color: var(--ink-600); line-height: 1.5; margin-top: 2px; }
+
+/* Compare table card */
+.compare-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.compare-table th { font-size: 11px; font-weight: 600; color: var(--ink-600); padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--ink-300); }
+.compare-table td { padding: 9px 12px; border-bottom: 1px solid var(--ink-300); color: var(--ink-700); vertical-align: middle; }
+.compare-table tr:last-child td { border-bottom: none; }
+.badge-yes  { background: var(--green-50);  color: var(--green-600);  font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; display: inline-block; }
+.badge-gate { background: #FFFBEB; color: #92400E; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; display: inline-block; }
+.badge-no   { background: #FEF2F2; color: #DC2626;  font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; display: inline-block; }
+
+/* ============================================================
+   API BANNER
+   ============================================================ */
+.api-banner {
+  background: linear-gradient(120deg, var(--violet-900) 0%, var(--violet-700) 50%, var(--blue-600) 100%);
+  padding: 72px 0; border-top: 1px solid var(--ink-300);
+}
+.api-banner__inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.api-banner__left .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+.api-banner__left h2 { font-size: clamp(26px, 3vw, 36px); font-weight: 700; letter-spacing: -0.5px; color: #fff; margin-bottom: 6px; }
+.api-banner__sub { font-size: 15px; color: rgba(255,255,255,0.7); margin-bottom: 18px; }
+.code-pill { display: inline-flex; align-items: center; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 7px 14px; font-family: 'Fira Code', monospace; font-size: 13px; color: var(--green-400); letter-spacing: 0.01em; }
+.btn-api { font-size: 15px; font-weight: 600; color: #fff; padding: 13px 26px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3); border-radius: 10px; cursor: pointer; transition: background 0.15s; white-space: nowrap; flex-shrink: 0; }
+.btn-api:hover { background: rgba(255,255,255,0.2); }
+
+/* ============================================================
+   FEATURES TABLE
+   ============================================================ */
+.features-table-section { background: var(--ink-100); padding: 96px 0; border-top: 1px solid var(--ink-300); }
+.table-wrapper { border-radius: 14px; overflow-x: auto; border: 1px solid var(--ink-300); margin-top: 40px; }
+.features-tbl { width: 100%; border-collapse: collapse; }
+.features-tbl thead tr { background: var(--ink-900); }
+.features-tbl th { color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 14px 20px; text-align: left; }
+.features-tbl tbody tr:nth-child(odd)  { background: var(--ink-100); }
+.features-tbl tbody tr:nth-child(even) { background: var(--cream); }
+.features-tbl td { padding: 18px 20px; line-height: 1.6; vertical-align: top; border-bottom: 1px solid var(--ink-300); font-size: 14px; }
+.features-tbl tr:last-child td { border-bottom: none; }
+.ft-col-feature { border-left: 3px solid var(--orange-400); }
+.ft-col-what    { border-left: 3px solid var(--blue-600); }
+.ft-col-who     { border-left: 3px solid transparent; }
+.ft-col-benefit { border-left: 3px solid var(--green-500); }
+.ft-name { font-weight: 600; color: var(--ink-900); display: flex; align-items: center; gap: 8px; }
+.ft-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.features-note { font-size: 14px; color: var(--ink-600); text-align: center; margin-top: 28px; line-height: 1.6; }
+.features-note strong { color: var(--ink-900); }
+
+/* ============================================================
+   USE CASES (4-card 2x2 grid)
+   ============================================================ */
+.use-cases { background: var(--cream); padding: 96px 0; border-top: 1px solid var(--ink-300); }
+.uc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
+.uc-card {
+  background: var(--ink-100); border: 1px solid var(--ink-300); border-radius: 14px;
+  padding: 32px; position: relative; overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.uc-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at top left, var(--blue-50) 0%, transparent 55%);
+  opacity: 0; transition: opacity 0.2s; pointer-events: none;
+}
+.uc-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.07); transform: translateY(-2px); }
+.uc-card:hover::before { opacity: 1; }
+.uc-card__num { font-size: 11px; font-weight: 700; color: var(--ink-400); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px; }
+.uc-card h3 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; color: var(--ink-900); line-height: 1.3; margin-bottom: 12px; }
+.uc-card p { font-size: 14.5px; color: var(--ink-700); line-height: 1.65; }
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq { background: var(--ink-100); padding: 96px 0; border-top: 1px solid var(--ink-300); }
+.faq__inner { max-width: 860px; margin: 0 auto; }
+.faq__title { font-size: clamp(26px, 3vw, 36px); font-weight: 700; letter-spacing: -0.5px; margin-bottom: 10px; }
+.faq__sub { font-size: 16px; color: var(--ink-600); margin-bottom: 40px; }
+.faq-accordion { border: 1px solid var(--ink-300); border-radius: 14px; overflow: hidden; }
+.faq-item { border-bottom: 1px solid var(--ink-300); }
+.faq-item:last-child { border-bottom: none; }
+.faq-question { display: flex; align-items: center; gap: 16px; padding: 20px 24px; cursor: pointer; transition: background 0.15s; user-select: none; background: transparent; border: none; width: 100%; text-align: left; font-family: inherit; }
+.faq-question:hover { background: var(--ink-200); }
+.faq-question.is-open { background: var(--blue-50); }
+.faq-num { font-size: 13px; font-weight: 700; color: var(--ink-400); min-width: 28px; transition: color 0.15s; }
+.faq-question.is-open .faq-num { color: var(--blue-600); }
+.faq-q-text { flex: 1; font-size: 15px; font-weight: 600; color: var(--ink-900); line-height: 1.4; }
+.faq-chevron { width: 18px; height: 18px; flex-shrink: 0; transition: transform 0.25s; }
+.faq-question.is-open .faq-chevron { transform: rotate(180deg); }
+.faq-answer { display: none; padding: 0 24px 22px 68px; font-size: 14.5px; color: var(--ink-700); line-height: 1.7; }
+.faq-answer.is-open { display: block; }
+.faq-answer p + p { margin-top: 10px; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer { background: var(--cream-hover); padding: 32px 0; border-top: 1px solid var(--ink-300); }
+.footer__inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.footer__logo { display: flex; align-items: center; gap: 9px; }
+.footer__links { display: flex; gap: 22px; flex-wrap: wrap; }
+.footer__link { font-size: 13px; color: var(--ink-600); transition: color 0.15s; }
+.footer__link:hover { color: var(--ink-900); }
+.footer__copy { font-size: 11.5px; color: var(--ink-500); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  .hero__inner { grid-template-columns: 1fr; gap: 48px; }
+  .hero__form-card { max-width: 480px; }
+}
+@media (max-width: 900px) {
+  .nav__links { display: none; }
+  .why-row { grid-template-columns: 1fr; gap: 32px; }
+  .why-row--flip .why-row__card { order: 0; }
+  .uc-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 860px) {
+  .fw-card { grid-template-columns: 1fr; }
+  .fw-card__left { border-right: none; border-bottom: 1px solid var(--ink-300); }
+}
+@media (max-width: 540px) {
+  .container, .hero__inner, .trust-strip__inner, .api-banner__inner, .footer__inner { padding: 0 20px; }
+  .hero { padding: 64px 0; }
+  .for-whom, .why-convert, .features-table-section, .use-cases, .faq { padding: 64px 0; }
+}
+
+    /* RELATED ARTICLES */
+    .related-articles { background: var(--cream); padding: 80px 0; border-top: 1px solid var(--ink-300); }
+    .ra-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 36px; }
+    .ra-card { display: flex; flex-direction: column; background: var(--ink-100); border: 1px solid var(--ink-300); border-radius: 12px; padding: 22px; text-decoration: none; transition: box-shadow 0.2s, transform 0.2s; position: relative; overflow: hidden; cursor: pointer; }
+    .ra-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at top left, var(--blue-50) 0%, transparent 55%); opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+    .ra-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.08); transform: translateY(-2px); }
+    .ra-card:hover::before { opacity: 1; }
+    .ra-tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; display: inline-block; margin-bottom: 12px; width: fit-content; }
+    .ra-tag--pain     { background: #FFFBEB; color: #92400E; }
+    .ra-tag--stats    { background: var(--violet-50); color: var(--violet-600); }
+    .ra-tag--tech     { background: var(--blue-50); color: var(--blue-600); }
+    .ra-tag--strategy { background: var(--green-50); color: var(--green-600); }
+    .ra-title { font-size: 14.5px; font-weight: 600; color: var(--ink-900); line-height: 1.45; flex: 1; margin-bottom: 16px; transition: color 0.15s; }
+    .ra-card:hover .ra-title { color: var(--blue-600); }
+    .ra-meta { font-size: 12px; color: var(--ink-500); display: flex; align-items: center; justify-content: space-between; }
+    .ra-read-more { color: var(--blue-600); font-weight: 500; }
+    @media (max-width: 860px) { .ra-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 540px) { .ra-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<!-- NAVIGATION -->
+<nav class="nav">
+<div class="nav__inner">
+<a class="nav__logo" href="https://www.convert.com/">
+<div class="nav__logomark">
+<svg fill="none" height="20" viewbox="0 0 20 20" width="20"><path d="M10 4C7 4 4.5 6 4 9C5 8 6.5 7.5 8 8C9 8.5 9.5 9.5 10.5 10C12 11 14 10.5 15 8.5C14 6 12.2 4 10 4Z" fill="white" opacity="0.9"></path><path d="M4 11C4.5 14 7 16 10 16C12.2 16 14 14.5 15 12.5C14 13.5 12.5 14 11 13.5C10 13 9.5 12 8.5 11.5C7 10.5 5 10.5 4 11Z" fill="white" opacity="0.7"></path></svg>
+</div>
+<span class="nav__wordmark">Convert</span>
+</a>
+<div class="nav__links">
+<a class="nav__link" href="#">Features</a>
+<a class="nav__link" href="#">Pricing</a>
+<a class="nav__link" href="#">Integrations</a>
+<a class="nav__link" href="#">Resources</a>
+<a class="nav__link" href="#">Customers</a>
+</div>
+<div class="nav__actions">
+<button class="btn-ghost">Log in</button>
+<button class="btn-primary">Start free trial</button>
+</div>
+</div>
+</nav>
+<!-- HERO -->
+<section class="hero">
+<div class="hero__glow-blue"></div>
+<div class="hero__glow-violet"></div>
+<div class="hero__inner">
+<div class="hero__copy">
+<div class="hero__eyebrow">
+<span class="hero__eyebrow-dot"></span>
+<span class="hero__eyebrow-text">Convert Experiences</span>
+</div>
+<h1>Server-side A/B testing software that <em>runs where decisions happen</em></h1>
+<p class="hero__sub">Convert's full-stack experimentation runs at the server layer, so your pricing logic, recommendation algorithms, and feature rollouts are tested where the decisions actually happen. Server-rendered variations can avoid client-side replacement flicker, your application supplies the visitor identifier so Convert doesn't need browser fingerprinting, and reporting stays unsampled. Marketers get cleaner results. Developers get Convert's JavaScript SDK and API v2, which can be integrated into CI/CD workflows for supported use cases.</p>
+<div class="hero__ctas">
+<button class="btn-hero-primary">Start your free 15-day trial</button>
+<button class="btn-hero-secondary">Book a demo</button>
+</div>
+</div>
+<div class="hero__form-card">
+<div class="hero__form-title">See Convert in your environment</div>
+<form onsubmit="return false;">
+<div class="form-group">
+<label for="work-email">Work email</label>
+<input id="work-email" placeholder="you@company.com" type="email"/>
+</div>
+<div class="form-group">
+<label for="company-url">Company URL</label>
+<input id="company-url" placeholder="https://yoursite.com" type="url"/>
+</div>
+<div class="form-group">
+<label for="monthly-visitors">Monthly visitors</label>
+<input id="monthly-visitors" placeholder="e.g. 250,000" type="text"/>
+</div>
+<button class="btn-form-submit" type="submit">Get trial access</button>
+</form>
+<p class="form-trust">No credit card required. 15-day full access, no strings.</p>
+</div>
+</div>
+</section>
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+<div class="trust-strip__inner">
+<span class="trust-strip__label">Trusted infrastructure</span>
+<div class="trust-divider"></div>
+<div class="trust-items">
+<div class="trust-item">
+<svg class="trust-check" fill="none" viewbox="0 0 14 14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+        400,000+ experiences served
+      </div>
+<div class="trust-item">
+<svg class="trust-check" fill="none" viewbox="0 0 14 14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+        40,000+ sites running Convert
+      </div>
+<div class="trust-item">
+<svg class="trust-check" fill="none" viewbox="0 0 14 14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+        SOC 2 · ISO 27001 · HIPAA · GDPR
+      </div>
+<div class="trust-item">
+<svg class="trust-check" fill="none" viewbox="0 0 14 14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+        7-minute average support response
+      </div>
+<div class="trust-item">
+<svg class="trust-check" fill="none" viewbox="0 0 14 14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+        16 years building experimentation infrastructure
+      </div>
+</div>
+</div>
+</div>
+<!-- FOR WHOM -->
+<section class="for-whom">
+<div class="container">
+<div class="section-header">
+<span class="section-label">Who Convert is built for</span>
+<h2>Server-side testing built for the teams doing real work at the application layer</h2>
+<p>Whether you're testing back-end pricing models, shipping code with feature flags, or delivering server-side programs for clients, Convert has the infrastructure to match.</p>
+</div>
+<div class="for-whom__stack">
+<!-- Ecommerce -->
+<div class="fw-card">
+<div class="fw-card__left">
+<div class="fw-icon">
+<svg fill="none" height="22" stroke="#0066FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path><line x1="3" x2="21" y1="6" y2="6"></line><path d="M16 10a4 4 0 01-8 0"></path></svg>
+</div>
+<span class="fw-eyebrow">Ecommerce</span>
+<h3>Test pricing logic and checkout flows without touching the front end</h3>
+</div>
+<div class="fw-card__right">
+<p>Client-side testing has a ceiling. When your most consequential experiments live in back-end pricing rules, recommendation algorithms, or cart logic, the browser is the wrong place to run them. Convert's JavaScript SDK, usable in supported server-side JavaScript environments like Node.js and compatible edge runtimes, gives engineering teams the SDK and controls needed to test pricing logic, recommendations, APIs, and checkout behavior within the application stack.</p>
+<ul class="bullet-list">
+<li>Run back-end pricing tests without exposing variant logic to the browser</li>
+<li>Avoid client-side replacement flicker on high-stakes product and checkout pages</li>
+<li>Convert reports eligible exposure and conversion events from your tracking flow without report sampling</li>
+</ul>
+<a class="fw-link" href="#">Explore for Ecommerce →</a>
+</div>
+</div>
+<!-- SaaS -->
+<div class="fw-card">
+<div class="fw-card__left">
+<div class="fw-icon">
+<svg fill="none" height="22" stroke="#0066FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><rect height="14" rx="2" width="20" x="2" y="3"></rect><path d="M8 21h8M12 17v4"></path></svg>
+</div>
+<span class="fw-eyebrow">SaaS</span>
+<h3>Experiment on onboarding logic and feature rollouts at the code level</h3>
+</div>
+<div class="fw-card__right">
+<p>Activation rate tests rarely live in the UI. The decisions that move trial-to-paid conversion, such as feature sequencing, paywall logic, and API response behavior, happen in your application layer. Convert's server-side testing lets SaaS teams run statistically rigorous experiments directly in code, with Frequentist, Bayesian, and Sequential testing models available.</p>
+<ul class="bullet-list">
+<li>Test feature flag rollouts across 10%, 25%, or 100% of users safely</li>
+<li>Sequential testing monitors results without inflating false positive rates (Pro+)</li>
+<li>Integrate natively with Amplitude, Mixpanel, or Heap with no data silos</li>
+</ul>
+<a class="fw-link" href="#">Explore for SaaS →</a>
+</div>
+</div>
+<!-- Agencies -->
+<div class="fw-card">
+<div class="fw-card__left">
+<div class="fw-icon">
+<svg fill="none" height="22" stroke="#0066FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" width="22"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 00-3-3.87"></path><path d="M16 3.13a4 4 0 010 7.75"></path></svg>
+</div>
+<span class="fw-eyebrow">Agencies</span>
+<h3>Deliver server-side programs across every client account from one platform</h3>
+</div>
+<div class="fw-card__right">
+<p>Running server-side experimentation for multiple clients means managing the SDK, test logic, and reporting across entirely different tech stacks without letting one client's configuration bleed into another. Convert's multi-project architecture gives CRO agencies centralized billing, isolated client environments, and an API that can be integrated into CI/CD workflows for supported experiment-management and application-delivery use cases.</p>
+<ul class="bullet-list">
+<li>Manage unlimited client projects with isolated environments and centralized billing</li>
+<li>Deploy and update experiments via the Convert API inside client pipelines</li>
+<li>Deliver unsampled reports clients can trust without caveats</li>
+</ul>
+<a class="fw-link" href="#">Explore for Agencies →</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- WHY CONVERT -->
+<section class="why-convert">
+<div class="container">
+<div class="section-header">
+<span class="section-label">Why Convert</span>
+<h2>Three reasons engineering and growth teams choose Convert for server-side testing</h2>
+<p>Transparent pricing, data quality that reflects reality, and a developer workflow that doesn't fight your existing pipeline.</p>
+</div>
+<div class="why-rows">
+<!-- Row 1: text left / card right -->
+<div class="why-row">
+<div class="why-row__copy">
+<div class="why-eyebrow">01 · Pricing</div>
+<h3>Run server-side tests at Pro pricing, not enterprise pricing</h3>
+<p class="lead">On Optimizely, full-stack testing is a separate product. On VWO, it requires an enterprise contract. With Convert, Full Stack experimentation and Feature Flags are available on Convert Pro and Enterprise, with Pro starting at $420 per month and including sequential testing and both Frequentist and Bayesian stats engines. No separate product purchase required.</p>
+<ul class="bullet-list">
+<li>Full Stack experimentation and Feature Flags are available on Convert Pro and Enterprise</li>
+<li>Sequential Testing, Frequentist, and Bayesian stats all in Pro</li>
+<li>No separate product purchase to unlock server-side testing</li>
+</ul>
+</div>
+<div class="why-row__card">
+<div class="card-chrome">
+<div class="card-head">
+<span class="card-dot" style="background:#EF4444"></span>
+<span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+<span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+<span class="card-title">Feature availability</span>
+</div>
+<div class="card-body">
+<table class="compare-table">
+<thead><tr><th>Feature</th><th>Convert</th><th>Optimizely</th><th>VWO</th></tr></thead>
+<tbody>
+<tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Full-Stack Testing</td><td><span class="badge-yes">Pro &amp; Enterprise</span></td><td><span class="badge-gate">Separate product</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
+<tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Sequential Testing</td><td><span class="badge-yes">Pro</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
+<tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Feature Flags</td><td><span class="badge-yes">Pro &amp; Enterprise</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
+<tr><td style="font-size:13px;font-weight:500;color:var(--ink-800);">Bayesian + Frequentist Stats</td><td><span class="badge-yes">Pro</span></td><td><span class="badge-gate">Enterprise</span></td><td><span class="badge-gate">Enterprise</span></td></tr>
+</tbody>
+</table>
+</div>
+<div class="stat-panel"><strong>Pro plan from $420/mo.</strong><p>Full Stack experimentation and Feature Flags on Pro and Enterprise.</p></div>
+</div>
+</div>
+</div>
+<!-- Row 2: card left / text right (flip) -->
+<div class="why-row why-row--flip">
+<div class="why-row__copy">
+<div class="why-eyebrow">02 · Data quality</div>
+<h3>Your server-side test results reflect reality, not sampling artifacts</h3>
+<p class="lead">Server-rendered variations can avoid client-side replacement flicker when the assigned content is generated before the response is sent. Convert reports eligible exposure and conversion events sent through the implemented tracking flow without report sampling, so you avoid sampling errors inherited from GA4 or Adobe. Server-side decisioning also avoids dependence on client-side script execution when iOS ITP or ad blockers limit cookies, though consistent bucketing still requires a stable visitor or user identifier that your application can lawfully persist and pass to the SDK.</p>
+<ul class="bullet-list">
+<li>Server-rendered variations can avoid client-side replacement flicker when generated before the response is sent</li>
+<li>Reporting covers eligible exposure and conversion events without report sampling</li>
+<li>Server-side decisioning avoids dependence on client-side script execution; consistent bucketing still needs a stable identifier your app passes to the SDK</li>
+</ul>
+</div>
+<div class="why-row__card">
+<div class="card-chrome">
+<div class="card-head">
+<span class="card-dot" style="background:#EF4444"></span>
+<span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+<span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+<span class="card-title">Assignment comparison</span>
+</div>
+<div class="card-body" style="padding-bottom:0;">
+<div class="timeline-row">
+<div class="tl-icon tl-icon--bad">⚡</div>
+<div><div class="tl-label">Client-side test</div><div class="tl-desc">Browser renders first, flicker occurs, cookie blockers interfere with assignment</div></div>
+</div>
+<div class="timeline-row">
+<div class="tl-icon tl-icon--good">✓</div>
+<div><div class="tl-label">Server-side assignment</div><div class="tl-desc">When the SDK decision is evaluated before the response is rendered, the variation ships without a client-side content swap</div></div>
+</div>
+<div class="timeline-row">
+<div class="tl-icon tl-icon--good">↻</div>
+<div><div class="tl-label">Unsampled reporting</div><div class="tl-desc">Eligible exposure and conversion events from your tracking flow reported without report sampling</div></div>
+</div>
+</div>
+<div class="stat-panel">
+<strong>Server-rendered variations avoid client-side replacement flicker.</strong>
+<p>Reporting without report sampling on all plans.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 3: text left / card right -->
+<div class="why-row">
+<div class="why-row__copy">
+<div class="why-eyebrow">03 · Developer workflow</div>
+<h3>Your dev team ships and monitors server-side tests without leaving the pipeline</h3>
+<p class="lead">Convert API v2 supports documented experiment-management and reporting operations, and the JavaScript SDK and API can be integrated into CI/CD workflows for supported use cases. For access control, use the authentication method and credentials documented for Convert API v2 and the JavaScript SDK. Feature flags let you roll out code to 10%, 25%, or 100% of users independently of any test. When a live test breaks, Convert's support team responds in an average of 7 minutes.</p>
+<ul class="bullet-list">
+<li>Convert API v2 supports documented experiment-management and reporting operations; review the API reference for the endpoints your workflow needs</li>
+<li>Use the authentication method and credentials documented for Convert API v2 and the JavaScript SDK</li>
+<li>7-minute average support response when a live backend test breaks</li>
+</ul>
+</div>
+<div class="why-row__card">
+<div class="card-chrome card-dark">
+<div class="card-head">
+<span class="card-dot" style="background:#334155"></span>
+<span class="card-dot" style="background:#334155;margin-left:4px"></span>
+<span class="card-dot" style="background:#334155;margin-left:4px"></span>
+<span class="card-title" style="color:#475569;">server-experiment.ts</span>
+</div>
+<div class="code-block"><span class="tok-keyword">import</span> <span class="tok-plain">ConvertSDK </span><span class="tok-keyword">from</span> <span class="tok-string">'@convertcom/js-sdk'</span><span class="tok-plain">;</span>
+<span class="tok-keyword">const</span> <span class="tok-var">sdk</span> <span class="tok-plain">= </span><span class="tok-keyword">new</span> <span class="tok-fn">ConvertSDK</span><span class="tok-plain">(</span><span class="tok-var">config</span><span class="tok-plain">);</span>
+<span class="tok-keyword">await</span> <span class="tok-var">sdk</span><span class="tok-plain">.</span><span class="tok-fn">onReady</span><span class="tok-plain">();</span>
+<span class="tok-keyword">const</span> <span class="tok-var">context</span> <span class="tok-plain">= </span><span class="tok-var">sdk</span><span class="tok-plain">.</span><span class="tok-fn">createContext</span><span class="tok-plain">(</span><span class="tok-string">'user-123'</span><span class="tok-plain">, {</span>
+<span class="tok-var">plan</span><span class="tok-plain">: </span><span class="tok-string">'trial'</span><span class="tok-plain">,</span>
+<span class="tok-var">accountTier</span><span class="tok-plain">: </span><span class="tok-string">'enterprise'</span>
+<span class="tok-plain">});</span>
+<span class="tok-comment">// Decision is evaluated here, before the response is sent</span>
+<span class="tok-keyword">const</span> <span class="tok-var">variation</span> <span class="tok-plain">= </span><span class="tok-var">context</span><span class="tok-plain">.</span><span class="tok-fn">runExperience</span><span class="tok-plain">(</span>
+<span class="tok-string">'pricing-logic-test'</span>
+<span class="tok-plain">);</span>
+<span class="tok-keyword">if</span> <span class="tok-plain">(</span><span class="tok-var">variation</span><span class="tok-plain">) {</span>
+<span class="tok-comment">  // Read the returned variation and apply its configured changes.</span>
+<span class="tok-plain">}</span>
+<span class="tok-comment">// Track conversion when the goal fires</span>
+<span class="tok-var">context</span><span class="tok-plain">.</span><span class="tok-fn">trackConversion</span><span class="tok-plain">(</span><span class="tok-string">'upgrade_clicked'</span><span class="tok-plain">);</span></div>
+<div class="stat-panel">
+<strong>Convert API v2 supports documented experiment-management and reporting operations.</strong>
+<p>Average support response: 7 minutes.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- API BANNER -->
+<section class="api-banner">
+<div class="api-banner__inner">
+<div class="api-banner__left">
+<div class="eyebrow">Developer-first</div>
+<h2>Read the API docs</h2>
+<p class="api-banner__sub">Convert API v2 · JavaScript SDK · quickstart</p>
+<div class="code-pill">npm install @convertcom/js-sdk</div>
+</div>
+<a class="btn-api" href="#">View docs →</a>
+</div>
+</section>
+<!-- FEATURES TABLE -->
+<section class="features-table-section">
+<div class="container">
+<div class="section-header">
+<span class="section-label">Platform capabilities</span>
+<h2>Built for server-side teams, with Full Stack experimentation and Feature Flags on Convert Pro and Enterprise</h2>
+<p>Convert gives engineering, product, and growth teams the infrastructure to run serious server-side experimentation without feature gates or enterprise paywalls where they don't belong.</p>
+</div>
+<div class="table-wrapper">
+<table class="features-tbl">
+<thead>
+<tr>
+<th class="ft-col-feature">Feature</th>
+<th class="ft-col-what">Problem it solves</th>
+<th class="ft-col-benefit">How your team benefits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--orange-400)"></span>Full-Stack / Server-Side Testing <span style="font-size:11px;font-weight:600;color:var(--violet-600);background:var(--violet-50);padding:2px 7px;border-radius:20px;margin-left:4px;">Pro+</span></div></td>
+<td class="ft-col-what">Run experiments on pricing logic, recommendation algorithms, API responses, onboarding flows, and backend services. Variants are determined server-side before content reaches the device.</td>
+<td class="ft-col-benefit">Product and engineering teams gain the freedom to test any layer of the stack. Client-side tools can only touch look and feel; server-side unlocks the logic underneath.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:#F59E0B"></span>Feature Flags <span style="font-size:11px;font-weight:600;color:var(--violet-600);background:var(--violet-50);padding:2px 7px;border-radius:20px;margin-left:4px;">Pro+</span></div></td>
+<td class="ft-col-what">Toggle specific features on or off for defined audience segments without a new deployment. Supports gradual rollouts and production testing with isolated exposure.</td>
+<td class="ft-col-benefit">After a feature has been integrated behind a Convert flag, authorized teams can disable it or adjust its rollout without another application deployment.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--blue-600)"></span>JS Conditions <span style="font-size:11px;font-weight:600;color:var(--violet-600);background:var(--violet-50);padding:2px 7px;border-radius:20px;margin-left:4px;">Pro+</span></div></td>
+<td class="ft-col-what">Write real JavaScript targeting conditions: fire experiments based on any custom logic, data attribute, cookie value, or API response your server exposes.</td>
+<td class="ft-col-benefit">For server-side targeting, pass supported visitor and location properties into the SDK context, then configure audiences and locations to evaluate those values.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--violet-600)"></span>DMP / Audience Targeting</div></td>
+<td class="ft-col-what">Segment users using first-party data and custom attributes: account tier, pipeline value, behavioral history, or any attribute your backend surfaces. No reliance on browser-side signals.</td>
+<td class="ft-col-benefit">Target with the precision your CRM and data warehouse already enable. Move beyond "returning visitor" to "enterprise accounts in trial" or "users who hit the paywall twice."</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:#7C3AED"></span>Sequential Testing <span style="font-size:11px;font-weight:600;color:var(--violet-600);background:var(--violet-50);padding:2px 7px;border-radius:20px;margin-left:4px;">Pro+</span></div></td>
+<td class="ft-col-what">Monitor live experiment results at any point without inflating false positive rates. No need to pre-commit to a fixed sample size before peeking at the data.</td>
+<td class="ft-col-benefit">Engineering and product teams make faster, safer decisions on backend changes, especially during high-stakes releases, without waiting for an arbitrary end date.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--blue-600)"></span>Multi-Arm Bandits <span style="font-size:11px;font-weight:600;color:var(--green-600);background:var(--green-50);padding:2px 7px;border-radius:20px;margin-left:4px;">Pro &amp; Enterprise</span></div></td>
+<td class="ft-col-what">Automatically shift traffic toward the best-performing server-side variant in real time. Ideal for time-sensitive experiments like pricing tests, promotional logic, or algorithm variants.</td>
+<td class="ft-col-benefit">Stop leaving revenue on a static 50/50 split during peak periods. The platform adapts traffic allocation dynamically so your best variant earns more exposure while the test runs.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--green-500)"></span>Frequentist + Bayesian Statistics <span style="font-size:11px;font-weight:600;color:var(--green-600);background:var(--green-50);padding:2px 7px;border-radius:20px;margin-left:4px;">All plans</span></div></td>
+<td class="ft-col-what">Choose the statistical model that fits your experiment design. Frequentist for controlled, fixed-horizon tests; Bayesian for continuous monitoring and probabilistic decision-making.</td>
+<td class="ft-col-benefit">Data and analytics teams aren't forced into a single framework. Match the stats model to the experiment type, especially important when testing backend logic with variable traffic patterns.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--orange-500)"></span>No-Flicker Loading</div></td>
+<td class="ft-col-what">When the assigned content is generated before the response is sent, server-rendered variations can avoid the client-side replacement flicker that affects many client-side implementations.</td>
+<td class="ft-col-benefit">Server-rendered variations can avoid client-side replacement flicker, so when the variation is delivered before the response is rendered there's no client-side content swap. Hybrid apps may still render some changes client-side.</td>
+</tr>
+<tr>
+<td class="ft-col-feature"><div class="ft-name"><span class="ft-dot" style="background:var(--green-600)"></span>Unsampled Reporting <span style="font-size:11px;font-weight:600;color:var(--green-600);background:var(--green-50);padding:2px 7px;border-radius:20px;margin-left:4px;">All plans</span></div></td>
+<td class="ft-col-what">Convert reports eligible exposure and conversion events sent through the implemented tracking flow without report sampling. No statistical approximations applied to raw results.</td>
+<td class="ft-col-benefit">When testing backend logic that affects revenue, attribution, or product behavior, sampled data is a liability. Full fidelity reporting means decisions are made on the complete picture.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- USE CASES -->
+<section class="use-cases">
+<div class="container">
+<div class="section-header">
+<span class="section-label">Use cases</span>
+<h2>What teams actually run on Convert's server-side infrastructure</h2>
+<p>From pricing logic to regulated-industry compliance, here's what server-side experimentation looks like in production.</p>
+</div>
+<div class="uc-grid">
+<div class="uc-card">
+<div class="uc-card__num">01 · Ecommerce</div>
+<h3>Test Pricing Logic Without Browser Risk</h3>
+<p>Validate dynamic versus flat pricing models at the server layer before committing to a change. Because the variation is generated before the response is sent, revenue-critical logic stays out of the browser and avoids client-side replacement flicker, ad blockers, and client-side manipulation.</p>
+</div>
+<div class="uc-card">
+<div class="uc-card__num">02 · Engineering</div>
+<h3>Ship Features Safely With Flag-Controlled Rollouts</h3>
+<p>Release new functionality to 10%, 25%, or 100% of users via Feature Flags, available on Convert Pro and Enterprise, giving engineering teams a controlled rollout path without a separate flagging tool.</p>
+</div>
+<div class="uc-card">
+<div class="uc-card__num">03 · Regulated industries</div>
+<h3>Run Clean Tests on Regulated or Privacy-Sensitive Sites</h3>
+<p>Server-side decisioning avoids dependence on client-side script execution affected by ITP, making Convert a strong fit for healthcare, insurance, and mental health platforms where HIPAA and GDPR accuracy matter. Consistent bucketing still requires a stable visitor or user identifier your application can lawfully persist and pass to the SDK.</p>
+</div>
+<div class="uc-card">
+<div class="uc-card__num">04 · SaaS</div>
+<h3>Optimize Recommendation Algorithms in the Back End</h3>
+<p>Pit profit-margin sorting against click-through sorting directly at the API response layer, so SaaS and ecommerce teams measure the revenue impact of algorithmic changes without touching a line of front-end code.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- RELATED ARTICLES -->
+<section class="related-articles">
+<div class="container">
+<div class="section-header">
+<span class="section-label">From the Convert blog</span>
+<h2>Go deeper on server-side experimentation</h2>
+</div>
+<div class="ra-grid">
+<a class="ra-card" href="#">
+<span class="ra-tag ra-tag--tech">Technical guide</span>
+<div class="ra-title">Client-side vs. server-side A/B testing: when each approach is the right choice</div>
+<div class="ra-meta"><span>8 min read</span><span class="ra-read-more">Read →</span></div>
+</a>
+<a class="ra-card" href="#">
+<span class="ra-tag ra-tag--pain">Pain point</span>
+<div class="ra-title">How ITP, ad blockers, and cookie restrictions break client-side experiments and what to do about it</div>
+<div class="ra-meta"><span>6 min read</span><span class="ra-read-more">Read →</span></div>
+</a>
+<a class="ra-card" href="#">
+<span class="ra-tag ra-tag--strategy">Strategy</span>
+<div class="ra-title">Feature flags and A/B tests: how to use both in the same release workflow without conflict</div>
+<div class="ra-meta"><span>7 min read</span><span class="ra-read-more">Read →</span></div>
+</a>
+<a class="ra-card" href="#">
+<span class="ra-tag ra-tag--stats">Statistics</span>
+<div class="ra-title">Sequential testing for engineering teams: how to monitor live experiments without inflating false positives</div>
+<div class="ra-meta"><span>6 min read</span><span class="ra-read-more">Read →</span></div>
+</a>
+</div>
+</div>
+</section>
+<!-- FAQ -->
+<section class="faq">
+<div class="container">
+<div class="faq__inner">
+<h2 class="faq__title">Frequently asked questions</h2>
+<p class="faq__sub">What engineering and growth teams ask before switching their server-side testing to Convert.</p>
+<div class="faq-accordion" id="faqAccordion">
+<div class="faq-item">
+<button class="faq-question" data-index="0">
+<span class="faq-num">01</span>
+<span class="faq-q-text">Can I use Convert for true server-side A/B testing, or is it mainly a client-side testing tool?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="0">
+<p>Convert supports true server-side A/B testing through its full-stack experimentation capabilities and SDK-based setup. Your team can run experiments where the decision happens in your application code, API layer, or backend logic instead of in the browser. This is the right setup when you need to test pricing logic, recommendation algorithms, feature rollouts, or API responses.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="1">
+<span class="faq-num">02</span>
+<span class="faq-q-text">How does Convert handle implementation for server-side experiments if my team already has an existing release workflow?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="1">
+<p>Convert is built to fit into developer-led release workflows. You can manage experiments through the JavaScript SDK, feature flags, and Convert API v2, which supports documented experiment-management and reporting operations and can be integrated into CI/CD workflows for supported use cases. Review the current API reference to confirm the endpoints your workflow needs. This lets your team keep experiment logic close to the codebase and deployment process you already use.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="2">
+<span class="faq-num">03</span>
+<span class="faq-q-text">Will server-side testing with Convert help me avoid flicker and browser-side rendering issues?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="2">
+<p>Server-rendered variations can avoid client-side replacement flicker when the assigned content is generated before the response is sent. Because the decision is evaluated before the experience is rendered, the application can deliver the assigned variation without a client-side content swap, so users don't see the original version flash first. Hybrid apps may still render some changes client-side. This matters most for pricing, checkout, and regulated use cases where visual inconsistency affects trust or data quality.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="3">
+<span class="faq-num">04</span>
+<span class="faq-q-text">Can I use Convert to test backend logic like pricing rules, recommendation algorithms, or API responses?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="3">
+<p>Yes. Convert is designed for server-side experiments that go beyond page-level changes. Your team can test dynamic pricing models, recommendation logic, onboarding sequences in apps, and API payload behavior where no browser-based visual editor applies. If what you want to test lives in code or infrastructure, Convert supports that use case.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="4">
+<span class="faq-num">05</span>
+<span class="faq-q-text">How accurate is Convert for server-side experimentation when cookies are blocked or browser tracking is limited?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="4">
+<p>Server-side decisioning avoids dependence on client-side script execution affected by ITP, ad blockers, or consent restrictions because the decision happens outside the browser. Consistent bucketing still requires a stable visitor or user identifier your application can lawfully persist and pass to the SDK. Convert reports eligible exposure and conversion events sent through the implemented tracking flow without report sampling. For teams focused on cleaner data collection, server-side testing gives you a more controlled measurement setup.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="5">
+<span class="faq-num">06</span>
+<span class="faq-q-text">Can I roll out server-side experiments gradually, like a feature flag, instead of exposing 100% of users at once?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="5">
+<p>Yes. Convert supports feature-flag style rollouts as part of its full-stack testing capabilities. Your team can release a change to a defined percentage of users first, then expand from 10% to 25% to 100% as confidence grows. This reduces release risk while still measuring user impact and conversion outcomes.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="6">
+<span class="faq-num">07</span>
+<span class="faq-q-text">How does Convert fit with my existing analytics, data warehouse, or CRM stack for server-side testing?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="6">
+<p>Convert integrates with GA4, Amplitude, Mixpanel, Segment, mParticle, HubSpot, and Salesforce, among others. That means you can run server-side tests in Convert while sending experiment and conversion data into the systems your team already uses for analysis. Convert is an experimentation platform, not a CDP, so it is designed to work with your existing stack rather than replace it.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="7">
+<span class="faq-num">08</span>
+<span class="faq-q-text">Can my developers and marketers both work in Convert without creating workflow bottlenecks on server-side tests?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="7">
+<p>Yes. Developers own code-based experiment logic, while marketers and CRO teams still access reporting, goals, and experiment management. Server-side tests typically require developer implementation, but Convert does not force the rest of the team out of the process. Teams can review results, manage projects, and coordinate experiments without a separate enterprise services layer.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="8">
+<span class="faq-num">09</span>
+<span class="faq-q-text">What happens if I need support during a live server-side experiment or rollout?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="8">
+<p>Convert's average support response time is about 7 minutes, handled by humans rather than a chatbot workflow. That is particularly important for server-side testing, where issues can involve implementation details, rollout behavior, or data validation. If support responsiveness is part of your vendor evaluation, Convert is built to be operationally dependable.</p>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-question" data-index="9">
+<span class="faq-num">10</span>
+<span class="faq-q-text">Is Convert a good fit for server-side testing in privacy-sensitive or regulated environments?</span>
+<svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#7E8AA0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<div class="faq-answer" data-index="9">
+<p>Yes. Convert combines code-level control with strict compliance standards. The platform is compliant with GDPR, CCPA, HIPAA, ISO 27001:2022, and SOC 2 Type 2, uses EU-based servers in Frankfurt, and has had zero data breaches to date. Convert also does not collect PII in standard experimentation workflows and supports consent-aware deployment options.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- FOOTER -->
+<footer class="footer">
+<div class="footer__inner">
+<div class="footer__logo">
+<div class="nav__logomark">
+<svg fill="none" height="20" viewbox="0 0 20 20" width="20"><path d="M10 4C7 4 4.5 6 4 9C5 8 6.5 7.5 8 8C9 8.5 9.5 9.5 10.5 10C12 11 14 10.5 15 8.5C14 6 12.2 4 10 4Z" fill="white" opacity="0.9"></path><path d="M4 11C4.5 14 7 16 10 16C12.2 16 14 14.5 15 12.5C14 13.5 12.5 14 11 13.5C10 13 9.5 12 8.5 11.5C7 10.5 5 10.5 4 11Z" fill="white" opacity="0.7"></path></svg>
+</div>
+<span style="font-size:15px;font-weight:700;color:var(--ink-900);letter-spacing:-0.3px;">Convert</span>
+</div>
+<nav class="footer__links">
+<a class="footer__link" href="#">Features</a>
+<a class="footer__link" href="#">Pricing</a>
+<a class="footer__link" href="#">Integrations</a>
+<a class="footer__link" href="#">Blog</a>
+<a class="footer__link" href="#">Privacy policy</a>
+<a class="footer__link" href="#">Security</a>
+<a class="footer__link" href="#">Contact</a>
+</nav>
+<span class="footer__copy">Convert.com landing pages, built by AUQ Analytics &amp; Growth Consulting</span>
+</div>
+</footer>
+<script>
+(function () {
+  var accordion = document.getElementById('faqAccordion');
+  if (!accordion) return;
+  var questions = accordion.querySelectorAll('.faq-question');
+  var answers   = accordion.querySelectorAll('.faq-answer');
+  questions.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var idx = this.getAttribute('data-index');
+      var isOpen = this.classList.contains('is-open');
+      questions.forEach(function (q) { q.classList.remove('is-open'); });
+      answers.forEach(function (a)   { a.classList.remove('is-open'); });
+      if (!isOpen) {
+        this.classList.add('is-open');
+        accordion.querySelector('.faq-answer[data-index="' + idx + '"]').classList.add('is-open');
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
