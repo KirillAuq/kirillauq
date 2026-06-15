@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Multi-Arm Bandit CRO Tools | Convert Experiences</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+    :root {
+      --blue-600:#0066FF; --blue-700:#0052CC;
+      --blue-50:#EEF4FF;  --blue-100:#DBEAFE; --blue-200:#E0E7FF;
+      --violet-50:#EDE9FE; --violet-100:#F5F0FF; --violet-200:#C4B5FD;
+      --violet-600:#7C3AED; --violet-700:#6D28D9; --violet-800:#5B21B6; --violet-900:#4C1D95;
+      --green-50:#EDFAF5; --green-400:#6EE7B7; --green-500:#10B981; --green-600:#059669;
+      --orange-50:#FFF7ED; --orange-400:#FB923C; --orange-500:#F97316;
+      --ink-900:#2A3442; --ink-800:#3C4659; --ink-700:#586478; --ink-600:#7E8AA0;
+      --ink-500:#A6B1C2; --ink-400:#D0D7E1; --ink-300:#E7EBF1; --ink-200:#F4F6F9; --ink-100:#FFFFFF;
+      --cream:#FAFAF7; --cream-hover:#F5F4EE;
+      --action:var(--blue-600); --action-hover:var(--blue-700);
+      --link:var(--violet-600);
+      --text:var(--ink-900); --text-secondary:var(--ink-700); --text-muted:var(--ink-600);
+      --border:var(--ink-400); --border-subtle:var(--ink-300);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Geist', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--cream);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+    section { border-top: 1px solid var(--ink-300); }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,250,247,0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--ink-300);
+    }
+    .nav__inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; max-width: 1200px; margin: 0 auto; height: 60px;
+    }
+    .nav__logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav__logo-mark {
+      width: 32px; height: 32px; background: var(--blue-600);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    }
+    .nav__wordmark { font-size: 15px; font-weight: 600; color: var(--ink-900); }
+    .nav__links { display: flex; align-items: center; gap: 28px; }
+    .nav__links a {
+      font-size: 14px; font-weight: 500; color: var(--ink-800);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .nav__links a:hover { color: var(--blue-600); }
+    .nav__actions { display: flex; align-items: center; gap: 12px; }
+    .btn-ghost {
+      font-size: 14px; font-weight: 500; color: var(--ink-800);
+      background: none; border: 1px solid var(--ink-400);
+      border-radius: 8px; padding: 8px 18px; cursor: pointer;
+      text-decoration: none; transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-ghost:hover { border-color: var(--blue-600); color: var(--blue-600); }
+    .btn-primary {
+      font-size: 14px; font-weight: 500; color: #fff;
+      background: var(--blue-600); border: none;
+      border-radius: 8px; padding: 8px 18px; cursor: pointer;
+      text-decoration: none; transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--blue-700); }
+    @media (max-width: 900px) { .nav__links { display: none; } }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(160deg, #0B1220 0%, #0D1535 55%, #150D2E 100%);
+      padding: 100px 0 96px;
+      position: relative; overflow: hidden;
+      border-top: none;
+    }
+    .hero__glow-blue {
+      position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse, rgba(0,102,255,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero__glow-violet {
+      position: absolute; bottom: -100px; right: -80px;
+      width: 500px; height: 400px;
+      background: radial-gradient(ellipse, rgba(124,58,237,0.16) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero__inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 40px;
+      display: grid; grid-template-columns: 1fr 400px; gap: 64px; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .hero__eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(196,181,253,0.12); border: 1px solid rgba(196,181,253,0.25);
+      border-radius: 100px; padding: 5px 14px 5px 10px;
+      font-size: 12px; font-weight: 600; color: var(--violet-200);
+      letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 22px;
+    }
+    .hero__dot {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--violet-600);
+      box-shadow: 0 0 8px var(--violet-600);
+    }
+    .hero__h1 {
+      font-size: clamp(30px, 3.8vw, 52px); font-weight: 600;
+      color: #fff; letter-spacing: -1px; line-height: 1.1; margin-bottom: 24px;
+    }
+    .hero__h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--blue-600), var(--violet-600));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero__sub {
+      font-size: 18px; color: rgba(255,255,255,0.65); line-height: 1.65;
+      margin-bottom: 36px; max-width: 560px;
+    }
+    .hero__ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-hero-primary {
+      background: var(--blue-600); color: #fff; font-size: 15px; font-weight: 600;
+      border: none; border-radius: 10px; padding: 14px 28px; cursor: pointer;
+      text-decoration: none; transition: background 0.15s;
+    }
+    .btn-hero-primary:hover { background: var(--blue-700); }
+    .btn-hero-secondary {
+      background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.88);
+      font-size: 15px; font-weight: 500; border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 10px; padding: 14px 28px; cursor: pointer;
+      text-decoration: none; transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-hero-secondary:hover { background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.3); }
+    .hero__form-card {
+      background: var(--cream); border: 1px solid var(--ink-300);
+      border-radius: 16px; padding: 32px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.22), 0 2px 8px rgba(0,0,0,.1);
+    }
+    .hero__form-title {
+      font-size: 16px; font-weight: 600; color: var(--ink-900);
+      margin-bottom: 22px; line-height: 1.4;
+    }
+    .form-group { margin-bottom: 14px; }
+    .form-label { font-size: 13px; font-weight: 500; color: var(--ink-700); display: block; margin-bottom: 6px; }
+    .form-input {
+      width: 100%; background: var(--ink-100); border: 1px solid var(--ink-300);
+      border-radius: 8px; padding: 10px 14px; font-size: 14px;
+      font-family: inherit; color: var(--ink-900);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .form-input:focus {
+      outline: none; border-color: var(--blue-600);
+      box-shadow: 0 0 0 3px rgba(0,102,255,.12);
+    }
+    .form-input::placeholder { color: var(--ink-500); }
+    .form-submit {
+      width: 100%; background: var(--blue-600); color: #fff;
+      border: none; border-radius: 8px; padding: 12px 20px;
+      font-size: 14px; font-weight: 600; font-family: inherit;
+      cursor: pointer; margin-top: 6px; transition: background 0.15s;
+    }
+    .form-submit:hover { background: var(--blue-700); }
+    .form-footer {
+      text-align: center; font-size: 11.5px; color: var(--ink-600);
+      margin-top: 14px; line-height: 1.5;
+    }
+    @media (max-width: 860px) {
+      .hero__inner { grid-template-columns: 1fr; }
+      .hero__form-card { max-width: 480px; }
+    }
+
+    /* TRUST STRIP */
+    .trust-strip { background: var(--ink-100); padding: 15px 0; }
+    .trust-strip__inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 40px;
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    .trust-strip__label {
+      font-size: 11px; font-weight: 600; color: var(--ink-600);
+      text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap;
+    }
+    .trust-divider { width: 1px; height: 18px; background: var(--ink-300); flex-shrink: 0; }
+    .trust-items { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .trust-item { display: flex; align-items: center; gap: 7px; }
+    .trust-item span { font-size: 13px; font-weight: 500; color: var(--ink-700); }
+
+    /* FOR WHOM */
+    .for-whom { background: var(--ink-100); padding: 96px 0; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-eyebrow {
+      font-size: 11px; font-weight: 600; color: var(--violet-600);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+    }
+    .section-h2 {
+      font-size: clamp(26px, 3vw, 36px); font-weight: 700;
+      color: var(--ink-900); letter-spacing: -0.5px; line-height: 1.15;
+    }
+    .for-whom__stack {
+      display: flex; flex-direction: column;
+      border: 1px solid var(--ink-300); border-radius: 16px; overflow: hidden;
+    }
+    .fw-card { display: grid; grid-template-columns: 300px 1fr; }
+    .fw-card:not(:last-child) { border-bottom: 1px solid var(--ink-300); }
+    .fw-card__left {
+      padding: 36px 32px; border-right: 1px solid var(--ink-300);
+      background: radial-gradient(ellipse at top left, var(--blue-50) 0%, var(--ink-100) 70%);
+    }
+    .fw-card__right {
+      padding: 36px 40px; display: flex; flex-direction: column; justify-content: center;
+      background: var(--ink-100);
+    }
+    .fw-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: var(--blue-50); display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .fw-eyebrow {
+      font-size: 11px; font-weight: 600; color: var(--violet-600);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;
+    }
+    .fw-h3 {
+      font-size: 19px; font-weight: 700; color: var(--ink-900);
+      letter-spacing: -0.3px; line-height: 1.25;
+    }
+    .fw-body { font-size: 15px; color: var(--ink-700); line-height: 1.65; margin-bottom: 18px; }
+    .bullet-list {
+      list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 22px;
+    }
+    .bullet-list li {
+      display: flex; align-items: flex-start; gap: 9px;
+      font-size: 15px; color: var(--ink-700); line-height: 1.5;
+    }
+    .bullet-list li::before {
+      content: ''; flex-shrink: 0; width: 16px; height: 16px; margin-top: 1px;
+      background: var(--blue-50); border-radius: 50%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3 8.5l3 3 7-7' stroke='%230066FF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-size: contain;
+    }
+    .fw-link {
+      font-size: 14px; font-weight: 600; color: var(--violet-600);
+      text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
+      transition: gap 0.15s;
+    }
+    .fw-link:hover { gap: 8px; }
+    @media (max-width: 860px) {
+      .fw-card { grid-template-columns: 1fr; }
+      .fw-card__left { border-right: none; border-bottom: 1px solid var(--ink-300); }
+    }
+
+    /* WHY CONVERT */
+    .why-convert { background: var(--cream); padding: 96px 0; }
+    .why-rows { display: flex; flex-direction: column; gap: 80px; margin-top: 64px; }
+    .why-row { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    .why-row--flip .why-row__card { order: -1; }
+    .why-eyebrow {
+      font-size: 11px; font-weight: 600; color: var(--violet-600);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;
+    }
+    .why-h3 {
+      font-size: 26px; font-weight: 700; color: var(--ink-900);
+      letter-spacing: -0.3px; line-height: 1.2; margin-bottom: 16px;
+    }
+    .why-lead { font-size: 15px; color: var(--ink-700); line-height: 1.65; margin-bottom: 22px; }
+    .why-row__card {
+      background: radial-gradient(ellipse at top left, var(--blue-50) 0%, var(--ink-100) 55%);
+      border: 1px solid var(--ink-300); border-radius: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05); overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .why-row__card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); transform: translateY(-2px); }
+    .card-head {
+      display: flex; align-items: center;
+      padding: 12px 16px; border-bottom: 1px solid var(--ink-300);
+    }
+    .card-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .card-dot + .card-dot { margin-left: 5px; }
+    .card-title { font-size: 12px; font-weight: 500; color: var(--ink-600); margin-left: 10px; }
+    .card-body { padding: 20px; }
+    .stat-panel { background: var(--ink-200); padding: 14px 22px; border-top: 1px solid var(--ink-300); }
+    .stat-panel p { font-size: 13px; color: var(--ink-700); line-height: 1.5; }
+    .stat-panel strong { color: var(--blue-600); }
+    @media (max-width: 860px) {
+      .why-row { grid-template-columns: 1fr; }
+      .why-row--flip .why-row__card { order: 0; }
+    }
+
+    /* Compare table card */
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .compare-table thead tr { background: var(--ink-900); }
+    .compare-table thead th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); }
+    .compare-table tbody tr:nth-child(odd) { background: rgba(255,255,255,0.5); }
+    .compare-table tbody tr:nth-child(even) { background: rgba(238,244,255,0.4); }
+    .compare-table td { padding: 10px 14px; color: var(--ink-800); vertical-align: middle; }
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 100px; font-size: 11.5px; font-weight: 600; }
+    .badge-yes { background: var(--green-50); color: var(--green-600); }
+    .badge-gate { background: #FFFBEB; color: #92400E; }
+    .badge-no { background: #FEF2F2; color: #991B1B; }
+
+    /* Timeline card */
+    .timeline-row { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--ink-300); }
+    .timeline-row:last-child { border-bottom: none; }
+    .tl-icon { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+    .tl-icon--bad { background: #FEF2F2; color: #DC2626; }
+    .tl-icon--good { background: var(--green-50); color: var(--green-600); }
+    .tl-label { font-size: 13px; font-weight: 600; color: var(--ink-800); margin-bottom: 3px; }
+    .tl-desc { font-size: 11.5px; color: var(--ink-600); line-height: 1.5; }
+
+    /* Dark code card */
+    .dark-code-card {
+      background: #0B1220; border: 1px solid transparent;
+      border-radius: 14px; overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .dark-code-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.2); transform: translateY(-2px); }
+    .dark-code-card .card-head { background: #0B1220; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .dark-code-card .card-dot { background: #334155; }
+    .dark-code-card .card-title { color: #475569; }
+    pre { font-family: 'Fira Code', 'Courier New', monospace; font-size: 12px; line-height: 1.7; padding: 20px; overflow-x: auto; color: #E2E8F0; }
+    .tok-comment { color: #64748B; }
+    .tok-kw { color: #93C5FD; }
+    .tok-str { color: #86EFAC; }
+    .tok-fn { color: #FCD34D; }
+    .tok-var { color: #F0ABFC; }
+    .tok-num { color: #FCA5A5; }
+
+    /* API BANNER */
+    .api-banner {
+      background: linear-gradient(120deg, var(--violet-900) 0%, var(--violet-700) 50%, var(--blue-600) 100%);
+      padding: 72px 0; border-top: none;
+    }
+    .api-banner__inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 40px;
+      display: flex; align-items: center; justify-content: space-between; gap: 40px;
+    }
+    .api-banner__eyebrow { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+    .api-banner__h2 { font-size: clamp(26px, 3vw, 36px); font-weight: 700; color: #fff; letter-spacing: -0.5px; line-height: 1.15; margin-bottom: 10px; }
+    .api-banner__sub { font-size: 15px; color: rgba(255,255,255,0.65); margin-bottom: 18px; }
+    .api-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px; padding: 8px 14px;
+      font-family: 'Fira Code', monospace; font-size: 13px; color: var(--green-400);
+    }
+    .btn-outline-white {
+      background: transparent; color: #fff; font-size: 14px; font-weight: 600;
+      border: 2px solid rgba(255,255,255,0.55); border-radius: 10px;
+      padding: 12px 26px; cursor: pointer; text-decoration: none; white-space: nowrap;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .btn-outline-white:hover { border-color: #fff; background: rgba(255,255,255,0.08); }
+    @media (max-width: 700px) { .api-banner__inner { flex-direction: column; } }
+
+    /* FEATURES TABLE */
+    .features-table-section { background: var(--ink-100); padding: 96px 0; }
+    .table-wrapper { border-radius: 14px; overflow-x: auto; border: 1px solid var(--ink-300); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .features-tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .features-tbl thead tr { background: var(--ink-900); }
+    .features-tbl thead th { color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600; padding: 14px 20px; text-align: left; white-space: nowrap; }
+    .features-tbl tbody tr:nth-child(odd) { background: var(--ink-100); }
+    .features-tbl tbody tr:nth-child(even) { background: var(--cream); }
+    .features-tbl td { padding: 18px 20px; line-height: 1.6; vertical-align: top; border-bottom: 1px solid var(--ink-300); }
+    .features-tbl tbody tr:last-child td { border-bottom: none; }
+    .col-feature { font-weight: 600; color: var(--ink-900); font-size: 14px; }
+    .col-what { border-left: 3px solid var(--orange-400); }
+    .col-why { border-left: 3px solid var(--blue-600); }
+    .col-risk { border-left: 3px solid var(--green-500); }
+    .features-closing { max-width: 760px; margin: 40px auto 0; text-align: center; font-size: 15px; color: var(--ink-700); line-height: 1.7; }
+    .features-closing strong { color: var(--ink-900); }
+
+    /* USE CASES */
+    .use-cases { background: var(--cream); padding: 96px 0; }
+    .uc-rows { display: flex; flex-direction: column; gap: 72px; margin-top: 64px; }
+    .uc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    .uc-row--flip .uc-row__card { order: -1; }
+    .uc-eyebrow { font-size: 11px; font-weight: 600; color: var(--violet-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+    .uc-h3 { font-size: 26px; font-weight: 700; color: var(--ink-900); letter-spacing: -0.3px; line-height: 1.2; margin-bottom: 16px; }
+    .uc-desc { font-size: 15px; color: var(--ink-700); line-height: 1.65; }
+    .uc-row__card {
+      background: radial-gradient(ellipse at top left, var(--blue-50) 0%, var(--ink-100) 55%);
+      border: 1px solid var(--ink-300); border-radius: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05); overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .uc-row__card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); transform: translateY(-2px); }
+    @media (max-width: 860px) {
+      .uc-row { grid-template-columns: 1fr; }
+      .uc-row--flip .uc-row__card { order: 0; }
+    }
+
+    /* Traffic allocation card */
+    .alloc-bars { padding: 16px 0 8px; }
+    .alloc-bar-row { margin-bottom: 14px; }
+    .alloc-bar-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 500; color: var(--ink-700); margin-bottom: 5px; }
+    .alloc-bar-track { height: 8px; background: var(--ink-200); border-radius: 100px; overflow: hidden; }
+    .alloc-bar-fill { height: 100%; border-radius: 100px; }
+    .alloc-bar-fill--blue { background: var(--blue-600); }
+    .alloc-bar-fill--violet { background: var(--violet-600); }
+    .alloc-bar-fill--blue2 { background: var(--blue-200); }
+    .alloc-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--green-50); color: var(--green-600); font-size: 11.5px; font-weight: 600; border-radius: 100px; padding: 4px 10px; margin-top: 14px; }
+    .alloc-ts { font-size: 11px; color: var(--ink-500); margin-left: 8px; }
+
+    /* Client accounts card */
+    .client-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--ink-300); }
+    .client-row:last-child { border-bottom: none; }
+    .client-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .client-name { font-size: 13px; font-weight: 600; color: var(--ink-800); }
+    .client-desc { font-size: 11.5px; color: var(--ink-600); margin-top: 2px; }
+    .client-role { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 100px; }
+    .role-owner { background: var(--blue-50); color: var(--blue-600); }
+    .role-editor { background: var(--violet-50); color: var(--violet-600); }
+    .role-viewer { background: var(--ink-200); color: var(--ink-600); }
+    .card-footer-bar { background: var(--ink-200); padding: 10px 16px; font-size: 11.5px; color: var(--ink-600); border-top: 1px solid var(--ink-300); }
+
+    /* Sequential test card */
+    .seq-step { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--ink-300); }
+    .seq-step:last-child { border-bottom: none; }
+    .seq-icon { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+    .seq-icon--done { background: var(--green-50); color: var(--green-600); }
+    .seq-icon--active { background: var(--blue-50); color: var(--blue-600); border: 1.5px solid var(--blue-600); }
+    .seq-label { font-size: 13px; font-weight: 600; color: var(--ink-800); margin-bottom: 2px; }
+    .seq-meta { font-size: 11.5px; color: var(--ink-600); }
+    .seq-lift { font-size: 11.5px; font-weight: 600; color: var(--green-600); margin-left: 6px; }
+    .seq-footer { padding: 12px 16px; border-top: 1px solid var(--ink-300); background: var(--green-50); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .seq-badge { font-size: 11.5px; font-weight: 600; color: var(--green-600); display: flex; align-items: center; gap: 5px; }
+    .seq-note { font-size: 11px; color: var(--ink-600); }
+
+    /* RELATED ARTICLES */
+    .related-articles { background: var(--cream); padding: 80px 0; }
+    .ra-header { margin-bottom: 32px; }
+    .ra-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .ra-card {
+      display: flex; flex-direction: column;
+      background: var(--ink-100); border: 1px solid var(--ink-300);
+      border-radius: 12px; padding: 22px; text-decoration: none;
+      transition: box-shadow 0.2s, transform 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .ra-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at top left, var(--blue-50) 0%, transparent 55%);
+      opacity: 0; transition: opacity 0.2s; pointer-events: none;
+    }
+    .ra-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.08); transform: translateY(-2px); }
+    .ra-card:hover::before { opacity: 1; }
+    .ra-tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 100px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.04em; width: fit-content; }
+    .ra-tag--pain { background: #FFF7ED; color: #92400E; }
+    .ra-title { font-size: 14.5px; font-weight: 600; color: var(--ink-900); line-height: 1.45; flex: 1; margin-bottom: 16px; transition: color 0.15s; }
+    .ra-card:hover .ra-title { color: var(--blue-600); }
+    .ra-meta { font-size: 12px; color: var(--ink-500); display: flex; justify-content: space-between; }
+    .ra-meta span { color: var(--blue-600); font-weight: 500; }
+    @media (max-width: 860px) { .ra-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 540px) { .ra-grid { grid-template-columns: 1fr; } }
+
+    /* FAQ */
+    .faq { background: var(--ink-100); padding: 96px 0; }
+    .faq__inner { max-width: 860px; margin: 0 auto; }
+    .faq__header { text-align: center; margin-bottom: 48px; }
+    .faq__stack { border: 1px solid var(--ink-300); border-radius: 14px; overflow: hidden; }
+    .faq__item { border-bottom: 1px solid var(--ink-300); }
+    .faq__item:last-child { border-bottom: none; }
+    .faq__question {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px; cursor: pointer; transition: background 0.15s;
+      background: none; border: none; width: 100%; text-align: left; gap: 16px;
+    }
+    .faq__question:hover { background: var(--cream); }
+    .faq__question.open { background: var(--blue-50); }
+    .faq__q-left { display: flex; align-items: center; gap: 14px; }
+    .faq__num { font-size: 12px; font-weight: 700; color: var(--ink-500); width: 24px; flex-shrink: 0; transition: color 0.15s; }
+    .faq__question.open .faq__num { color: var(--blue-600); }
+    .faq__q-text { font-size: 15px; font-weight: 600; color: var(--ink-900); line-height: 1.4; text-align: left; }
+    .faq__chevron { flex-shrink: 0; width: 18px; height: 18px; color: var(--ink-500); transition: transform 0.25s, color 0.15s; }
+    .faq__question.open .faq__chevron { transform: rotate(180deg); color: var(--blue-600); }
+    .faq__answer { display: none; padding: 0 24px 22px 62px; font-size: 15px; color: var(--ink-700); line-height: 1.7; }
+    .faq__answer.open { display: block; }
+    .faq__answer p + p { margin-top: 10px; }
+
+    /* FOOTER */
+    .footer { background: var(--cream-hover); padding: 28px 0; border-top: 1px solid var(--ink-300); }
+    .footer__inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer__logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .footer__logo-mark { width: 26px; height: 26px; background: var(--blue-600); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+    .footer__wordmark { font-size: 14px; font-weight: 600; color: var(--ink-800); }
+    .footer__links { display: flex; gap: 22px; flex-wrap: wrap; }
+    .footer__links a { font-size: 13px; color: var(--ink-600); text-decoration: none; transition: color 0.15s; }
+    .footer__links a:hover { color: var(--ink-900); }
+    .footer__copy { font-size: 11.5px; color: var(--ink-500); }
+  </style>
+</head>
+<body>
+<!-- NAV -->
+<nav class="nav">
+<div class="nav__inner">
+<a class="nav__logo" href="/">
+<div class="nav__logo-mark">
+<svg fill="none" height="18" viewbox="0 0 18 18" width="18">
+<path d="M14 4C12.5 2.5 10.4 1.6 8 1.6C4.4 1.6 1.4 4 .5 7.2" stroke="white" stroke-linecap="round" stroke-width="2.2"></path>
+<path d="M4 14C5.5 15.5 7.6 16.4 10 16.4C13.6 16.4 16.6 14 17.5 10.8" stroke="white" stroke-linecap="round" stroke-width="2.2"></path>
+<circle cx="9" cy="9" fill="white" r="2.5"></circle>
+</svg>
+</div>
+<span class="nav__wordmark">Convert</span>
+</a>
+<div class="nav__links">
+<a href="#">Features</a>
+<a href="#">Pricing</a>
+<a href="#">For agencies</a>
+<a href="#">Docs</a>
+<a href="#">Blog</a>
+</div>
+<div class="nav__actions">
+<a class="btn-ghost" href="#">Log in</a>
+<a class="btn-primary" href="#">Start free trial</a>
+</div>
+</div>
+</nav>
+<!-- HERO -->
+<section class="hero">
+<div class="hero__glow-blue"></div>
+<div class="hero__glow-violet"></div>
+<div class="hero__inner">
+<div class="hero__copy">
+<div class="hero__eyebrow">
+<span class="hero__dot"></span>
+        Multi-arm bandits in Convert Experiences
+      </div>
+<h1 class="hero__h1">Multi-arm bandit testing software that <em>sends traffic to your winner</em></h1>
+<p class="hero__sub">Convert's multi-arm bandit engine shifts traffic toward your better-performing variants in real time, so you stop losing conversions while a test plays out. Marketers get faster, data-backed calls. Developers get full programmatic control through the REST API, no manual intervention required.</p>
+<div class="hero__ctas">
+<a class="btn-hero-primary" href="#">Start your free 15-day trial</a>
+<a class="btn-hero-secondary" href="#">Book a demo</a>
+</div>
+</div>
+<div class="hero__form-card">
+<div class="hero__form-title">See multi-arm bandits in action, free for 15 days</div>
+<form>
+<div class="form-group">
+<label class="form-label" for="work-email">Work email</label>
+<input class="form-input" id="work-email" placeholder="you@company.com" type="email"/>
+</div>
+<div class="form-group">
+<label class="form-label" for="company-url">Company URL</label>
+<input class="form-input" id="company-url" placeholder="company.com" type="url"/>
+</div>
+<div class="form-group">
+<label class="form-label" for="monthly-visitors">Monthly visitors</label>
+<input class="form-input" id="monthly-visitors" placeholder="e.g. 200,000" type="text"/>
+</div>
+<button class="form-submit" type="submit">Start free trial</button>
+</form>
+<p class="form-footer">No credit card required. Cancel any time. Onboarding included.</p>
+</div>
+</div>
+</section>
+<!-- TRUST STRIP -->
+<section class="trust-strip">
+<div class="trust-strip__inner">
+<span class="trust-strip__label">Trusted by</span>
+<div class="trust-divider"></div>
+<div class="trust-items">
+<div class="trust-item">
+<svg fill="none" height="14" viewbox="0 0 14 14" width="14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+<span>40,000+ sites running Convert</span>
+</div>
+<div class="trust-item">
+<svg fill="none" height="14" viewbox="0 0 14 14" width="14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+<span>400,000+ experiences served</span>
+</div>
+<div class="trust-item">
+<svg fill="none" height="14" viewbox="0 0 14 14" width="14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+<span>SOC 2 · ISO 27001 · HIPAA · GDPR</span>
+</div>
+<div class="trust-item">
+<svg fill="none" height="14" viewbox="0 0 14 14" width="14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+<span>7-minute average support response</span>
+</div>
+<div class="trust-item">
+<svg fill="none" height="14" viewbox="0 0 14 14" width="14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+<span>16 years building experimentation infrastructure</span>
+</div>
+</div>
+</div>
+</section>
+<!-- FOR WHOM -->
+<section class="for-whom">
+<div class="container">
+<div class="section-header">
+<div class="section-eyebrow">Who it's built for</div>
+<h2 class="section-h2">Multi-arm bandits work differently depending on your context</h2>
+</div>
+<div class="for-whom__stack">
+<!-- Ecommerce -->
+<div class="fw-card">
+<div class="fw-card__left">
+<div class="fw-icon">
+<svg fill="none" height="18" stroke="#0066FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 18 18" width="18">
+<path d="M1.5 1.5h2l2 9h9l1.5-6H5"></path>
+<circle cx="7.5" cy="15" fill="#0066FF" r="1.2" stroke="none"></circle>
+<circle cx="12.5" cy="15" fill="#0066FF" r="1.2" stroke="none"></circle>
+</svg>
+</div>
+<div class="fw-eyebrow">Ecommerce</div>
+<h3 class="fw-h3">Stop splitting traffic evenly when one variant is already winning</h3>
+</div>
+<div class="fw-card__right">
+<p class="fw-body">Every session your checkout funnel runs on a losing variant costs measurable revenue. Multi-arm bandits let Convert automatically shift traffic toward the better-performing variant while the test is still live, so you capture conversion gains during the experiment, not just after it concludes. For high-SKU catalogs and seasonal campaigns where timing is tight, that difference compounds fast.</p>
+<ul class="bullet-list">
+<li>Recover revenue during the test, not after it ends</li>
+<li>Protect peak-traffic windows from underperforming variants</li>
+<li>Run on BigCommerce, WooCommerce, and Magento without Shopify lock-in</li>
+</ul>
+<a class="fw-link" href="#">Explore for ecommerce <span>→</span></a>
+</div>
+</div>
+<!-- SaaS -->
+<div class="fw-card">
+<div class="fw-card__left">
+<div class="fw-icon">
+<svg fill="none" height="18" stroke="#0066FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 18 18" width="18">
+<rect height="10" rx="2" width="14" x="2" y="3"></rect>
+<path d="M6 16h6M9 13v3"></path>
+</svg>
+</div>
+<div class="fw-eyebrow">SaaS</div>
+<h3 class="fw-h3">Accelerate trial-to-paid learning without burning your activation window</h3>
+</div>
+<div class="fw-card__right">
+<p class="fw-body">Onboarding sequences and feature adoption flows have a narrow window to influence upgrade behavior. Multi-arm bandits let your team surface the strongest variant faster, reducing the time your worst-performing onboarding path stays live. Pair that with Convert's Frequentist and Bayesian stats engines and unsampled reporting, and you get statistically defensible results your growth team can act on with confidence.</p>
+<ul class="bullet-list">
+<li>Shorten the time your weakest onboarding variant stays live</li>
+<li>Choose Frequentist or Bayesian, both engines included, no upsell</li>
+<li>Unsampled reporting counts every activation event, no statistical shortcuts</li>
+</ul>
+<a class="fw-link" href="#">Explore for SaaS <span>→</span></a>
+</div>
+</div>
+<!-- Agencies -->
+<div class="fw-card">
+<div class="fw-card__left">
+<div class="fw-icon">
+<svg fill="none" height="18" stroke="#0066FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 18 18" width="18">
+<circle cx="9" cy="5" r="2.5"></circle>
+<path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6"></path>
+<circle cx="14.5" cy="7" r="1.8"></circle>
+<circle cx="3.5" cy="7" r="1.8"></circle>
+</svg>
+</div>
+<div class="fw-eyebrow">Agencies</div>
+<h3 class="fw-h3">Deliver stronger client results without waiting for tests to run their full course</h3>
+</div>
+<div class="fw-card__right">
+<p class="fw-body">When you manage experimentation programs across multiple client accounts, test velocity and demonstrable wins define your retainer's value. Multi-arm bandits let you show clients measurable lift mid-experiment, not just at the finish line. Convert's multi-project structure keeps each client's data siloed and reportable independently, while centralized billing keeps your operations clean. Multi-Arm Bandit Auto-Allocation is available on Convert Pro, with no separate Enterprise contract required.</p>
+<ul class="bullet-list">
+<li>Show clients measurable lift before the test concludes</li>
+<li>Manage unlimited client projects from one centralized account</li>
+<li>Multi-Arm Bandit Auto-Allocation is available on Convert Pro and Enterprise</li>
+</ul>
+<a class="fw-link" href="#">Explore for agencies <span>→</span></a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- WHY CONVERT -->
+<section class="why-convert">
+<div class="container">
+<div class="section-header">
+<div class="section-eyebrow">Why Convert</div>
+<h2 class="section-h2">What sets Convert's multi-arm bandit implementation apart</h2>
+</div>
+<div class="why-rows">
+<!-- Row 1: text left / card right -->
+<div class="why-row">
+<div class="why-row__copy">
+<div class="why-eyebrow">01 · MAB vs A/B Testing</div>
+<h3 class="why-h3">You don't have to pick one. Convert runs both.</h3>
+<p class="why-lead">Multi-arm bandits and traditional A/B tests answer different questions. A/B testing gives you controlled, statistically rigorous results — the right tool when you need a defensible decision log or are running long-horizon tests. Multi-arm bandits prioritize revenue during the test window by dynamically shifting more traffic toward better-performing variations as data accumulates, while the experiment is still live.</p>
+<ul class="bullet-list">
+<li>A/B testing: fixed splits, fixed horizon, clean p-values — best for learning and building statistical proof</li>
+<li>MAB: adaptive splits, continuous reallocation — best for revenue protection during time-sensitive windows</li>
+<li>Convert runs both in the same platform, with Frequentist and Bayesian statistics available for either approach</li>
+</ul>
+</div>
+<div class="why-row__card">
+<div class="card-head">
+<span class="card-dot" style="background:#EF4444"></span>
+<span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+<span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+<span class="card-title">When to use each</span>
+</div>
+<div class="card-body">
+<table class="compare-table">
+<thead>
+<tr><th></th><th>A/B Test</th><th>Multi-arm bandit</th></tr>
+</thead>
+<tbody>
+<tr>
+<td style="font-weight:600;color:var(--ink-700);font-size:12px">Goal</td>
+<td style="font-size:12px">Statistical proof</td>
+<td style="font-size:12px">Revenue capture</td>
+</tr>
+<tr>
+<td style="font-weight:600;color:var(--ink-700);font-size:12px">Traffic split</td>
+<td style="font-size:12px">Fixed (e.g. 50/50)</td>
+<td style="font-size:12px">Adaptive, real-time</td>
+</tr>
+<tr>
+<td style="font-weight:600;color:var(--ink-700);font-size:12px">Best for</td>
+<td style="font-size:12px">Long-run learning</td>
+<td style="font-size:12px">Time-sensitive windows</td>
+</tr>
+<tr>
+<td style="font-weight:600;color:var(--ink-700);font-size:12px">In Convert</td>
+<td><span class="badge badge-yes">✓ All plans</span></td>
+<td><span class="badge badge-yes">✓ Pro &amp; Enterprise</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="stat-panel">
+<p>Most platforms force a choice. Convert supports both methods in the same experiment dashboard.</p>
+</div>
+</div>
+</div>
+<!-- Row 2: card left / text right -->
+<div class="why-row why-row--flip">
+<div class="why-row__copy">
+<div class="why-eyebrow">02 · Data quality</div>
+<h3 class="why-h3">Feed your bandit algorithm data it can actually trust</h3>
+<p class="why-lead">A multi-arm bandit shifts traffic based on the conversion signals it receives. When flicker corrupts those signals or sampling truncates them, the algorithm makes poor allocation decisions.</p>
+<ul class="bullet-list">
+<li>Synchronous loading eliminates flicker from bandit arm data since 2016</li>
+<li>Every visitor and conversion counted in full, no statistical sampling</li>
+<li>Clean signals mean the algorithm allocates traffic correctly from the first impression</li>
+</ul>
+</div>
+<div class="why-row__card">
+<div class="card-head">
+<span class="card-dot" style="background:#EF4444"></span>
+<span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+<span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+<span class="card-title">Data quality comparison</span>
+</div>
+<div class="card-body">
+<div class="timeline-row">
+<div class="tl-icon tl-icon--bad">⚡</div>
+<div>
+<div class="tl-label">Flicker-contaminated data</div>
+<div class="tl-desc">Variants flash before render, visitors respond to the disruption not the variant, bandit reallocates on noise.</div>
+</div>
+</div>
+<div class="timeline-row">
+<div class="tl-icon tl-icon--bad">⚡</div>
+<div>
+<div class="tl-label">Sampled reporting</div>
+<div class="tl-desc">Phantom performance gaps between arms, algorithm over-indexes on apparent winners, optimization drifts from true optimum.</div>
+</div>
+</div>
+<div class="timeline-row">
+<div class="tl-icon tl-icon--good">✓</div>
+<div>
+<div class="tl-label">Convert: clean signals</div>
+<div class="tl-desc">Sync load, unsampled data, complete visitor counts. Bandit allocates on genuine variant performance.</div>
+</div>
+</div>
+</div>
+<div class="stat-panel">
+<p>Synchronous loading on Akamai CDN designed to minimize flicker, <strong>in production since 2016</strong>.</p>
+</div>
+</div>
+</div>
+<!-- Row 3: text left / card right -->
+<div class="why-row">
+<div class="why-row__copy">
+<div class="why-eyebrow">03 · Statistics and support</div>
+<h3 class="why-h3">Choose your statistical model, and get help when it matters</h3>
+<p class="why-lead">Multi-arm bandits typically operate on Bayesian probability, but your testing program shouldn't lock you into one statistical framework. Convert gives you both Frequentist and Bayesian engines with custom threshold controls.</p>
+<ul class="bullet-list">
+<li>Frequentist and Bayesian both available, apply the right model per test</li>
+<li>Custom threshold controls for each experiment type</li>
+<li>7-minute average support response when an adaptive test breaks mid-run</li>
+</ul>
+</div>
+<div class="dark-code-card">
+<div class="card-head">
+<span class="card-dot"></span>
+<span class="card-dot"></span>
+<span class="card-dot"></span>
+<span class="card-title">bandit-config.ts</span>
+</div>
+<pre><span class="tok-comment">// Bucket a visitor into a multi-arm bandit experience</span>
+<span class="tok-kw">import</span> <span class="tok-var">ConvertSDK</span> <span class="tok-kw">from</span> <span class="tok-str">'@convertcom/js-sdk'</span>;
+
+<span class="tok-kw">const</span> <span class="tok-var">convertSDK</span> = <span class="tok-kw">new</span> <span class="tok-fn">ConvertSDK</span>({ sdkKey: <span class="tok-str">'YOUR_SDK_KEY'</span> });
+
+<span class="tok-comment">// Auto-Allocate shifts more traffic toward better-performing variations</span>
+<span class="tok-kw">const</span> <span class="tok-var">userContext</span> = <span class="tok-var">convertSDK</span>.<span class="tok-fn">createContext</span>(<span class="tok-str">'visitor-123'</span>);
+<span class="tok-kw">const</span> <span class="tok-var">variation</span> = <span class="tok-var">userContext</span>.<span class="tok-fn">runExperience</span>(<span class="tok-str">'checkout-bandit'</span>);
+
+<span class="tok-comment">// Track the goal the bandit optimizes toward</span>
+<span class="tok-var">userContext</span>.<span class="tok-fn">trackConversion</span>(<span class="tok-str">'checkout_complete'</span>);</pre>
+<div class="stat-panel" style="background:rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.07);">
+<p style="color:#94A3B8;">Average support response: <strong style="color:#93C5FD;">7 minutes</strong>, not a chatbot.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- API BANNER -->
+<section class="api-banner">
+<div class="api-banner__inner">
+<div>
+<div class="api-banner__eyebrow">Developer tools</div>
+<h2 class="api-banner__h2">Read the API docs</h2>
+<p class="api-banner__sub">REST API · JavaScript SDK · quickstart</p>
+<div class="api-pill">npm install @convertcom/js-sdk</div>
+</div>
+<a class="btn-outline-white" href="#">View docs →</a>
+</div>
+</section>
+<!-- FEATURES TABLE -->
+<section class="features-table-section">
+<div class="container">
+<div class="section-header">
+<div class="section-eyebrow">Platform capabilities</div>
+<h2 class="section-h2">Everything a multi-arm bandit test actually requires</h2>
+</div>
+<div class="table-wrapper">
+<table class="features-tbl">
+<thead>
+<tr>
+<th>Feature</th>
+<th>Problem it solves</th>
+<th>How your team benefits</th>
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="col-feature">Multi-arm bandits</td>
+<td class="col-what">Shifts more traffic toward better-performing variations as data accumulates</td>
+<td class="col-why">Stops revenue bleed of rigid splits during high-stakes windows. Earns while it learns.</td>
+</tr>
+<tr>
+<td class="col-feature">Frequentist + Bayesian statistics</td>
+<td class="col-what">Both models in one platform</td>
+<td class="col-why">MAB workflows pair with Bayesian; validate long-term learnings with Frequentist rigor without switching tools</td>
+</tr>
+<tr>
+<td class="col-feature">Sequential testing</td>
+<td class="col-what">Peek at results without inflating false positives</td>
+<td class="col-why">MAB teams monitor continuously; sequential testing ensures traffic reallocation decisions are defensible</td>
+</tr>
+<tr>
+<td class="col-feature">JS conditions</td>
+<td class="col-what">Trigger on any custom JS condition</td>
+<td class="col-why">Bandit tests need precise trigger conditions to avoid polluting arm data with irrelevant traffic</td>
+</tr>
+<tr>
+<td class="col-feature">DMP / Audience targeting</td>
+<td class="col-what">Targets against real first-party segments including CRM and pipeline data</td>
+<td class="col-why">Run separate bandit instances per segment. High-value pipeline gets a different optimization path than first-time visitors.</td>
+</tr>
+<tr>
+<td class="col-feature">Full-stack / server-side testing</td>
+<td class="col-what">Extends MAB beyond the front end to pricing, recommendation algorithms, API responses</td>
+<td class="col-why">Apply bandit logic where conversion impact is greatest, not just where it's easiest</td>
+</tr>
+<tr>
+<td class="col-feature">Feature flags</td>
+<td class="col-what">Instant rollout, rollback, and segmented exposure without a code deployment</td>
+<td class="col-why">Flags are the deployment layer for promoting a leading variation. Once integrated behind a flag, adjust its rollout or disable it from Convert without another deployment.</td>
+</tr>
+<tr>
+<td class="col-feature">No-flicker loading</td>
+<td class="col-what">Variant renders instantly, eliminating visual flash</td>
+<td class="col-why">Flicker introduces a confounding variable into bandit arm performance</td>
+</tr>
+<tr>
+<td class="col-feature">Unsampled reporting</td>
+<td class="col-what">100% of raw event data in every report</td>
+<td class="col-why">MAB algorithms are only as good as the conversion signal they receive</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- USE CASES -->
+<section class="use-cases">
+<div class="container">
+<div class="section-header">
+<div class="section-eyebrow">Use cases</div>
+<h2 class="section-h2">How teams put multi-arm bandits to work</h2>
+</div>
+<div class="uc-rows">
+<!-- Row 1: text left / card right -->
+<div class="uc-row">
+<div class="uc-row__copy">
+<div class="uc-eyebrow">01 · Revenue protection</div>
+<h3 class="uc-h3">Accelerate winner selection on high-traffic pages</h3>
+<p class="uc-desc">Automatically shift budget-equivalent traffic toward your best-performing variant in real time, so ecommerce teams on BigCommerce or Magento stop bleeding revenue through the duration of a slow-resolving A/B test.</p>
+</div>
+<div class="uc-row__card">
+<div class="card-head">
+<span class="card-dot" style="background:#EF4444"></span>
+<span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+<span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+<span class="card-title">Live traffic allocation</span>
+</div>
+<div class="card-body">
+<div class="alloc-bars">
+<div class="alloc-bar-row">
+<div class="alloc-bar-label"><span>Control</span><span>20%</span></div>
+<div class="alloc-bar-track"><div class="alloc-bar-fill alloc-bar-fill--blue" style="width:20%"></div></div>
+</div>
+<div class="alloc-bar-row">
+<div class="alloc-bar-label">
+<span>Variant B <span style="background:var(--violet-50);color:var(--violet-600);font-size:10px;font-weight:600;padding:1px 6px;border-radius:100px;margin-left:4px;">Leading</span></span>
+<span>55%</span>
+</div>
+<div class="alloc-bar-track"><div class="alloc-bar-fill alloc-bar-fill--violet" style="width:55%"></div></div>
+</div>
+<div class="alloc-bar-row">
+<div class="alloc-bar-label"><span>Variant C</span><span>25%</span></div>
+<div class="alloc-bar-track"><div class="alloc-bar-fill alloc-bar-fill--blue2" style="width:25%"></div></div>
+</div>
+</div>
+<div style="display:flex;align-items:center;margin-top:6px;">
+<span class="alloc-badge">
+<svg fill="none" height="10" viewbox="0 0 10 10" width="10"><circle cx="5" cy="5" fill="#059669" r="4"></circle><path d="M3 5.5l1.5 1.5 3-3" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"></path></svg>
+                Reallocating in real time
+              </span>
+<span class="alloc-ts">Updated 2m ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 2: card left / text right -->
+<div class="uc-row uc-row--flip">
+<div class="uc-row__copy">
+<div class="uc-eyebrow">02 · Agency clients</div>
+<h3 class="uc-h3">Protect agency client revenue mid-experiment</h3>
+<p class="uc-desc">Give CRO agency teams a defensible, data-driven mechanism to minimize exposure to underperforming variants without manually pausing tests, keeping client results moving while statistical confidence builds.</p>
+</div>
+<div class="uc-row__card">
+<div class="card-head">
+<span class="card-dot" style="background:#EF4444"></span>
+<span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+<span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+<span class="card-title">Agency client accounts</span>
+</div>
+<div class="card-body">
+<div class="client-row">
+<div class="client-dot" style="background:var(--blue-600)"></div>
+<div style="flex:1;">
+<div class="client-name">Meridian Commerce</div>
+<div class="client-desc">BigCommerce · seasonal campaign active</div>
+</div>
+<span class="client-role role-owner">Owner</span>
+</div>
+<div class="client-row">
+<div class="client-dot" style="background:var(--violet-600)"></div>
+<div style="flex:1;">
+<div class="client-name">Orbit SaaS</div>
+<div class="client-desc">Onboarding flow · bandit running</div>
+</div>
+<span class="client-role role-editor">Editor</span>
+</div>
+<div class="client-row">
+<div class="client-dot" style="background:var(--green-500)"></div>
+<div style="flex:1;">
+<div class="client-name">Vertex Insurance</div>
+<div class="client-desc">HIPAA-compliant · sequential test</div>
+</div>
+<span class="client-role role-viewer">Viewer</span>
+</div>
+</div>
+<div class="card-footer-bar">Centralized billing · Client data isolated</div>
+</div>
+</div>
+<!-- Row 3: text left / card right -->
+<div class="uc-row">
+<div class="uc-row__copy">
+<div class="uc-eyebrow">03 · Lean teams</div>
+<h3 class="uc-h3">Run simultaneous variant tests without enterprise pricing</h3>
+<p class="uc-desc">Access multi-arm bandit allocation on Convert's Pro plan at a fraction of what Optimizely or VWO charge for the same capability, letting lean SaaS growth teams test three or more variants concurrently without a procurement escalation.</p>
+</div>
+<div class="uc-row__card">
+<div class="card-head">
+<span class="card-dot" style="background:#EF4444"></span>
+<span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+<span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+<span class="card-title">MAB pricing comparison</span>
+</div>
+<div class="card-body">
+<table class="compare-table">
+<thead>
+<tr><th>Platform</th><th>MAB access</th><th>Approx. starting price</th></tr>
+</thead>
+<tbody>
+<tr>
+<td style="font-weight:600;color:var(--blue-600)">Convert Pro</td>
+<td><span class="badge badge-yes">✓ Included</span></td>
+<td style="color:var(--green-600);font-weight:600;">$299/mo annual</td>
+</tr>
+<tr>
+<td>VWO</td>
+<td>Enterprise contract</td>
+<td><span class="badge badge-gate">Contact sales</span></td>
+</tr>
+<tr>
+<td>Optimizely</td>
+<td>Enterprise tier</td>
+<td><span class="badge badge-gate">Contact sales</span></td>
+</tr>
+<tr>
+<td>AB Tasty</td>
+<td>Enterprise tier</td>
+<td><span class="badge badge-gate">Contact sales</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Row 4: card left / text right -->
+<div class="uc-row uc-row--flip">
+<div class="uc-row__copy">
+<div class="uc-eyebrow">04 · Statistical rigor</div>
+<h3 class="uc-h3">Pair bandit allocation with Bayesian or Frequentist stats</h3>
+<p class="uc-desc">Combine adaptive traffic distribution with your choice of statistical model, Frequentist or Bayesian, with custom threshold controls, so regulated-industry teams in healthcare or insurance maintain methodological rigor while still optimizing in real time.</p>
+</div>
+<div class="uc-row__card">
+<div class="card-head">
+<span class="card-dot" style="background:#EF4444"></span>
+<span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
+<span class="card-dot" style="background:#10B981;margin-left:4px"></span>
+<span class="card-title">Sequential test monitor: bandit active</span>
+</div>
+<div class="card-body">
+<div class="seq-step">
+<div class="seq-icon seq-icon--done">✓</div>
+<div style="flex:1;">
+<div class="seq-label">Signup page variant</div>
+<div class="seq-meta">1,840 sessions <span class="seq-lift">+8.2% lift</span></div>
+</div>
+</div>
+<div class="seq-step">
+<div class="seq-icon seq-icon--done">✓</div>
+<div style="flex:1;">
+<div class="seq-label">Onboarding modal</div>
+<div class="seq-meta">1,612 sessions <span class="seq-lift">+11.4% lift</span></div>
+</div>
+</div>
+<div class="seq-step">
+<div class="seq-icon seq-icon--active">↻</div>
+<div style="flex:1;">
+<div class="seq-label">Pricing page</div>
+<div class="seq-meta">940 sessions · <span style="color:var(--blue-600);font-size:11.5px;font-weight:600;">bandit reallocating</span></div>
+</div>
+</div>
+</div>
+<div class="seq-footer">
+<span class="seq-badge">
+<svg fill="none" height="10" viewbox="0 0 10 10" width="10"><circle cx="5" cy="5" fill="#059669" r="4"></circle><path d="M3 5.5l1.5 1.5 3-3" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"></path></svg>
+              Bayesian: 87% probability of winning
+            </span>
+<span class="seq-note">Traffic shifted: 60% to variant B</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- RELATED ARTICLES -->
+<section class="related-articles">
+<div class="container">
+<div class="ra-header">
+<div class="section-eyebrow">From the blog</div>
+<h2 class="section-h2">Further reading on multi-arm bandit testing</h2>
+</div>
+<div class="ra-grid">
+<a class="ra-card" href="#">
+<span class="ra-tag ra-tag--pain">Pain point</span>
+<div class="ra-title">Multi-arm bandits vs. A/B tests: when adaptive allocation actually makes sense</div>
+<div class="ra-meta"><span>6 min read</span><span>Read →</span></div>
+</a>
+<a class="ra-card" href="#">
+<span class="ra-tag" style="background:var(--violet-50);color:var(--violet-700);">Statistics</span>
+<div class="ra-title">How multi-arm bandits use Bayesian probability to shift traffic in real time</div>
+<div class="ra-meta"><span>7 min read</span><span>Read →</span></div>
+</a>
+<a class="ra-card" href="#">
+<span class="ra-tag ra-tag--pain">Pain point</span>
+<div class="ra-title">The revenue cost of running a losing variant for too long</div>
+<div class="ra-meta"><span>5 min read</span><span>Read →</span></div>
+</a>
+<a class="ra-card" href="#">
+<span class="ra-tag" style="background:var(--blue-50);color:var(--blue-600);">Technical guide</span>
+<div class="ra-title">How to combine multi-arm bandits with sequential testing in Convert</div>
+<div class="ra-meta"><span>8 min read</span><span>Read →</span></div>
+</a>
+</div>
+</div>
+</section>
+<!-- FAQ -->
+<section class="faq">
+<div class="container">
+<div class="faq__inner">
+<div class="faq__header">
+<div class="section-eyebrow">FAQ</div>
+<h2 class="section-h2">Common questions about multi-arm bandit testing</h2>
+</div>
+<div class="faq__stack">
+<div class="faq__item">
+<button aria-expanded="false" class="faq__question">
+<div class="faq__q-left">
+<span class="faq__num">01</span>
+<span class="faq__q-text">What is a multi-arm bandit test and how is it different from a standard A/B test?</span>
+</div>
+<svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
+</button>
+<div class="faq__answer">
+<p>A standard A/B test splits traffic evenly between variants for the full duration of the test, then declares a winner at the end. A multi-arm bandit test dynamically reallocates traffic toward better-performing variants as data accumulates, so better-performing variants receive more traffic while the test is still running.</p>
+<p>The practical difference: with a standard A/B test, you pay a fixed "cost of exploration" for the entire test duration. With a multi-arm bandit, that cost decreases over time as the algorithm exploits what it's learning. For high-traffic pages and time-sensitive campaigns, this can represent meaningful revenue recovered during the experiment itself.</p>
+</div>
+</div>
+<div class="faq__item">
+<button aria-expanded="false" class="faq__question">
+<div class="faq__q-left">
+<span class="faq__num">02</span>
+<span class="faq__q-text">When should I use a multi-arm bandit instead of a standard A/B test?</span>
+</div>
+<svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
+</button>
+<div class="faq__answer">
+<p>Multi-arm bandits are most valuable when the cost of running a losing variant is high relative to the benefit of a statistically clean result. That typically means high-traffic pages, time-bounded campaigns (like seasonal promotions), and situations where you need to act quickly rather than wait for a traditional significance threshold.</p>
+<p>Standard A/B tests are still preferable when you need a clean causal inference, when your traffic is lower and the algorithm has less signal to work with, or when your organization needs a methodologically conservative result for regulatory or compliance reasons. In many programs, both approaches run concurrently on different test types.</p>
+</div>
+</div>
+<div class="faq__item">
+<button aria-expanded="false" class="faq__question">
+<div class="faq__q-left">
+<span class="faq__num">03</span>
+<span class="faq__q-text">Does Convert's multi-arm bandit use Bayesian or Frequentist statistics?</span>
+</div>
+<svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
+</button>
+<div class="faq__answer">
+<p>Convert supports both. The multi-arm bandit allocation engine typically pairs with Bayesian probability, which is well-suited for continuous traffic reallocation because it produces a posterior probability estimate that updates naturally as new data arrives. You can set a winner threshold (for example, 95% probability of being best) and Convert will promote or reallocate accordingly.</p>
+<p>If your testing program also requires Frequentist validation for long-term learnings or compliance documentation, that engine is available in the same platform. You're not forced to choose one model for your entire program.</p>
+</div>
+</div>
+<div class="faq__item">
+<button aria-expanded="false" class="faq__question">
+<div class="faq__q-left">
+<span class="faq__num">04</span>
+<span class="faq__q-text">What is the minimum traffic level required to run a multi-arm bandit effectively?</span>
+</div>
+<svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
+</button>
+<div class="faq__answer">
+<p>There is no hard cutoff, but multi-arm bandits perform best when there's enough signal for the algorithm to make meaningful reallocation decisions. In practice, sites with fewer than 5,000 monthly unique visitors on the tested page will see limited benefit, because the algorithm needs sufficient data to distinguish real performance differences from random variance.</p>
+<p>As a general guideline, if your current A/B tests take months to reach significance, a multi-arm bandit will also take time to converge. The allocation advantage is most pronounced in the 20,000+ monthly visitors range. Convert's support team can help you assess whether a given test configuration makes sense for your traffic level before you start.</p>
+</div>
+</div>
+<div class="faq__item">
+<button aria-expanded="false" class="faq__question">
+<div class="faq__q-left">
+<span class="faq__num">05</span>
+<span class="faq__q-text">Does multi-arm bandit testing work with server-side and full-stack experiments?</span>
+</div>
+<svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
+</button>
+<div class="faq__answer">
+<p>Yes. Convert's multi-arm bandit capability extends to server-side and full-stack experiments. You can apply bandit allocation to pricing logic, recommendation algorithms, API responses, and any backend variant that affects conversion behavior, not just visual front-end changes.</p>
+<p>This matters because some of the highest-leverage bandit use cases are in layers that client-side tools can't reach. Pricing page logic, personalized recommendation engines, and onboarding flow branching are examples where server-side bandit allocation produces more meaningful results than surface-level UI testing.</p>
+</div>
+</div>
+<div class="faq__item">
+<button aria-expanded="false" class="faq__question">
+<div class="faq__q-left">
+<span class="faq__num">06</span>
+<span class="faq__q-text">How does Convert's multi-arm bandit handle flicker and data quality?</span>
+</div>
+<svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
+</button>
+<div class="faq__answer">
+<p>Convert loads experiments synchronously, which means variants render before the page is visible to the user. There is no flash of original content. This has been the case since 2016, delivered via Akamai CDN. For bandit tests specifically, this matters because flicker introduces a confounding variable: visitors react to the disruption, not the variant itself, which corrupts the conversion signals the bandit algorithm uses to make reallocation decisions.</p>
+<p>On the data side, Convert does not sample. Every visitor and every conversion event is counted in full. Sampled analytics in a bandit context creates a compounding problem: each reallocation cycle is made on incomplete data, and the errors accumulate over the duration of the test.</p>
+</div>
+</div>
+<div class="faq__item">
+<button aria-expanded="false" class="faq__question">
+<div class="faq__q-left">
+<span class="faq__num">07</span>
+<span class="faq__q-text">Can I run multi-arm bandit tests across different audience segments simultaneously?</span>
+</div>
+<svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
+</button>
+<div class="faq__answer">
+<p>Yes. Convert's audience targeting and DMP integrations let you define separate bandit instances for distinct segments. A high-value pipeline segment and a first-time visitor segment can each have their own bandit running simultaneously, each optimizing toward the arm that performs best for that specific audience.</p>
+<p>Running a single bandit across a mixed audience is a common mistake. It produces a winner that is a compromise across segments rather than the optimal variant for any individual segment. Segment-level bandits require more traffic per test but produce more actionable, segment-specific results.</p>
+</div>
+</div>
+<div class="faq__item">
+<button aria-expanded="false" class="faq__question">
+<div class="faq__q-left">
+<span class="faq__num">08</span>
+<span class="faq__q-text">Is multi-arm bandit testing available on Convert's self-service plan, or is it enterprise-only?</span>
+</div>
+<svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
+</button>
+<div class="faq__answer">
+<p>Multi-arm bandits are available on Convert's Pro plan, which starts at $299/month on annual billing. You do not need an enterprise contract or a sales conversation to access the feature. This is a deliberate product decision: most competing platforms gate multi-arm bandits behind enterprise tiers that require procurement and contract negotiation.</p>
+<p>Convert's self-serve plans include the same feature set used by enterprise customers. The pricing structure reflects traffic volume and project count rather than feature access. You can start a 15-day free trial and run your first bandit experiment without any upfront commitment.</p>
+</div>
+</div>
+<div class="faq__item">
+<button aria-expanded="false" class="faq__question">
+<div class="faq__q-left">
+<span class="faq__num">09</span>
+<span class="faq__q-text">How do I combine multi-arm bandit testing with sequential testing in Convert?</span>
+</div>
+<svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
+</button>
+<div class="faq__answer">
+<p>Sequential testing addresses the "peeking problem": if you monitor a standard A/B test continuously and make decisions based on early results, you inflate your false positive rate. Multi-arm bandits require continuous monitoring by design, so pairing them with sequential testing controls lets you defend early reallocation decisions without inflating Type I errors.</p>
+<p>In Convert, you configure your statistical method and threshold at the experiment level. For bandit experiments where you anticipate making interim decisions, setting the sequential testing control before the test launches ensures each reallocation point is evaluated against a statistically valid boundary rather than an arbitrary peek.</p>
+</div>
+</div>
+<div class="faq__item">
+<button aria-expanded="false" class="faq__question">
+<div class="faq__q-left">
+<span class="faq__num">10</span>
+<span class="faq__q-text">What happens when a multi-arm bandit identifies a winner? How do I ship it?</span>
+</div>
+<svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
+</button>
+<div class="faq__answer">
+<p>Once a leading variation meets your configured probability threshold, Convert can shift more traffic—up to 100%—toward that variation while you prepare the permanent implementation. For front-end experiments, you can extend the experiment to serve only the selected variation indefinitely. For full-stack experiments, once the feature has been integrated behind a Convert flag, you can promote the selected variation to a full rollout without a new engineering deployment.</p>
+<p>Because the change sits behind a feature flag, you can also disable it or roll it back. If the selected variation produces unexpected downstream effects post-rollout—a common risk with adaptive algorithms that optimize for a narrow conversion metric—you can revert to the control from the Convert dashboard without another deployment.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- FOOTER -->
+<footer class="footer">
+<div class="footer__inner">
+<a class="footer__logo" href="/">
+<div class="footer__logo-mark">
+<svg fill="none" height="14" viewbox="0 0 18 18" width="14">
+<path d="M14 4C12.5 2.5 10.4 1.6 8 1.6C4.4 1.6 1.4 4 .5 7.2" stroke="white" stroke-linecap="round" stroke-width="2.2"></path>
+<path d="M4 14C5.5 15.5 7.6 16.4 10 16.4C13.6 16.4 16.6 14 17.5 10.8" stroke="white" stroke-linecap="round" stroke-width="2.2"></path>
+<circle cx="9" cy="9" fill="white" r="2.5"></circle>
+</svg>
+</div>
+<span class="footer__wordmark">Convert</span>
+</a>
+<div class="footer__links">
+<a href="#">Privacy policy</a>
+<a href="#">Terms</a>
+<a href="#">Security</a>
+<a href="#">Status</a>
+<a href="#">Docs</a>
+</div>
+<p class="footer__copy">© 2025 Convert.com. All rights reserved.</p>
+</div>
+</footer>
+<!-- FAQ ACCORDION JS -->
+<script>
+  (function () {
+    var questions = document.querySelectorAll('.faq__question');
+    questions.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var isOpen = btn.classList.contains('open');
+        questions.forEach(function (q) {
+          q.classList.remove('open');
+          q.setAttribute('aria-expanded', 'false');
+          var ans = q.parentElement.querySelector('.faq__answer');
+          if (ans) { ans.classList.remove('open'); }
+        });
+        if (!isOpen) {
+          btn.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+          var answer = btn.parentElement.querySelector('.faq__answer');
+          if (answer) { answer.classList.add('open'); }
+        }
+      });
+    });
+  })();
+</script>
+</body>
+</html>
