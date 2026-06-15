@@ -531,8 +531,8 @@
 <span class="hero__dot"></span>
         Multi-arm bandits in Convert Experiences
       </div>
-<h1 class="hero__h1">Multi-arm bandit testing software that <em>sends traffic to your winner</em></h1>
-<p class="hero__sub">Convert's multi-arm bandit engine shifts traffic toward your better-performing variants in real time, so you stop losing conversions while a test plays out. Marketers get faster, data-backed calls. Developers get full programmatic control through the REST API, no manual intervention required.</p>
+<h1 class="hero__h1">Multi-arm bandit testing software that <em>shifts traffic toward stronger variations</em></h1>
+<p class="hero__sub">Convert's Auto-Allocation dynamically shifts more traffic toward better-performing variations as experiment data accumulates, so you stop losing conversions while a test plays out. Marketers get faster, data-backed calls. Developers can use Convert's REST API for documented account and experiment-management workflows and the JavaScript SDK for runtime visitor bucketing, variation decisions, and conversion tracking.</p>
 <div class="hero__ctas">
 <a class="btn-hero-primary" href="#">Start your free 15-day trial</a>
 <a class="btn-hero-secondary" href="#">Book a demo</a>
@@ -656,11 +656,11 @@
 <h3 class="fw-h3">Deliver stronger client results without waiting for tests to run their full course</h3>
 </div>
 <div class="fw-card__right">
-<p class="fw-body">When you manage experimentation programs across multiple client accounts, test velocity and demonstrable wins define your retainer's value. Multi-arm bandits let you show clients measurable lift mid-experiment, not just at the finish line. Convert's multi-project structure keeps each client's data siloed and reportable independently, while centralized billing keeps your operations clean. Multi-Arm Bandit Auto-Allocation is available on Convert Pro, with no separate Enterprise contract required.</p>
+<p class="fw-body">When you manage experimentation programs across multiple client accounts, test velocity and demonstrable wins define your retainer's value. Multi-arm bandits let you show clients measurable lift mid-experiment, not just at the finish line. Convert's multi-project structure keeps each client's data siloed and reportable independently, while centralized billing keeps your operations clean. Auto-Allocation is available on Pro and Enterprise, no enterprise-only contract required to get started.</p>
 <ul class="bullet-list">
 <li>Show clients measurable lift before the test concludes</li>
-<li>Manage unlimited client projects from one centralized account</li>
-<li>Multi-Arm Bandit Auto-Allocation is available on Convert Pro and Enterprise</li>
+<li>Convert Pro supports up to 30 active projects per account; Enterprise supports unlimited active projects</li>
+<li>Multi-Arm Bandit Auto-Allocation is available on Convert Pro and Enterprise plans</li>
 </ul>
 <a class="fw-link" href="#">Explore for agencies <span>→</span></a>
 </div>
@@ -681,11 +681,11 @@
 <div class="why-row__copy">
 <div class="why-eyebrow">01 · MAB vs A/B Testing</div>
 <h3 class="why-h3">You don't have to pick one. Convert runs both.</h3>
-<p class="why-lead">Multi-arm bandits and traditional A/B tests answer different questions. A/B testing gives you controlled, statistically rigorous results — the right tool when you need a defensible decision log or are running long-horizon tests. Multi-arm bandits prioritize revenue during the test window by dynamically shifting more traffic toward better-performing variations as data accumulates, while the experiment is still live.</p>
+<p class="why-lead">Multi-arm bandits and traditional A/B tests answer different questions. A/B testing gives you controlled, statistically rigorous results — the right tool when you need a defensible decision log or are running long-horizon tests. Multi-arm bandits maximise revenue during the test window by dynamically shifting more traffic toward better-performing variations as experiment data accumulates.</p>
 <ul class="bullet-list">
 <li>A/B testing: fixed splits, fixed horizon, clean p-values — best for learning and building statistical proof</li>
 <li>MAB: adaptive splits, continuous reallocation — best for revenue protection during time-sensitive windows</li>
-<li>Convert runs both in the same platform, with Frequentist and Bayesian statistics available for either approach</li>
+<li>Convert runs both in the same platform; use Auto-Allocation with Convert's Frequentist or Bayesian statistical model (Frequentist Auto-Allocation requires the Sequential test type)</li>
 </ul>
 </div>
 <div class="why-row__card">
@@ -718,7 +718,7 @@
 </tr>
 <tr>
 <td style="font-weight:600;color:var(--ink-700);font-size:12px">In Convert</td>
-<td><span class="badge badge-yes">✓ All plans</span></td>
+<td><span class="badge badge-yes">✓ Core feature</span></td>
 <td><span class="badge badge-yes">✓ Pro &amp; Enterprise</span></td>
 </tr>
 </tbody>
@@ -736,9 +736,9 @@
 <h3 class="why-h3">Feed your bandit algorithm data it can actually trust</h3>
 <p class="why-lead">A multi-arm bandit shifts traffic based on the conversion signals it receives. When flicker corrupts those signals or sampling truncates them, the algorithm makes poor allocation decisions.</p>
 <ul class="bullet-list">
-<li>Synchronous loading eliminates flicker from bandit arm data since 2016</li>
-<li>Every visitor and conversion counted in full, no statistical sampling</li>
-<li>Clean signals mean the algorithm allocates traffic correctly from the first impression</li>
+<li>Convert is designed to minimize visible flicker when its tracking code is installed synchronously per the recommended implementation</li>
+<li>Convert reports the eligible visitor and conversion events it receives without report sampling</li>
+<li>Convert begins collecting eligible exposure and conversion data from the first visit, then adapts allocation as performance evidence accumulates</li>
 </ul>
 </div>
 <div class="why-row__card">
@@ -767,12 +767,12 @@
 <div class="tl-icon tl-icon--good">✓</div>
 <div>
 <div class="tl-label">Convert: clean signals</div>
-<div class="tl-desc">Sync load, unsampled data, complete visitor counts. Bandit allocates on genuine variant performance.</div>
+<div class="tl-desc">Sync load and unsampled reporting of the eligible events received. Bandit allocates on genuine variant performance.</div>
 </div>
 </div>
 </div>
 <div class="stat-panel">
-<p>Synchronous loading on Akamai CDN designed to minimize flicker, <strong>in production since 2016</strong>.</p>
+<p>Designed to <strong>minimize visible flicker</strong> when the tracking code is installed synchronously per the recommended implementation.</p>
 </div>
 </div>
 </div>
@@ -780,11 +780,11 @@
 <div class="why-row">
 <div class="why-row__copy">
 <div class="why-eyebrow">03 · Statistics and support</div>
-<h3 class="why-h3">Choose your statistical model, and get help when it matters</h3>
-<p class="why-lead">Multi-arm bandits typically operate on Bayesian probability, but your testing program shouldn't lock you into one statistical framework. Convert gives you both Frequentist and Bayesian engines with custom threshold controls.</p>
+<h3 class="why-h3">Choose your strategy and statistical model, and get help when it matters</h3>
+<p class="why-lead">Auto-Allocation lets you choose Thompson Sampling, Epsilon-Greedy, or UCB to control how traffic is redistributed, paired with Convert's Frequentist or Bayesian statistical model. Optimization targets the experience's selected primary goal — pick it carefully, because it can't be changed once the active MAB experience is enabled.</p>
 <ul class="bullet-list">
-<li>Frequentist and Bayesian both available, apply the right model per test</li>
-<li>Custom threshold controls for each experiment type</li>
+<li>Thompson Sampling, Epsilon-Greedy, or UCB, with Convert's Frequentist or Bayesian model (Frequentist Auto-Allocation requires the Sequential test type)</li>
+<li>Optimizes the primary goal using Conversion Rate, Revenue Per Visitor, or Average Products Per Visitor</li>
 <li>7-minute average support response when an adaptive test breaks mid-run</li>
 </ul>
 </div>
@@ -798,14 +798,17 @@
 <pre><span class="tok-comment">// Bucket a visitor into a multi-arm bandit experience</span>
 <span class="tok-kw">import</span> <span class="tok-var">ConvertSDK</span> <span class="tok-kw">from</span> <span class="tok-str">'@convertcom/js-sdk'</span>;
 
-<span class="tok-kw">const</span> <span class="tok-var">convertSDK</span> = <span class="tok-kw">new</span> <span class="tok-fn">ConvertSDK</span>({ sdkKey: <span class="tok-str">'YOUR_SDK_KEY'</span> });
+<span class="tok-kw">const</span> <span class="tok-var">sdk</span> = <span class="tok-kw">new</span> <span class="tok-fn">ConvertSDK</span>(<span class="tok-var">config</span>);
+<span class="tok-kw">await</span> <span class="tok-var">sdk</span>.<span class="tok-fn">onReady</span>();
 
-<span class="tok-comment">// Auto-Allocate shifts more traffic toward better-performing variations</span>
-<span class="tok-kw">const</span> <span class="tok-var">userContext</span> = <span class="tok-var">convertSDK</span>.<span class="tok-fn">createContext</span>(<span class="tok-str">'visitor-123'</span>);
-<span class="tok-kw">const</span> <span class="tok-var">variation</span> = <span class="tok-var">userContext</span>.<span class="tok-fn">runExperience</span>(<span class="tok-str">'checkout-bandit'</span>);
+<span class="tok-comment">// Auto-Allocation shifts traffic toward stronger variations as data accumulates</span>
+<span class="tok-kw">const</span> <span class="tok-var">context</span> = <span class="tok-var">sdk</span>.<span class="tok-fn">createContext</span>(<span class="tok-str">'visitor-123'</span>);
+<span class="tok-kw">const</span> <span class="tok-var">variation</span> = <span class="tok-var">context</span>.<span class="tok-fn">runExperience</span>(<span class="tok-str">'checkout-bandit'</span>);
 
-<span class="tok-comment">// Track the goal the bandit optimizes toward</span>
-<span class="tok-var">userContext</span>.<span class="tok-fn">trackConversion</span>(<span class="tok-str">'checkout_complete'</span>);</pre>
+<span class="tok-comment">// Track the experience's primary goal</span>
+<span class="tok-kw">if</span> (<span class="tok-var">variation</span>) {
+  <span class="tok-var">context</span>.<span class="tok-fn">trackConversion</span>(<span class="tok-str">'checkout_complete'</span>);
+}</pre>
 <div class="stat-panel" style="background:rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.07);">
 <p style="color:#94A3B8;">Average support response: <strong style="color:#93C5FD;">7 minutes</strong>, not a chatbot.</p>
 </div>
@@ -845,19 +848,19 @@
 </thead>
 <tbody>
 <tr>
-<td class="col-feature">Multi-arm bandits</td>
-<td class="col-what">Shifts more traffic toward better-performing variations as data accumulates</td>
-<td class="col-why">Stops revenue bleed of rigid splits during high-stakes windows. Earns while it learns.</td>
+<td class="col-feature">Multi-arm bandits (Auto-Allocation)</td>
+<td class="col-what">Dynamically shifts more traffic toward better-performing variations as data accumulates</td>
+<td class="col-why">Stops revenue bleed of rigid splits during high-stakes windows. Available for A/B and Multivariate Web or Full Stack experiences (not A/A or Deploy tests).</td>
 </tr>
 <tr>
 <td class="col-feature">Frequentist + Bayesian statistics</td>
-<td class="col-what">Both models in one platform</td>
-<td class="col-why">MAB workflows pair with Bayesian; validate long-term learnings with Frequentist rigor without switching tools</td>
+<td class="col-what">Both statistical models in one platform</td>
+<td class="col-why">Run Auto-Allocation on the Bayesian model, or on the Frequentist model when the Sequential test type is enabled, without switching tools</td>
 </tr>
 <tr>
 <td class="col-feature">Sequential testing</td>
 <td class="col-what">Peek at results without inflating false positives</td>
-<td class="col-why">MAB teams monitor continuously; sequential testing ensures traffic reallocation decisions are defensible</td>
+<td class="col-why">When using Convert's Frequentist model, Auto-Allocation requires the Sequential test type so the experiment can be monitored over time under the supported Frequentist framework</td>
 </tr>
 <tr>
 <td class="col-feature">JS conditions</td>
@@ -867,7 +870,7 @@
 <tr>
 <td class="col-feature">DMP / Audience targeting</td>
 <td class="col-what">Targets against real first-party segments including CRM and pipeline data</td>
-<td class="col-why">Run separate bandit instances per segment. High-value pipeline gets a different optimization path than first-time visitors.</td>
+<td class="col-why">Create separately targeted Auto-Allocation experiences when distinct segments need independent optimization. Each experience needs enough traffic and conversions to support meaningful allocation decisions.</td>
 </tr>
 <tr>
 <td class="col-feature">Full-stack / server-side testing</td>
@@ -876,17 +879,17 @@
 </tr>
 <tr>
 <td class="col-feature">Feature flags</td>
-<td class="col-what">Instant rollout, rollback, and segmented exposure without a code deployment</td>
-<td class="col-why">Flags are the deployment layer for promoting a leading variation. Once integrated behind a flag, adjust its rollout or disable it from Convert without another deployment.</td>
+<td class="col-what">Adjust rollout rules or disable an already integrated Full Stack flag without another deployment</td>
+<td class="col-why">For an integrated flag, authorized teams can change rollout or kill the feature in Convert. Connecting an MAB result to a production rollout still requires the appropriate flag implementation.</td>
 </tr>
 <tr>
-<td class="col-feature">No-flicker loading</td>
-<td class="col-what">Variant renders instantly, eliminating visual flash</td>
+<td class="col-feature">Low-flicker loading</td>
+<td class="col-what">Designed to minimize visible flicker when the tracking code is installed synchronously per the recommended implementation</td>
 <td class="col-why">Flicker introduces a confounding variable into bandit arm performance</td>
 </tr>
 <tr>
 <td class="col-feature">Unsampled reporting</td>
-<td class="col-what">100% of raw event data in every report</td>
+<td class="col-what">Reports the eligible events received without report sampling (accurate results still depend on correct goal and revenue tracking)</td>
 <td class="col-why">MAB algorithms are only as good as the conversion signal they receive</td>
 </tr>
 </tbody>
@@ -1010,7 +1013,7 @@
 <tr>
 <td style="font-weight:600;color:var(--blue-600)">Convert Pro</td>
 <td><span class="badge badge-yes">✓ Included</span></td>
-<td style="color:var(--green-600);font-weight:600;">$299/mo annual</td>
+<td style="color:var(--green-600);font-weight:600;">$420/mo annual</td>
 </tr>
 <tr>
 <td>VWO</td>
@@ -1096,7 +1099,7 @@
 </a>
 <a class="ra-card" href="#">
 <span class="ra-tag" style="background:var(--violet-50);color:var(--violet-700);">Statistics</span>
-<div class="ra-title">How multi-arm bandits use Bayesian probability to shift traffic in real time</div>
+<div class="ra-title">How multi-arm bandits use Thompson Sampling, Epsilon-Greedy, and UCB to shift traffic</div>
 <div class="ra-meta"><span>7 min read</span><span>Read →</span></div>
 </a>
 <a class="ra-card" href="#">
@@ -1130,7 +1133,7 @@
 <svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
 </button>
 <div class="faq__answer">
-<p>A standard A/B test splits traffic evenly between variants for the full duration of the test, then declares a winner at the end. A multi-arm bandit test dynamically reallocates traffic toward better-performing variants as data accumulates, so better-performing variants receive more traffic while the test is still running.</p>
+<p>A standard A/B test splits traffic evenly between variants for the full duration of the test, then declares a winner at the end. A multi-arm bandit test dynamically reallocates traffic toward better-performing variations as data accumulates, so stronger-performing variations receive more traffic while the test is still running.</p>
 <p>The practical difference: with a standard A/B test, you pay a fixed "cost of exploration" for the entire test duration. With a multi-arm bandit, that cost decreases over time as the algorithm exploits what it's learning. For high-traffic pages and time-sensitive campaigns, this can represent meaningful revenue recovered during the experiment itself.</p>
 </div>
 </div>
@@ -1156,8 +1159,8 @@
 <svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
 </button>
 <div class="faq__answer">
-<p>Convert supports both. The multi-arm bandit allocation engine typically pairs with Bayesian probability, which is well-suited for continuous traffic reallocation because it produces a posterior probability estimate that updates naturally as new data arrives. You can set a winner threshold (for example, 95% probability of being best) and Convert will promote or reallocate accordingly.</p>
-<p>If your testing program also requires Frequentist validation for long-term learnings or compliance documentation, that engine is available in the same platform. You're not forced to choose one model for your entire program.</p>
+<p>Convert supports both. Frequentist and Bayesian are statistical models, not allocation strategies: the documented Auto-Allocation strategies are Thompson Sampling, Epsilon-Greedy, and UCB (Upper Confidence Bound), and you choose one to control how traffic is redistributed. You can use Auto-Allocation with Convert's Bayesian model, or with the Frequentist model when the Sequential test type is enabled.</p>
+<p>Auto-Allocation optimizes the experience's selected primary goal using Conversion Rate, Revenue Per Visitor, or Average Products Per Visitor. Choose that primary goal carefully before launch, because it cannot be changed once the active MAB experience is enabled.</p>
 </div>
 </div>
 <div class="faq__item">
@@ -1169,8 +1172,8 @@
 <svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
 </button>
 <div class="faq__answer">
-<p>There is no hard cutoff, but multi-arm bandits perform best when there's enough signal for the algorithm to make meaningful reallocation decisions. In practice, sites with fewer than 5,000 monthly unique visitors on the tested page will see limited benefit, because the algorithm needs sufficient data to distinguish real performance differences from random variance.</p>
-<p>As a general guideline, if your current A/B tests take months to reach significance, a multi-arm bandit will also take time to converge. The allocation advantage is most pronounced in the 20,000+ monthly visitors range. Convert's support team can help you assess whether a given test configuration makes sense for your traffic level before you start.</p>
+<p>There is no fixed universal threshold. Auto-Allocation works best when the tested experience receives enough eligible traffic and conversions for the selected strategy to distinguish meaningful performance differences. The required volume depends on the number of variations, the baseline conversion rate, the conversion delay, and the expected effect size.</p>
+<p>As a general guideline, if your current A/B tests take months to reach significance, a multi-arm bandit will also take time to converge. Convert's support team can help you assess whether a given test configuration makes sense for your traffic level before you start.</p>
 </div>
 </div>
 <div class="faq__item">
@@ -1195,8 +1198,8 @@
 <svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
 </button>
 <div class="faq__answer">
-<p>Convert loads experiments synchronously, which means variants render before the page is visible to the user. There is no flash of original content. This has been the case since 2016, delivered via Akamai CDN. For bandit tests specifically, this matters because flicker introduces a confounding variable: visitors react to the disruption, not the variant itself, which corrupts the conversion signals the bandit algorithm uses to make reallocation decisions.</p>
-<p>On the data side, Convert does not sample. Every visitor and every conversion event is counted in full. Sampled analytics in a bandit context creates a compounding problem: each reallocation cycle is made on incomplete data, and the errors accumulate over the duration of the test.</p>
+<p>Convert is designed to minimize visible flicker when its tracking code is installed synchronously according to the recommended implementation. For bandit tests specifically, this matters because flicker can introduce a confounding variable: visitors may react to the disruption rather than the variant itself, which can corrupt the conversion signals the bandit algorithm uses to make reallocation decisions.</p>
+<p>On the data side, Convert reports the eligible visitor and conversion events it receives without report sampling. Accurate results still depend on correct goal and revenue-tracking implementation. Sampled analytics in a bandit context creates a compounding problem: each reallocation cycle is made on incomplete data, and the errors accumulate over the duration of the test.</p>
 </div>
 </div>
 <div class="faq__item">
@@ -1208,8 +1211,8 @@
 <svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
 </button>
 <div class="faq__answer">
-<p>Yes. Convert's audience targeting and DMP integrations let you define separate bandit instances for distinct segments. A high-value pipeline segment and a first-time visitor segment can each have their own bandit running simultaneously, each optimizing toward the arm that performs best for that specific audience.</p>
-<p>Running a single bandit across a mixed audience is a common mistake. It produces a winner that is a compromise across segments rather than the optimal variant for any individual segment. Segment-level bandits require more traffic per test but produce more actionable, segment-specific results.</p>
+<p>Yes. Using Convert's audience targeting and DMP integrations, you can create separately targeted Auto-Allocation experiences when distinct audience segments need independent traffic optimization. A high-value pipeline segment and a first-time visitor segment can each be set up as their own experience, each optimizing for that specific audience.</p>
+<p>Running a single bandit across a mixed audience is a common mistake. It produces a leading variation that is a compromise across segments rather than the strongest variation for any individual segment. Each separately targeted experience needs enough traffic and conversions to support meaningful allocation decisions, but produces more actionable, segment-specific results.</p>
 </div>
 </div>
 <div class="faq__item">
@@ -1221,8 +1224,8 @@
 <svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
 </button>
 <div class="faq__answer">
-<p>Multi-arm bandits are available on Convert's Pro plan, which starts at $299/month on annual billing. You do not need an enterprise contract or a sales conversation to access the feature. This is a deliberate product decision: most competing platforms gate multi-arm bandits behind enterprise tiers that require procurement and contract negotiation.</p>
-<p>Convert's self-serve plans include the same feature set used by enterprise customers. The pricing structure reflects traffic volume and project count rather than feature access. You can start a 15-day free trial and run your first bandit experiment without any upfront commitment.</p>
+<p>Multi-Arm Bandit Auto-Allocation is available on Convert Pro and Enterprise plans. Convert Pro starts at $420 per month when billed annually for 100K tested users per month, so you do not need an enterprise-only contract or a sales conversation to access the feature. This is a deliberate product decision: most competing platforms gate multi-arm bandits behind enterprise tiers that require procurement and contract negotiation.</p>
+<p>Convert Pro includes Auto-Allocation and other advanced experimentation capabilities, while Enterprise adds higher limits and enterprise-specific controls and services. The pricing structure reflects tested-user volume and project count, so you can start a 15-day free trial and run your first bandit experiment without any upfront commitment.</p>
 </div>
 </div>
 <div class="faq__item">
@@ -1234,21 +1237,21 @@
 <svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
 </button>
 <div class="faq__answer">
-<p>Sequential testing addresses the "peeking problem": if you monitor a standard A/B test continuously and make decisions based on early results, you inflate your false positive rate. Multi-arm bandits require continuous monitoring by design, so pairing them with sequential testing controls lets you defend early reallocation decisions without inflating Type I errors.</p>
-<p>In Convert, you configure your statistical method and threshold at the experiment level. For bandit experiments where you anticipate making interim decisions, setting the sequential testing control before the test launches ensures each reallocation point is evaluated against a statistically valid boundary rather than an arbitrary peek.</p>
+<p>Sequential testing addresses the "peeking problem": if you monitor a standard A/B test continuously and make decisions based on early results, you inflate your false positive rate. With Convert's Frequentist statistical model, Auto-Allocation requires the Sequential test type so the experiment can be monitored over time under the supported Frequentist framework.</p>
+<p>In Convert, you configure your statistical model and the test type at the experiment level. When you run Auto-Allocation on the Frequentist model, selecting the Sequential test type before launch is what lets the experiment be monitored over time under that supported framework rather than through an arbitrary peek.</p>
 </div>
 </div>
 <div class="faq__item">
 <button aria-expanded="false" class="faq__question">
 <div class="faq__q-left">
 <span class="faq__num">10</span>
-<span class="faq__q-text">What happens when a multi-arm bandit identifies a winner? How do I ship it?</span>
+<span class="faq__q-text">What happens as a multi-arm bandit favors a leading variation? How do I roll it out?</span>
 </div>
 <svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
 </button>
 <div class="faq__answer">
-<p>Once a leading variation meets your configured probability threshold, Convert can shift more traffic—up to 100%—toward that variation while you prepare the permanent implementation. For front-end experiments, you can extend the experiment to serve only the selected variation indefinitely. For full-stack experiments, once the feature has been integrated behind a Convert flag, you can promote the selected variation to a full rollout without a new engineering deployment.</p>
-<p>Because the change sits behind a feature flag, you can also disable it or roll it back. If the selected variation produces unexpected downstream effects post-rollout—a common risk with adaptive algorithms that optimize for a narrow conversion metric—you can revert to the control from the Convert dashboard without another deployment.</p>
+<p>Auto-Allocation continually adjusts variation traffic according to the selected MAB strategy. Rather than declaring a definitive winner on your behalf, it progressively favors stronger-performing variations as evidence accumulates, and your team can review the allocation and report before deciding how to roll out the leading variation.</p>
+<p>For an already integrated Full Stack feature flag, authorized teams can adjust rollout rules or disable the feature in Convert without another application deployment — useful if a rollout produces unexpected downstream effects. Connecting an MAB result to a production rollout still requires the appropriate flag implementation.</p>
 </div>
 </div>
 </div>
