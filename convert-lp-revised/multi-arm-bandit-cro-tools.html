@@ -532,7 +532,7 @@
         Multi-arm bandits in Convert Experiences
       </div>
 <h1 class="hero__h1">Multi-arm bandit testing software that <em>shifts traffic toward stronger variations</em></h1>
-<p class="hero__sub">Convert's Auto-Allocation dynamically shifts more traffic toward better-performing variations as experiment data accumulates, so you stop losing conversions while a test plays out. Marketers get faster, data-backed calls. Developers can use Convert's REST API for documented account and experiment-management workflows and the JavaScript SDK for runtime visitor bucketing, variation decisions, and conversion tracking.</p>
+<p class="hero__sub">Convert's Auto-Allocation dynamically shifts more traffic toward better-performing variations as experiment data accumulates, so you stop losing conversions while a test plays out. Marketers get faster, data-backed calls. Developers can use Convert's REST API and remote MCP server for documented account and experiment-management workflows, plus the JavaScript SDK for runtime visitor bucketing, variation decisions, and conversion tracking.</p>
 <div class="hero__ctas">
 <a class="btn-hero-primary" href="#">Start your free 15-day trial</a>
 <a class="btn-hero-secondary" href="#">Book a demo</a>
@@ -579,7 +579,7 @@
 </div>
 <div class="trust-item">
 <svg fill="none" height="14" viewbox="0 0 14 14" width="14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
-<span>7-minute average support response</span>
+<span>sub-3-minute average support response</span>
 </div>
 <div class="trust-item">
 <svg fill="none" height="14" viewbox="0 0 14 14" width="14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
@@ -632,10 +632,10 @@
 <h3 class="fw-h3">Accelerate trial-to-paid learning without burning your activation window</h3>
 </div>
 <div class="fw-card__right">
-<p class="fw-body">Onboarding sequences and feature adoption flows have a narrow window to influence upgrade behavior. Multi-arm bandits let your team surface the strongest variant faster, reducing the time your worst-performing onboarding path stays live. Pair that with Convert's Frequentist and Bayesian stats engines and unsampled reporting, and you get statistically defensible results your growth team can act on with confidence.</p>
+<p class="fw-body">Onboarding sequences and feature adoption flows have a narrow window to influence upgrade behavior. Multi-arm bandits let your team surface the strongest variant faster, reducing the time your worst-performing onboarding path stays live. Convert's bandits run on both Bayesian and Frequentist sampling methods, and with unsampled reporting you get statistically defensible results your growth team can act on with confidence.</p>
 <ul class="bullet-list">
 <li>Shorten the time your weakest onboarding variant stays live</li>
-<li>Choose Frequentist or Bayesian, both engines included, no upsell</li>
+<li>Bayesian (Thompson Sampling) and Frequentist (Epsilon-Greedy, UCB) bandits, both included, no upsell</li>
 <li>Unsampled reporting counts every activation event, no statistical shortcuts</li>
 </ul>
 <a class="fw-link" href="#">Explore for SaaS <span>→</span></a>
@@ -679,13 +679,13 @@
 <!-- Row 1: text left / card right -->
 <div class="why-row">
 <div class="why-row__copy">
-<div class="why-eyebrow">01 · MAB vs A/B Testing</div>
-<h3 class="why-h3">You don't have to pick one. Convert runs both.</h3>
-<p class="why-lead">Multi-arm bandits and traditional A/B tests answer different questions. A/B testing gives you controlled, statistically rigorous results — the right tool when you need a defensible decision log or are running long-horizon tests. Multi-arm bandits maximise revenue during the test window by dynamically shifting more traffic toward better-performing variations as experiment data accumulates.</p>
+<div class="why-eyebrow">01 · Bandit strategies</div>
+<h3 class="why-h3">Both Bayesian and Frequentist bandits, built into one platform</h3>
+<p class="why-lead">This is what actually sets Convert's multi-arm bandits apart. Convert runs them on three sampling methods — Thompson Sampling, which is Bayesian, plus Epsilon-Greedy and UCB, which are Frequentist. The sampling method <em>is</em> the statistical approach, so you get both without bolting a strategy onto a separate engine.</p>
 <ul class="bullet-list">
-<li>A/B testing: fixed splits, fixed horizon, clean p-values — best for learning and building statistical proof</li>
-<li>MAB: adaptive splits, continuous reallocation — best for revenue protection during time-sensitive windows</li>
-<li>Convert runs both in the same platform; use Auto-Allocation with Convert's Frequentist or Bayesian statistical model (Frequentist Auto-Allocation requires the Sequential test type)</li>
+<li>Thompson Sampling — the Bayesian method, allocating traffic by each variation's probability of being best</li>
+<li>Epsilon-Greedy and UCB — the Frequentist methods, balancing exploration against the current leader</li>
+<li>Both approaches ship on Convert Pro and Enterprise, no upsell and no separate engine to configure</li>
 </ul>
 </div>
 <div class="why-row__card">
@@ -693,39 +693,38 @@
 <span class="card-dot" style="background:#EF4444"></span>
 <span class="card-dot" style="background:#F59E0B;margin-left:4px"></span>
 <span class="card-dot" style="background:#10B981;margin-left:4px"></span>
-<span class="card-title">When to use each</span>
+<span class="card-title">Convert's bandit strategies</span>
 </div>
 <div class="card-body">
 <table class="compare-table">
 <thead>
-<tr><th></th><th>A/B Test</th><th>Multi-arm bandit</th></tr>
+<tr><th>Strategy</th><th>Type</th><th>How it allocates</th></tr>
 </thead>
 <tbody>
 <tr>
-<td style="font-weight:600;color:var(--ink-700);font-size:12px">Goal</td>
-<td style="font-size:12px">Statistical proof</td>
-<td style="font-size:12px">Revenue capture</td>
+<td style="font-weight:600;color:var(--ink-700);font-size:12px">Thompson Sampling</td>
+<td><span class="badge badge-yes">Bayesian</span></td>
+<td style="font-size:12px">By probability of being best</td>
 </tr>
 <tr>
-<td style="font-weight:600;color:var(--ink-700);font-size:12px">Traffic split</td>
-<td style="font-size:12px">Fixed (e.g. 50/50)</td>
-<td style="font-size:12px">Adaptive, real-time</td>
+<td style="font-weight:600;color:var(--ink-700);font-size:12px">Epsilon-Greedy</td>
+<td><span class="badge badge-gate">Frequentist</span></td>
+<td style="font-size:12px">Mostly exploit, sometimes explore</td>
 </tr>
 <tr>
-<td style="font-weight:600;color:var(--ink-700);font-size:12px">Best for</td>
-<td style="font-size:12px">Long-run learning</td>
-<td style="font-size:12px">Time-sensitive windows</td>
+<td style="font-weight:600;color:var(--ink-700);font-size:12px">UCB</td>
+<td><span class="badge badge-gate">Frequentist</span></td>
+<td style="font-size:12px">Favor the highest upper bound</td>
 </tr>
 <tr>
 <td style="font-weight:600;color:var(--ink-700);font-size:12px">In Convert</td>
-<td><span class="badge badge-yes">✓ Core feature</span></td>
-<td><span class="badge badge-yes">✓ Pro &amp; Enterprise</span></td>
+<td colspan="2"><span class="badge badge-yes">✓ All three on Pro &amp; Enterprise</span></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="stat-panel">
-<p>Most platforms force a choice. Convert supports both methods in the same experiment dashboard.</p>
+<p>One platform, both statistical schools. Most tools give you a single bandit flavor; Convert ships all three sampling methods.</p>
 </div>
 </div>
 </div>
@@ -779,13 +778,13 @@
 <!-- Row 3: text left / card right -->
 <div class="why-row">
 <div class="why-row__copy">
-<div class="why-eyebrow">03 · Statistics and support</div>
-<h3 class="why-h3">Choose your strategy and statistical model, and get help when it matters</h3>
-<p class="why-lead">Auto-Allocation lets you choose Thompson Sampling, Epsilon-Greedy, or UCB to control how traffic is redistributed, paired with Convert's Frequentist or Bayesian statistical model. Optimization targets the experience's selected primary goal — pick it carefully, because it can't be changed once the active MAB experience is enabled.</p>
+<div class="why-eyebrow">03 · A/B and bandits together</div>
+<h3 class="why-h3">You don't have to pick one — Convert runs bandits and A/B tests side by side</h3>
+<p class="why-lead">Bandits and classic A/B tests answer different questions. Reach for a multi-arm bandit to protect revenue during a time-sensitive window; reach for a fixed-horizon A/B test when you need a clean, defensible result for the decision log. Convert runs both in the same platform, and Auto-Allocation optimizes the experience's selected primary goal — pick it carefully, because it can't be changed once the active MAB experience is enabled.</p>
 <ul class="bullet-list">
-<li>Thompson Sampling, Epsilon-Greedy, or UCB, with Convert's Frequentist or Bayesian model (Frequentist Auto-Allocation requires the Sequential test type)</li>
-<li>Optimizes the primary goal using Conversion Rate, Revenue Per Visitor, or Average Products Per Visitor</li>
-<li>7-minute average support response when an adaptive test breaks mid-run</li>
+<li>A/B testing: fixed splits, fixed horizon, clean p-values — best for learning and building statistical proof</li>
+<li>MAB: adaptive splits, continuous reallocation — best for revenue protection during time-sensitive windows</li>
+<li>Both run in the same platform and dashboard — no second tool and no separate contract</li>
 </ul>
 </div>
 <div class="dark-code-card">
@@ -810,7 +809,7 @@
   <span class="tok-var">context</span>.<span class="tok-fn">trackConversion</span>(<span class="tok-str">'checkout_complete'</span>);
 }</pre>
 <div class="stat-panel" style="background:rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.07);">
-<p style="color:#94A3B8;">Average support response: <strong style="color:#93C5FD;">7 minutes</strong>, not a chatbot.</p>
+<p style="color:#94A3B8;">Average support response: <strong style="color:#93C5FD;">under 3 minutes</strong>, not a chatbot.</p>
 </div>
 </div>
 </div>
@@ -823,7 +822,7 @@
 <div>
 <div class="api-banner__eyebrow">Developer tools</div>
 <h2 class="api-banner__h2">Read the API docs</h2>
-<p class="api-banner__sub">REST API · JavaScript SDK · quickstart</p>
+<p class="api-banner__sub">REST API · MCP server · JavaScript SDK · quickstart</p>
 <div class="api-pill">npm install @convertcom/js-sdk</div>
 </div>
 <a class="btn-outline-white" href="#">View docs →</a>
@@ -853,14 +852,14 @@
 <td class="col-why">Stops revenue bleed of rigid splits during high-stakes windows. Available for A/B and Multivariate Web or Full Stack experiences (not A/A or Deploy tests).</td>
 </tr>
 <tr>
-<td class="col-feature">Frequentist + Bayesian statistics</td>
-<td class="col-what">Both statistical models in one platform</td>
-<td class="col-why">Run Auto-Allocation on the Bayesian model, or on the Frequentist model when the Sequential test type is enabled, without switching tools</td>
+<td class="col-feature">Bayesian + Frequentist bandits</td>
+<td class="col-what">Thompson Sampling is Bayesian; Epsilon-Greedy and UCB are Frequentist</td>
+<td class="col-why">Both statistical approaches are built into Auto-Allocation as sampling methods — no separate engine to configure or switch between</td>
 </tr>
 <tr>
 <td class="col-feature">Sequential testing</td>
-<td class="col-what">Peek at results without inflating false positives</td>
-<td class="col-why">When using Convert's Frequentist model, Auto-Allocation requires the Sequential test type so the experiment can be monitored over time under the supported Frequentist framework</td>
+<td class="col-what">Monitor an adaptive test continuously without inflating false positives</td>
+<td class="col-why">Check on a running bandit and act on early signals without paying the peeking penalty that continuous monitoring would otherwise incur</td>
 </tr>
 <tr>
 <td class="col-feature">JS conditions</td>
@@ -1039,8 +1038,8 @@
 <div class="uc-row uc-row--flip">
 <div class="uc-row__copy">
 <div class="uc-eyebrow">04 · Statistical rigor</div>
-<h3 class="uc-h3">Adaptive allocation on your choice of statistical model</h3>
-<p class="uc-desc">Run Auto-Allocation with Convert's Bayesian model — or with the Frequentist model when Sequential testing is enabled — using Thompson Sampling, Epsilon-Greedy, or UCB. Teams that standardize on a specific statistical framework, common in healthcare or insurance, can keep that methodology while traffic shifts toward better-performing variations as data accumulates.</p>
+<h3 class="uc-h3">Adaptive allocation in Bayesian or Frequentist form</h3>
+<p class="uc-desc">Run Auto-Allocation with a Bayesian sampling method (Thompson Sampling) or a Frequentist one (Epsilon-Greedy or UCB). Teams that standardize on a specific statistical framework, common in healthcare or insurance, can keep that methodology while traffic shifts toward better-performing variations as data accumulates.</p>
 </div>
 <div class="uc-row__card">
 <div class="card-head">
@@ -1159,7 +1158,7 @@
 <svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
 </button>
 <div class="faq__answer">
-<p>Convert supports both. Frequentist and Bayesian are statistical models, not allocation strategies: the documented Auto-Allocation strategies are Thompson Sampling, Epsilon-Greedy, and UCB (Upper Confidence Bound), and you choose one to control how traffic is redistributed. You can use Auto-Allocation with Convert's Bayesian model, or with the Frequentist model when the Sequential test type is enabled.</p>
+<p>Convert supports both, and the choice lives in the sampling method itself. Thompson Sampling is the Bayesian approach; Epsilon-Greedy and UCB (Upper Confidence Bound) are Frequentist. Convert runs multi-arm bandits directly on these sampling methods, so you are not pairing a strategy with a separate statistical engine — you pick the method whose statistical approach fits your program, and that controls how traffic is redistributed.</p>
 <p>Auto-Allocation optimizes the experience's selected primary goal using Conversion Rate, Revenue Per Visitor, or Average Products Per Visitor. Choose that primary goal carefully before launch, because it cannot be changed once the active MAB experience is enabled.</p>
 </div>
 </div>
@@ -1237,8 +1236,8 @@
 <svg class="faq__chevron" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 18 18"><path d="M4 7l5 5 5-5"></path></svg>
 </button>
 <div class="faq__answer">
-<p>Sequential testing addresses the "peeking problem": if you monitor a standard A/B test continuously and make decisions based on early results, you inflate your false positive rate. With Convert's Frequentist statistical model, Auto-Allocation requires the Sequential test type so the experiment can be monitored over time under the supported Frequentist framework.</p>
-<p>In Convert, you configure your statistical model and the test type at the experiment level. When you run Auto-Allocation on the Frequentist model, selecting the Sequential test type before launch is what lets the experiment be monitored over time under that supported framework rather than through an arbitrary peek.</p>
+<p>Sequential testing addresses the "peeking problem": if you monitor a standard A/B test continuously and make decisions based on early results, you inflate your false positive rate. Convert's Sequential test type lets you watch a running experiment and act on early signals without paying that penalty — which pairs naturally with an adaptive bandit that is reallocating traffic as evidence accumulates.</p>
+<p>In Convert, you set the test type at the experiment level. Pairing Auto-Allocation with the Sequential test type before launch is what lets the bandit be monitored continuously as it favors stronger variations, rather than through an arbitrary peek that would distort your results.</p>
 </div>
 </div>
 <div class="faq__item">
