@@ -483,7 +483,7 @@ pre.code-block {
         </div>
 <div class="trust-item">
 <svg fill="none" height="14" viewbox="0 0 14 14" width="14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
-          SOC-2, HIPAA, GDPR compliant
+          SOC 2, ISO 27001, HIPAA, GDPR, and CCPA compliant
         </div>
 <div class="trust-item">
 <svg fill="none" height="14" viewbox="0 0 14 14" width="14"><path d="M2 7.5l3 3 7-7" stroke="#10B981" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
@@ -577,7 +577,7 @@ pre.code-block {
 <ul class="bullet-list">
 <li>Synchronous tracking-code placement reduces flicker on initial load, before Angular bootstraps the first paint</li>
 <li>Trigger Convert polling from Angular Router events to reevaluate experiences on view changes, no full page reload required</li>
-<li>Fast variation switching on first and repeat loads, with no impact on Core Web Vitals</li>
+<li>Fast variation switching on first and repeat loads; the synchronous snippet reduces flicker at a small render-blocking cost, with an async option when Core Web Vitals are the priority</li>
 <li>Experiment data reflects what visitors actually saw, not an artifact of a slow script</li>
 </ul>
 </div>
@@ -647,16 +647,15 @@ pre.code-block {
   <span class="tok-fn">sdkKey</span>: <span class="tok-var">process</span>.env.<span class="tok-var">CONVERT_SDK_KEY</span>,
 });
 
-<span class="tok-comment">// Pass route or account data through the SDK's documented</span>
-<span class="tok-comment">// visitor or location properties</span>
-<span class="tok-keyword">const</span> <span class="tok-var">userContext</span> = <span class="tok-var">convertSDK</span>.<span class="tok-fn">createContext</span>(<span class="tok-string">'visitor-123'</span>, {
+<span class="tok-comment">// Create the visitor context with the visitor id</span>
+<span class="tok-keyword">const</span> <span class="tok-var">userContext</span> = <span class="tok-var">convertSDK</span>.<span class="tok-fn">createContext</span>(<span class="tok-string">'visitor-123'</span>);
+
+<span class="tok-comment">// Pass route and visitor data to runExperience so the Convert</span>
+<span class="tok-comment">// audience and location rules can evaluate them before bucketing</span>
+<span class="tok-keyword">const</span> <span class="tok-var">variation</span> = <span class="tok-var">userContext</span>.<span class="tok-fn">runExperience</span>(<span class="tok-string">'onboarding-step2-cta'</span>, {
   <span class="tok-fn">locationProperties</span>: { <span class="tok-fn">route</span>: <span class="tok-var">router</span>.url },
   <span class="tok-fn">visitorProperties</span>: { <span class="tok-fn">plan</span>: <span class="tok-var">user</span>.plan },
-});
-
-<span class="tok-comment">// Configure the Convert audience and location rules to</span>
-<span class="tok-comment">// evaluate those properties before bucketing</span>
-<span class="tok-keyword">const</span> <span class="tok-var">variation</span> = <span class="tok-var">userContext</span>.<span class="tok-fn">runExperience</span>(<span class="tok-string">'onboarding-step2-cta'</span>);</pre>
+});</pre>
 </div>
 <div class="card-stat" style="background:#0D1535;border-top-color:rgba(255,255,255,.08);">
 <strong style="color:#93C5FD;">JS Conditions enterprise-only on VWO and Optimizely</strong><span style="color:#475569;">, included on Convert Pro.</span>
@@ -863,7 +862,7 @@ pre.code-block {
 <span class="card-title">feature-flags.ts</span>
 </div>
 <div class="card-body">
-<pre class="code-block"><span class="tok-keyword">import</span> { <span class="tok-type">ConvertSDK</span> } <span class="tok-keyword">from</span> <span class="tok-string">'@convertcom/js-sdk'</span>;
+<pre class="code-block"><span class="tok-keyword">import</span> <span class="tok-type">ConvertSDK</span> <span class="tok-keyword">from</span> <span class="tok-string">'@convertcom/js-sdk'</span>;
 
 <span class="tok-keyword">const</span> <span class="tok-var">sdk</span> = <span class="tok-keyword">new</span> <span class="tok-type">ConvertSDK</span>({ <span class="tok-fn">sdkKey</span>: <span class="tok-var">SDK_KEY</span> });
 <span class="tok-keyword">await</span> <span class="tok-var">sdk</span>.<span class="tok-fn">onReady</span>();
@@ -874,7 +873,7 @@ pre.code-block {
   <span class="tok-string">'new-angular-dashboard'</span>
 );
 
-<span class="tok-keyword">if</span> (<span class="tok-var">feature</span>) {
+<span class="tok-keyword">if</span> (<span class="tok-var">feature</span>.<span class="tok-var">status</span> === <span class="tok-string">'enabled'</span>) {
   <span class="tok-comment">// Load or enable the feature according to its</span>
   <span class="tok-comment">// returned configuration</span>
   <span class="tok-keyword">const</span> { <span class="tok-type">NewDashboard</span> } = <span class="tok-keyword">await</span> <span class="tok-fn">import</span>(
@@ -1067,7 +1066,7 @@ pre.code-block {
 <svg class="faq-chevron" fill="none" viewbox="0 0 18 18"><path d="M4 6.5l5 5 5-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
 </div>
 <div class="faq-a">
-<p>Yes. The @convertcom/js-sdk package is distributed as an ES module and is compatible with Angular's build system and tree-shaking. For client-side use, you can import only the functions you need. For server-side or Node.js use within an Angular Universal (SSR) setup, the SDK exports a separate entry point designed for Node environments. Bundle size impact is minimal because unused SDK features are excluded from the production build automatically.</p>
+<p>Yes. The @convertcom/js-sdk package ships CommonJS, ESM, and UMD builds and is compatible with Angular's build system and tree-shaking. For client-side use, you can import only the functions you need. For server-side or Node.js use within an Angular Universal (SSR) setup, Node picks up the CommonJS build automatically — there is no separate Node-specific entry point. Bundle size impact is minimal because unused SDK features are excluded from the production build automatically.</p>
 </div>
 </div>
 <div class="faq-item">
